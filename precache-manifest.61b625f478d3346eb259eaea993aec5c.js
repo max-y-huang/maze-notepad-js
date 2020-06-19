@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c386743b80bb1e133d3a327d28835f72",
+    "revision": "945c44a2dce9df8046fd995d95a088fb",
     "url": "/maze-notepad-js/index.html"
   },
   {
-    "revision": "31000b4e0d280faa8732",
-    "url": "/maze-notepad-js/static/css/main.6a9bacff.chunk.css"
+    "revision": "f3b81e2300094f423553",
+    "url": "/maze-notepad-js/static/css/main.8c9fe9fc.chunk.css"
   },
   {
     "revision": "f1fdf62b1a1337edf80b",
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/maze-notepad-js/static/js/2.b46fe474.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "31000b4e0d280faa8732",
+    "revision": "f3b81e2300094f423553",
     "url": "/maze-notepad-js/static/js/main.d9710dce.chunk.js"
   },
   {
