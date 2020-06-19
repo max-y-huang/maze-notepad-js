@@ -1,10 +1,12 @@
-
+import Camera from './camera';
+import Cursor from './cursor';
 import Maze from './maze';
 
 const sketch = p => {
 
   let setupWidth = 0, setupHeight = 0;
   let camera;
+  let cursor;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
@@ -14,18 +16,19 @@ const sketch = p => {
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
-    camera = { x: 0, y: 0, zoom: 1, zoomStep: Math.sqrt(2) };
+    camera = new Camera(p, 0, 0, 1, Math.sqrt(2));
     maze = new Maze(p, 10, 10);
+    cursor = new Cursor(p, camera, maze);
   };
 
   p.draw = () => {
-    p.background(100);
+    p.background(241);
 
     p.push();
-    p.translate(camera.x, camera.y);
-    p.scale(camera.zoom);
+    camera.focus();
 
     maze.draw();
+    cursor.draw();
 
     p.pop();
 
@@ -42,15 +45,14 @@ const sketch = p => {
   }
 
   p.mouseDragged = () => {
-    camera.x += p.movedX;
-    camera.y += p.movedY;
+    if (p.mouseButton !== p.CENTER) {
+      return;
+    }
+    camera.translate();
   }
 
   p.mouseWheel = (event) => {
-    let delta = event.delta > 0 ? 1 / camera.zoomStep : camera.zoomStep;
-    camera.x = (camera.x - p.mouseX) * delta + p.mouseX;
-    camera.y = (camera.y - p.mouseY) * delta + p.mouseY;
-    camera.zoom *= delta;
+    camera.zoom(event);
   }
 };
 
