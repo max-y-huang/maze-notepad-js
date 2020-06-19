@@ -6,8 +6,6 @@ class Graph {
     this.size = size;
   }
 
-  resetEdgeList = () => {}
-
   addEdge = (a, b, weight) => {
     this.edgeList.push({ a: a, b: b, weight: weight });
   }
