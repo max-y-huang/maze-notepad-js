@@ -8,7 +8,7 @@ const sketch = p => {
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
-    p.onResize(props.width, props.height);
+    onResize(props.width, props.height);
   };
 
   p.setup = () => {
@@ -34,7 +34,7 @@ const sketch = p => {
   };
 
   // Used instead of default windowResized() to keep track of new width and height.
-  p.onResize = (width, height) => {
+  const onResize = (width, height) => {
     // setupWidth and setupHeight are used in case setup runs after this function.
     setupWidth = width;
     setupHeight = height;
