@@ -1,26 +1,31 @@
-let initWidth = 0, initHeight = 0;
+
+import Maze from './maze';
 
 const sketch = p => {
 
-  p.camera = { x: 0, y: 0, zoom: 1, zoomStep: Math.sqrt(2) };
+  let setupWidth = 0, setupHeight = 0;
+  let camera;
+  let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     p.onResize(props.width, props.height);
   };
 
   p.setup = () => {
-    p.createCanvas(initWidth, initHeight);
+    p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
+    camera = { x: 0, y: 0, zoom: 1, zoomStep: Math.sqrt(2) };
+    maze = new Maze(p, 10, 10);
   };
 
   p.draw = () => {
     p.background(100);
 
     p.push();
-    p.translate(p.camera.x, p.camera.y);
-    p.scale(p.camera.zoom);
+    p.translate(camera.x, camera.y);
+    p.scale(camera.zoom);
 
-    p.rect(100, 100, 200, 200);
+    maze.draw();
 
     p.pop();
 
@@ -30,22 +35,22 @@ const sketch = p => {
 
   // Used instead of default windowResized() to keep track of new width and height.
   p.onResize = (width, height) => {
-    // initWidth and initHeight are used in case setup runs after this function.
-    initWidth = width;
-    initHeight = height;
+    // setupWidth and setupHeight are used in case setup runs after this function.
+    setupWidth = width;
+    setupHeight = height;
     p.resizeCanvas(width, height);
   }
 
   p.mouseDragged = () => {
-    p.camera.x += p.movedX;
-    p.camera.y += p.movedY;
+    camera.x += p.movedX;
+    camera.y += p.movedY;
   }
 
   p.mouseWheel = (event) => {
-    let delta = event.delta > 0 ? 1 / p.camera.zoomStep : p.camera.zoomStep;
-    p.camera.x = (p.camera.x - p.mouseX) * delta + p.mouseX;
-    p.camera.y = (p.camera.y - p.mouseY) * delta + p.mouseY;
-    p.camera.zoom *= delta;
+    let delta = event.delta > 0 ? 1 / camera.zoomStep : camera.zoomStep;
+    camera.x = (camera.x - p.mouseX) * delta + p.mouseX;
+    camera.y = (camera.y - p.mouseY) * delta + p.mouseY;
+    camera.zoom *= delta;
   }
 };
 
