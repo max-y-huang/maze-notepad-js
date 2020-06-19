@@ -37,7 +37,7 @@ class MazeGraph extends Graph {
     super(w * h);
     this.w = w;
     this.h = h;
-    this.activeList = Array(this.w * this.h).fill(false);
+    this.activeList = Array(w * h).fill(false);
     this.resetEdgeList();
   }
 

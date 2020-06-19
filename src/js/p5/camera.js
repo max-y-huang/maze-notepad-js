@@ -3,11 +3,13 @@ class Camera {
   zoomKeyboardSpeed = 100;
   zoomKeyboardSpeedCheck = 0;
 
-  constructor (p, keyLogger, x, y, z, zStep) {
+  constructor (p, keyLogger, x, y, z, zStep, zMin, zMax) {
     this.p = p;
     this.keyLogger = keyLogger;
     this.pos = { x: x, y: y, z: z };
     this.zStep = zStep;
+    this.zMin = zMin;
+    this.zMax = zMax;
   }
 
   focus = () => {
@@ -21,8 +23,7 @@ class Camera {
   }
 
   translateWithMouse = () => {
-    this.pos.x += this.p.movedX;
-    this.pos.y += this.p.movedY;
+    this.translate(-this.p.movedX, -this.p.movedY);
   }
 
   translateWithKeyboard = () => {
@@ -44,6 +45,9 @@ class Camera {
   }
 
   zoom = (delta) => {
+    if (this.pos.z * delta < this.zMin || this.pos.z * delta > this.zMax) {
+      return;
+    }
     this.pos.x = (this.pos.x - this.p.mouseX) * delta + this.p.mouseX;
     this.pos.y = (this.pos.y - this.p.mouseY) * delta + this.p.mouseY;
     this.pos.z *= delta;

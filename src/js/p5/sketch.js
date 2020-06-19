@@ -1,3 +1,4 @@
+import $ from './global';
 import { KeyLogger } from './keyLogger';
 import { Camera } from './camera';
 import { Cursor } from './cursor';
@@ -20,8 +21,8 @@ const sketch = p => {
     p.frameRate(60);
     p.noSmooth();
     keyLogger = new KeyLogger();
-    camera = new Camera(p, keyLogger, 0, 0, 1, Math.sqrt(2));
-    maze = new Maze(p, 10, 10);
+    camera = new Camera(p, keyLogger, 0, 0, 1, Math.sqrt(2), 1, Math.pow(Math.sqrt(2), 6));
+    maze = new Maze(p, 100, 100);
     cursor = new Cursor(p, camera, maze);
   };
 
@@ -71,13 +72,13 @@ const sketch = p => {
   }
 
   p.keyPressed = () => {
-    if (p.key === 'p') {
-      if (maze.mode === maze.CREATE) {
-        maze.solvedGraph = maze.graph.kruskal();
-        maze.mode = maze.SOLVE;
+    if (p.key === ' ') {
+      if ($.mode === $.CREATE) {
+        maze.solvedGraph = maze.graph.kruskal();  // TODO: Move to maze.
+        $.mode = $.SOLVE;
       }
-      else if (maze.mode === maze.SOLVE) {
-        maze.mode = maze.CREATE;
+      else if ($.mode === $.SOLVE) {
+        $.mode = $.CREATE;
       }
     }
     keyLogger.onKeyDown(p.key);
