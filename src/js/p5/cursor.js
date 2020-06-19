@@ -10,8 +10,8 @@ class Cursor {
     this.maze = maze;
   }
 
-  getX = () => clamp((this.p.mouseX - this.camera.x) / this.camera.zoom / this.tileSize, 0, this.maze.w - 1);
-  getY = () => clamp((this.p.mouseY - this.camera.y) / this.camera.zoom / this.tileSize, 0, this.maze.h - 1);
+  getX = () => clamp((this.p.mouseX - this.camera.pos.x) / this.camera.pos.z / this.tileSize, 0, this.maze.w - 1);
+  getY = () => clamp((this.p.mouseY - this.camera.pos.y) / this.camera.pos.z / this.tileSize, 0, this.maze.h - 1);
  
   draw = () => {
     this.p.noFill();
