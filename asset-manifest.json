@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/maze-notepad-js/static/css/main.6a9bacff.chunk.css",
+    "main.js": "/maze-notepad-js/static/js/main.d9710dce.chunk.js",
+    "main.js.map": "/maze-notepad-js/static/js/main.d9710dce.chunk.js.map",
+    "runtime-main.js": "/maze-notepad-js/static/js/runtime-main.f0280433.js",
+    "runtime-main.js.map": "/maze-notepad-js/static/js/runtime-main.f0280433.js.map",
+    "static/js/2.b46fe474.chunk.js": "/maze-notepad-js/static/js/2.b46fe474.chunk.js",
+    "static/js/2.b46fe474.chunk.js.map": "/maze-notepad-js/static/js/2.b46fe474.chunk.js.map",
+    "index.html": "/maze-notepad-js/index.html",
+    "precache-manifest.fb815de5e5b5926298e1c1e1afd56c4a.js": "/maze-notepad-js/precache-manifest.fb815de5e5b5926298e1c1e1afd56c4a.js",
+    "service-worker.js": "/maze-notepad-js/service-worker.js",
+    "static/css/main.6a9bacff.chunk.css.map": "/maze-notepad-js/static/css/main.6a9bacff.chunk.css.map",
+    "static/js/2.b46fe474.chunk.js.LICENSE.txt": "/maze-notepad-js/static/js/2.b46fe474.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f0280433.js",
+    "static/js/2.b46fe474.chunk.js",
+    "static/css/main.6a9bacff.chunk.css",
+    "static/js/main.d9710dce.chunk.js"
+  ]
+}
