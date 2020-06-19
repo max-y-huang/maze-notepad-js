@@ -25,8 +25,7 @@ const sketch = p => {
     p.background(241);
 
     p.push();
-    p.translate(camera.x, camera.y);
-    p.scale(camera.zoom);
+    camera.focus();
 
     maze.draw();
     cursor.draw();

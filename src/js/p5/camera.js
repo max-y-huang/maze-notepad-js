@@ -8,6 +8,11 @@ class Camera {
     this.zoomStep = zoomStep;
   }
 
+  focus = () => {
+    this.p.translate(this.x, this.y);
+    this.p.scale(this.zoom);
+  }
+
   onTranslate = () => {
     this.x += this.p.movedX;
     this.y += this.p.movedY;
