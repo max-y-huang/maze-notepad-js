@@ -1,3 +1,5 @@
+import Graph from './graph';
+
 class Maze {
 
   tileSize = 6;
@@ -6,6 +8,7 @@ class Maze {
     this.p = p;
     this.w = w;
     this.h = h;
+    this.graph = new Graph();
   }
  
   draw = () => {
