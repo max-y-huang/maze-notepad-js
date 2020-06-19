@@ -45,11 +45,19 @@ const sketch = p => {
     p.resizeCanvas(width, height);
   }
 
-  p.mouseDragged = () => {
-    if (p.mouseButton !== p.CENTER) {
-      return;
+  p.mousePressed = () => {
+    if (p.mouseButton === p.LEFT) {
+      maze.setActiveState(cursor.getX(), cursor.getY(), true);
     }
-    camera.translate();
+  }
+
+  p.mouseDragged = () => {
+    if (p.mouseButton === p.LEFT) {
+      maze.setActiveState(cursor.getX(), cursor.getY(), true);
+    }
+    else if (p.mouseButton === p.CENTER) {
+      camera.translate();
+    }
   }
 
   p.mouseWheel = (event) => {
