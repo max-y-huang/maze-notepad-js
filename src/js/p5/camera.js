@@ -1,28 +1,26 @@
 class Camera {
 
-  constructor (p, x, y, zoom, zoomStep) {
+  constructor (p, x, y, z, zStep) {
     this.p = p;
-    this.x = x;
-    this.y = y;
-    this.zoom = zoom;
-    this.zoomStep = zoomStep;
+    this.pos = { x: x, y: y, z: z };
+    this.zStep = zStep;
   }
 
   focus = () => {
-    this.p.translate(this.x, this.y);
-    this.p.scale(this.zoom);
+    this.p.translate(this.pos.x, this.pos.y);
+    this.p.scale(this.pos.z);
   }
 
-  onTranslate = () => {
-    this.x += this.p.movedX;
-    this.y += this.p.movedY;
+  translate = () => {
+    this.pos.x += this.p.movedX;
+    this.pos.y += this.p.movedY;
   }
 
-  onZoom = (event) => {
-    let delta = event.delta > 0 ? 1 / this.zoomStep : this.zoomStep;
-    this.x = (this.x - this.p.mouseX) * delta + this.p.mouseX;
-    this.y = (this.y - this.p.mouseY) * delta + this.p.mouseY;
-    this.zoom *= delta;
+  zoom = (event) => {
+    let delta = event.delta > 0 ? 1 / this.zStep : this.zStep;
+    this.pos.x = (this.pos.x - this.p.mouseX) * delta + this.p.mouseX;
+    this.pos.y = (this.pos.y - this.p.mouseY) * delta + this.p.mouseY;
+    this.pos.z *= delta;
   }
 }
 

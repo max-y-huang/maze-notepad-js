@@ -48,11 +48,11 @@ const sketch = p => {
     if (p.mouseButton !== p.CENTER) {
       return;
     }
-    camera.onTranslate();
+    camera.translate();
   }
 
   p.mouseWheel = (event) => {
-    camera.onZoom(event);
+    camera.zoom(event);
   }
 };
 
