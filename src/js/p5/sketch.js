@@ -71,8 +71,14 @@ const sketch = p => {
   }
 
   p.keyPressed = () => {
-    if (p.key === 'P' || p.key === 'p') {
-      console.log(maze.graph.kruskal().edgeList);
+    if (p.key === 'p') {
+      if (maze.mode === maze.CREATE) {
+        maze.solvedGraph = maze.graph.kruskal();
+        maze.mode = maze.SOLVE;
+      }
+      else if (maze.mode === maze.SOLVE) {
+        maze.mode = maze.CREATE;
+      }
     }
     keyLogger.onKeyDown(p.key);
   }

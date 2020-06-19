@@ -1,27 +1,46 @@
-import { MazeGraph } from './graph';
+import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
+  CREATE = 0;
+  SOLVE = 1;
   displayTileNumbers = true;
 
-  tileSize = 12;
+  tileSize = 14;
+  mode = this.CREATE;
   canvasColour = [ 255, 255, 255 ];
   mazeShapeColour = [ 156, 156, 156 ];
   gridLineColour = [ 196, 196, 196 ];
   gridLineWeight = 1;
+  mazeColour = [ 255, 255, 255 ];
+  mazeStrokeColour = [ 0, 0, 0 ];
+  mazeStrokeWeight = 2;
 
   constructor (p, w, h) {
     this.p = p;
     this.w = w;
     this.h = h;
     this.graph = new MazeGraph(w, h);
+    this.solvedGraph = new Graph(w * h);
   }
 
   shape = (x, y, state) => {
+    if (this.mode !== this.CREATE) {
+      return;
+    }
     this.graph.setActiveState(x, y, state);
   }
- 
+
   draw = () => {
+    if (this.mode === this.CREATE) {
+      this.drawCreate();
+    }
+    else if (this.mode === this.SOLVE) {
+      this.drawSolve();
+    }
+  }
+ 
+  drawCreate = () => {
     // Fill canvas colour.
     this.p.noStroke();
     this.p.fill(this.canvasColour);
@@ -64,6 +83,34 @@ class Maze {
           counter++;
         }
       }
+    }
+  }
+
+  drawSolve = () => {
+    // Draw maze shape.
+    this.p.stroke(this.mazeStrokeColour);
+    this.p.strokeWeight(this.mazeStrokeWeight);
+    this.p.fill(this.mazeStrokeColour);
+    for (let i = 0; i < this.h; i++) {
+      for (let j = 0; j < this.w; j++) {
+        if (this.graph.getActiveState(j, i)) {
+          this.p.rect(j * this.tileSize, i * this.tileSize, this.tileSize, this.tileSize);
+        }
+      }
+    }
+    // Draw corridors.
+    this.p.stroke(this.mazeColour);
+    this.p.strokeWeight(this.tileSize - this.mazeStrokeWeight);
+    this.p.strokeCap(this.p.PROJECT);
+    for (let i = 0; i < this.solvedGraph.edgeList.length; i++) {
+      let a = this.solvedGraph.edgeList[i].a;
+      let b = this.solvedGraph.edgeList[i].b;
+      // Shift everything by 0.5 units in both directions.
+      let xa = 0.5 + a % this.w;
+      let ya = 0.5 + Math.floor(a / this.h);
+      let xb = 0.5 + b % this.w;
+      let yb = 0.5 + Math.floor(b / this.h);
+      this.p.line(xa * this.tileSize, ya * this.tileSize, xb * this.tileSize, yb * this.tileSize);
     }
   }
 }

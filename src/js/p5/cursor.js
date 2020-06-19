@@ -2,7 +2,8 @@ import { clamp } from '../funcs';
 
 class Cursor {
 
-  tileSize = 12;
+  tileSize = 14;
+  colour = [ 64, 128, 255 ];
 
   constructor (p, camera, maze) {
     this.p = p;
@@ -15,8 +16,8 @@ class Cursor {
  
   draw = () => {
     this.p.noFill();
-    this.p.stroke(0);
-    this.p.strokeWeight(1);
+    this.p.stroke(this.colour);
+    this.p.strokeWeight(2);
     this.p.rect(this.getX() * this.tileSize, this.getY() * this.tileSize, this.tileSize, this.tileSize);
   }
 }
