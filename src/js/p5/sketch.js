@@ -1,3 +1,4 @@
+import { KeyLogger } from './keyLogger';
 import { Camera } from './camera';
 import { Cursor } from './cursor';
 import { Maze } from './maze';
@@ -5,6 +6,7 @@ import { Maze } from './maze';
 const sketch = p => {
 
   let setupWidth = 0, setupHeight = 0;
+  let keyLogger;
   let camera;
   let cursor;
   let maze;
@@ -17,12 +19,16 @@ const sketch = p => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
     p.noSmooth();
-    camera = new Camera(p, 0, 0, 1, Math.sqrt(2));
+    keyLogger = new KeyLogger();
+    camera = new Camera(p, keyLogger, 0, 0, 1, Math.sqrt(2));
     maze = new Maze(p, 10, 10);
     cursor = new Cursor(p, camera, maze);
   };
 
   p.draw = () => {
+    camera.translateWithKeyboard();
+    camera.zoomWithKeyboard();
+
     p.background(241);
 
     p.push();
@@ -56,16 +62,23 @@ const sketch = p => {
       maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT);
     }
     else if (p.mouseButton === p.CENTER) {
-      camera.translate();
+      camera.translateWithMouse();
     }
   }
 
   p.mouseWheel = (event) => {
-    camera.zoom(event);
+    camera.zoomWithMouse(event);
   }
 
   p.keyPressed = () => {
-    console.log(maze.graph.kruskal().edgeList);
+    if (p.key === 'P' || p.key === 'p') {
+      console.log(maze.graph.kruskal().edgeList);
+    }
+    keyLogger.onKeyDown(p.key);
+  }
+
+  p.keyReleased = () => {
+    keyLogger.onKeyUp(p.key);
   }
 };
 
