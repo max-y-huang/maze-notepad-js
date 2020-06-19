@@ -1,3 +1,4 @@
+import Camera from './camera';
 import Cursor from './cursor';
 import Maze from './maze';
 
@@ -15,7 +16,7 @@ const sketch = p => {
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
-    camera = { x: 0, y: 0, zoom: 1, zoomStep: Math.sqrt(2) };
+    camera = new Camera(p, 0, 0, 1, Math.sqrt(2));
     maze = new Maze(p, 10, 10);
     cursor = new Cursor(p, camera, maze);
   };
@@ -48,15 +49,11 @@ const sketch = p => {
     if (p.mouseButton !== p.CENTER) {
       return;
     }
-    camera.x += p.movedX;
-    camera.y += p.movedY;
+    camera.onTranslate();
   }
 
   p.mouseWheel = (event) => {
-    let delta = event.delta > 0 ? 1 / camera.zoomStep : camera.zoomStep;
-    camera.x = (camera.x - p.mouseX) * delta + p.mouseX;
-    camera.y = (camera.y - p.mouseY) * delta + p.mouseY;
-    camera.zoom *= delta;
+    camera.onZoom(event);
   }
 };
 
