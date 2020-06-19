@@ -16,6 +16,7 @@ const sketch = p => {
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
+    p.noSmooth();
     camera = new Camera(p, 0, 0, 1, Math.sqrt(2));
     maze = new Maze(p, 10, 10);
     cursor = new Cursor(p, camera, maze);

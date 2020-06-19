@@ -1,3 +1,5 @@
+import Graph from './graph';
+
 class Maze {
 
   displayTileNumbers = true;
@@ -11,6 +13,7 @@ class Maze {
     this.p = p;
     this.w = w;
     this.h = h;
+    this.graph = new Graph(w, h);
   }
  
   draw = () => {
@@ -18,6 +21,8 @@ class Maze {
     this.p.noStroke();
     this.p.fill(this.canvasColour);
     this.p.rect(0, 0, this.tileSize * this.w, this.tileSize * this.h);
+    // Draw maze outline shading.
+    // TODO: add maze shading.
     // Draw canvas grid lines.
     this.p.stroke(this.lineColour);
     this.p.strokeCap(this.p.PROJECT);
