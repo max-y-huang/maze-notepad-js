@@ -63,6 +63,10 @@ const sketch = p => {
   p.mouseWheel = (event) => {
     camera.zoom(event);
   }
+
+  p.keyPressed = () => {
+    console.log(maze.graph.kruskal().edgeList);
+  }
 };
 
 export default sketch;

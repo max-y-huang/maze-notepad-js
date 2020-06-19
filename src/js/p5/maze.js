@@ -1,4 +1,4 @@
-import Graph from './graph';
+import { MazeGraph } from './graph';
 
 class Maze {
 
@@ -14,7 +14,7 @@ class Maze {
     this.p = p;
     this.w = w;
     this.h = h;
-    this.graph = new Graph(w, h);
+    this.graph = new MazeGraph(w, h);
   }
 
   shape = (x, y, state) => {
