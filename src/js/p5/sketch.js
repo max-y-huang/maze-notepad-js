@@ -21,7 +21,7 @@ const sketch = p => {
   };
 
   p.draw = () => {
-    p.background(100);
+    p.background(241);
 
     p.push();
     p.translate(camera.x, camera.y);
@@ -45,6 +45,9 @@ const sketch = p => {
   }
 
   p.mouseDragged = () => {
+    if (p.mouseButton !== p.CENTER) {
+      return;
+    }
     camera.x += p.movedX;
     camera.y += p.movedY;
   }

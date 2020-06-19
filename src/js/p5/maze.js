@@ -1,7 +1,9 @@
 class Maze {
 
+  displayTileNumbers = true;
+
   tileSize = 12;
-  canvasColour = [ 241, 241, 241 ];
+  canvasColour = [ 255, 255, 255 ];
   lineColour = [ 196, 196, 196 ];
   lineWeight = 1;
 
@@ -12,18 +14,39 @@ class Maze {
   }
  
   draw = () => {
+    // Fill canvas colour.
     this.p.noStroke();
     this.p.fill(this.canvasColour);
     this.p.rect(0, 0, this.tileSize * this.w, this.tileSize * this.h);
-
+    // Draw canvas grid lines.
     this.p.stroke(this.lineColour);
-    this.p.strokeCap(this.p.SQUARE);
+    this.p.strokeCap(this.p.PROJECT);
     this.p.strokeWeight(this.lineWeight);
     for (let i = 1; i < this.h; i++) {
       this.p.line(0, i * this.tileSize, this.tileSize * this.w, i * this.tileSize);
     }
     for (let i = 1; i < this.w; i++) {
       this.p.line(i * this.tileSize, 0, i * this.tileSize, this.tileSize * this.h);
+    }
+    // Draw canvas outline.
+    this.p.stroke(0);
+    this.p.line(0, 0, this.tileSize * this.w, 0);
+    this.p.line(0, this.tileSize * this.h, this.tileSize * this.w, this.tileSize * this.h);
+    this.p.line(0, 0, 0, this.tileSize * this.h);
+    this.p.line(this.tileSize * this.w, 0, this.tileSize * this.w, this.tileSize * this.h);
+    // Add numbers for easy identification.
+    if (this.displayTileNumbers) {
+      this.p.textSize(4);
+      this.p.textAlign(this.p.CENTER, this.p.CENTER);
+      this.p.fill(0);
+      this.p.noStroke();
+      let counter = 0;
+      for (let i = 0; i < this.h; i++) {
+        for (let j = 0; j < this.w; j++) {
+          this.p.text(counter, (j + 0.5) * this.tileSize, (i + 0.5) * this.tileSize);
+          counter++;
+        }
+      }
     }
   }
 }
