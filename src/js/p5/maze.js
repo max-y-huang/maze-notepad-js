@@ -17,7 +17,7 @@ class Maze {
     this.graph = new Graph(w, h);
   }
 
-  setActiveState = (x, y, state) => {
+  shape = (x, y, state) => {
     this.graph.setActiveState(x, y, state);
   }
  

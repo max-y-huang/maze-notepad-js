@@ -46,14 +46,14 @@ const sketch = p => {
   }
 
   p.mousePressed = () => {
-    if (p.mouseButton === p.LEFT) {
-      maze.setActiveState(cursor.getX(), cursor.getY(), true);
+    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
+      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT);
     }
   }
 
   p.mouseDragged = () => {
-    if (p.mouseButton === p.LEFT) {
-      maze.setActiveState(cursor.getX(), cursor.getY(), true);
+    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
+      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT);
     }
     else if (p.mouseButton === p.CENTER) {
       camera.translate();

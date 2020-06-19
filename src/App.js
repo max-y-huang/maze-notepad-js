@@ -36,7 +36,7 @@ class App extends React.Component {
       <div className={stylesheet.wrapper}>
         <div className={stylesheet.wrapper__toolbar}>Bar 1</div>
         <div className={stylesheet.wrapper__menubar}>Bar 2</div>
-        <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef}>
+        <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
           <P5Wrapper sketch={sketch} width={canvasWidth} height={canvasHeight} />
         </div>
       </div>
