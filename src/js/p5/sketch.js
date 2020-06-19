@@ -1,10 +1,11 @@
-
+import Cursor from './cursor';
 import Maze from './maze';
 
 const sketch = p => {
 
   let setupWidth = 0, setupHeight = 0;
   let camera;
+  let cursor;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
@@ -16,6 +17,7 @@ const sketch = p => {
     p.frameRate(60);
     camera = { x: 0, y: 0, zoom: 1, zoomStep: Math.sqrt(2) };
     maze = new Maze(p, 10, 10);
+    cursor = new Cursor(p, camera, maze);
   };
 
   p.draw = () => {
@@ -26,6 +28,7 @@ const sketch = p => {
     p.scale(camera.zoom);
 
     maze.draw();
+    cursor.draw();
 
     p.pop();
 

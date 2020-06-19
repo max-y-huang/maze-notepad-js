@@ -4,7 +4,7 @@ import P5Wrapper from 'react-p5-wrapper';
 
 import stylesheet from './css/App.module.css';
 
-import sketch from './p5/sketch.js';
+import sketch from './js/p5/sketch.js';
 
 class App extends React.Component {
 
