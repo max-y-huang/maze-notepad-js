@@ -1,6 +1,6 @@
-import Camera from './camera';
-import Cursor from './cursor';
-import Maze from './maze';
+import { Camera } from './camera';
+import { Cursor } from './cursor';
+import { Maze } from './maze';
 
 const sketch = p => {
 

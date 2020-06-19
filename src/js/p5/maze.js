@@ -68,4 +68,4 @@ class Maze {
   }
 }
 
-export default Maze;
+export { Maze };
