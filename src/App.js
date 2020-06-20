@@ -62,7 +62,7 @@ class App extends React.Component {
           open={errorModalOpen}
           header='Error!'
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
-          actions={[{ content: 'Got it', positive: true, onClick: this.hideErrorModal }]}
+          actions={[{ key: 'confirm', content: 'Got it', positive: true, onClick: this.hideErrorModal }]}
         />
       </>
     );
