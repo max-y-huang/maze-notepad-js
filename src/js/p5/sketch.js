@@ -58,7 +58,8 @@ const sketch = p => {
       return;
     }
     if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT, cursor.getX(), cursor.getY());
+      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+      maze.shape(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY(), state);
     }
   }
 
@@ -67,7 +68,10 @@ const sketch = p => {
       return;
     }
     if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT, cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
+      let prevX = cursor.getX(p.mouseX - p.movedX);
+      let prevY = cursor.getY(p.mouseY - p.movedY);
+      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+      maze.shape(cursor.getX(), cursor.getY(), prevX, prevY, state);
     }
     else if (p.mouseButton === p.CENTER) {
       camera.translateWithMouse();

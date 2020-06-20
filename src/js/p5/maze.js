@@ -44,7 +44,7 @@ class Maze {
     return { success: true };
   }
 
-  shape = (x, y, state, lastX, lastY) => {
+  shape = (x, y, prevX, prevY, state) => {
     if ($.mode !== $.CREATE) {
       return;
     }
@@ -52,25 +52,25 @@ class Maze {
       this.shapeFill(x, y, state);
     }
     else {
-      this.shapePen(x, y, state, lastX, lastY);
+      this.shapePen(x, y, prevX, prevY, state);
     }
   }
 
-  shapePen = (x, y, state, lastX, lastY) => {
-    this.graph.setActiveStateWithXY(lastX, lastY, state);
-    if (x === lastX && y === lastY) {
+  shapePen = (x, y, prevX, prevY, state) => {
+    this.graph.setActiveStateWithXY(prevX, prevY, state);
+    if (x === prevX && y === prevY) {
       return;
     }
     // If mouse movement changed grids, setActiveState() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
-    if (Math.abs(x - lastX) > Math.abs(y - lastY)) {
-      offsetX = lastX < x ? 1 : -1;
+    if (Math.abs(x - prevX) > Math.abs(y - prevY)) {
+      offsetX = prevX < x ? 1 : -1;
     }
     else {
-      offsetY = lastY < y ? 1 : -1;
+      offsetY = prevY < y ? 1 : -1;
     }
-    this.shape(x, y, state, lastX + offsetX, lastY + offsetY);
+    this.shape(x, y, prevX + offsetX, prevY + offsetY, state);
   }
 
   shapeFill = (x, y, state) => {
