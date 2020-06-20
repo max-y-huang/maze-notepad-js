@@ -56,7 +56,6 @@ class App extends React.Component {
               setCanvasModeFunc={this.setCanvasMode}
             />
           </div>
-          <div className={stylesheet.wrapper__menubar}>Bar 2</div>
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
               sketch={sketch}
