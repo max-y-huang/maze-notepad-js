@@ -1,9 +1,8 @@
-import consts from './../consts';
-
 class Global {
 
   mouseOverSketch = false;
-  mode = consts.CREATE;
+  mode = 0;
+  createTool = 0;
   tileSize = 14;
 }
 

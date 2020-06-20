@@ -21,6 +21,9 @@ const sketch = p => {
     if (props.mode !== $.mode) {
       changeMode(props.mode);
     }
+    if (props.createTool !== $.createTool) {
+      changeCreateTool(props.createTool);
+    }
   };
 
   const changeMode = (mode) => {
@@ -37,6 +40,10 @@ const sketch = p => {
       maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
       $.mode = mode;
     }
+  }
+
+  const changeCreateTool = (tool) => {
+    $.createTool = tool;
   }
 
   p.setup = () => {
@@ -79,25 +86,15 @@ const sketch = p => {
     if (!$.mouseOverSketch) {
       return;
     }
-    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-      maze.shape(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY(), state);
-    }
+    maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
   }
 
   p.mouseDragged = () => {
     if (!$.mouseOverSketch) {
       return;
     }
-    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      let prevX = cursor.getX(p.mouseX - p.movedX);
-      let prevY = cursor.getY(p.mouseY - p.movedY);
-      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-      maze.shape(cursor.getX(), cursor.getY(), prevX, prevY, state);
-    }
-    else if (p.mouseButton === p.CENTER) {
-      camera.translateWithMouse();
-    }
+    camera.translateWithMouse();
+    maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
   }
 
   p.mouseWheel = (event) => {

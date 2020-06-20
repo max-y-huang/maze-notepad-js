@@ -19,22 +19,17 @@ class Cursor {
     if (!$.mouseOverSketch) {
       return;
     }
-    if ($.mode === consts.CREATE) {
-      this.drawCreate();
-    }
-    else if ($.mode === consts.SOLVE) {
-      this.drawSolve();
+    if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
+      this.drawSquareCursor();
     }
   }
 
-  drawCreate = () => {
+  drawSquareCursor = () => {
     this.p.noFill();
     this.p.stroke(this.colour);
     this.p.strokeWeight(2);
     this.p.rect(this.getX() * $.tileSize, this.getY() * $.tileSize, $.tileSize, $.tileSize);
   }
-
-  drawSolve = () => {}
 }
 
 export { Cursor };

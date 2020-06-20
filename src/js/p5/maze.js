@@ -89,6 +89,17 @@ class Maze {
     }
   }
 
+  shapeWithMouse = (x, y, prevX, prevY) => {
+    if (!($.mode === consts.CREATE && $.createTool === consts.SHAPE)) {
+      return;
+    }
+    if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
+      return;
+    }
+    let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+    this.shape(x, y, prevX, prevY, state);
+  }
+
   draw = () => {
     if ($.mode === consts.CREATE) {
       this.drawCreate();

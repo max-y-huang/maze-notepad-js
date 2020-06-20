@@ -16,9 +16,10 @@ class App extends React.Component {
       canvasWidth: window.innerWidth,
       canvasHeight: window.innerHeight,
       mouseOverCanvas: false,
+      canvasMode: 0,
+      canvasCreateTool: 0,
       errorModalOpen: false,
-      errorModalMessage: '',
-      canvasMode: 0
+      errorModalMessage: ''
     }
     this.canvasWrapperRef = React.createRef();
   }
@@ -26,6 +27,7 @@ class App extends React.Component {
   setMouseOverCanvas = (val) => this.setState({ mouseOverCanvas: val });
 
   setCanvasMode = (mode) => this.setState({ canvasMode: mode });
+  setCanvasCreateTool = (mode) => this.setState({ canvasCreateTool: mode });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = () => this.setState({ errorModalOpen: false });
@@ -46,14 +48,16 @@ class App extends React.Component {
   }
 
   render() {
-    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, errorModalOpen, errorModalMessage } = this.state;
+    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, canvasCreateTool, errorModalOpen, errorModalMessage } = this.state;
     return (
       <>
         <div className={stylesheet.wrapper}>
           <div className={stylesheet.wrapper__toolbar}>
             <Toolbar
               canvasMode={canvasMode}
+              canvasCreateTool={canvasCreateTool}
               setCanvasModeFunc={this.setCanvasMode}
+              setCanvasCreateToolFunc={this.setCanvasCreateTool}
             />
           </div>
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
@@ -63,6 +67,7 @@ class App extends React.Component {
               height={canvasHeight}
               mouseOverCanvas={mouseOverCanvas}
               mode={canvasMode}
+              createTool={canvasCreateTool}
               setModeFunc={this.setCanvasMode}
               showErrorMessageFunc={this.showErrorModal}
             />

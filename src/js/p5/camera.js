@@ -27,6 +27,9 @@ class Camera {
   }
 
   translateWithMouse = () => {
+    if (!(this.p.mouseIsPressed && this.p.mouseButton === this.p.CENTER)) {
+      return;
+    }
     this.translate(-this.p.movedX, -this.p.movedY);
   }
 

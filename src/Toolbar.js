@@ -8,23 +8,53 @@ import consts from './js/consts';
 class Toolbar extends React.Component {
 
   setCanvasMode = (mode) => this.props.setCanvasModeFunc(mode);
+  setCanvasCreateTool = (tool) => this.props.setCanvasCreateToolFunc(tool);
+
+  renderCreateToolsButtons = () => {
+    if (this.props.canvasMode !== consts.CREATE) {
+      return null;
+    }
+    return (
+      <>
+        <Divider />
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='square'
+          color={this.props.canvasCreateTool === consts.SHAPE ? 'blue' : 'black'}
+          onClick={() => this.setCanvasCreateTool(consts.SHAPE)}
+        />
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='map'
+          color={this.props.canvasCreateTool === consts.PATHS ? 'blue' : 'black'}
+          onClick={() => this.setCanvasCreateTool(consts.PATHS)}
+        />
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='map marker alternate'
+          color={this.props.canvasCreateTool === consts.GOALS ? 'blue' : 'black'}
+          onClick={() => this.setCanvasCreateTool(consts.GOALS)}
+        />
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='rocket'
+          color={this.props.canvasCreateTool === consts.PORTALS ? 'blue' : 'black'}
+          onClick={() => this.setCanvasCreateTool(consts.PORTALS)}
+        />
+      </>
+    );
+  }
 
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <Button className={stylesheet.wrapper__item} basic size='huge' icon='wrench'
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='wrench'
           color={this.props.canvasMode === consts.CREATE ? 'blue' : 'black'}
           onClick={() => this.setCanvasMode(consts.CREATE)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge' icon='pencil'
+        <Button className={stylesheet.wrapper__item} basic size='huge'
+          icon='pencil'
           color={this.props.canvasMode === consts.SOLVE ? 'blue' : 'black'}
           onClick={() => this.setCanvasMode(consts.SOLVE)}
         />
-        <Divider />
-        <Button className={stylesheet.wrapper__item} basic color='black' size='huge' icon='square' />
-        <Button className={stylesheet.wrapper__item} basic color='black' size='huge' icon='map' />
-        <Button className={stylesheet.wrapper__item} basic color='black' size='huge' icon='map marker alternate' />
-        <Button className={stylesheet.wrapper__item} basic color='black' size='huge' icon='rocket' />
+        {this.renderCreateToolsButtons()}
       </div>
     )
   }
