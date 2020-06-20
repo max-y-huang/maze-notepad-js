@@ -1,3 +1,4 @@
+import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
 import { Graph, MazeGraph } from './graph';
@@ -45,7 +46,7 @@ class Maze {
   }
 
   shape = (x, y, prevX, prevY, state) => {
-    if ($.mode !== $.CREATE) {
+    if ($.mode !== consts.CREATE) {
       return;
     }
     if (keyLogger.isKeyCodePressed(this.p.SHIFT)) {
@@ -89,10 +90,10 @@ class Maze {
   }
 
   draw = () => {
-    if ($.mode === $.CREATE) {
+    if ($.mode === consts.CREATE) {
       this.drawCreate();
     }
-    else if ($.mode === $.SOLVE) {
+    else if ($.mode === consts.SOLVE) {
       this.drawSolve();
     }
   }

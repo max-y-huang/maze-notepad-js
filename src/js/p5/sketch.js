@@ -1,3 +1,4 @@
+import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
 import { Camera } from './camera';
@@ -15,7 +16,28 @@ const sketch = p => {
     onResize(props.width, props.height);
     $.mouseOverSketch = props.mouseOverCanvas;
     $.showErrorMessageFunc = props.showErrorMessageFunc;
+    $.setModeFunc = props.setModeFunc;
+
+    if (props.mode !== $.mode) {
+      changeMode(props.mode);
+    }
   };
+
+  const changeMode = (mode) => {
+    if (mode === consts.CREATE) {
+      $.mode = mode;
+    }
+    else if (mode === consts.SOLVE) {
+      let validCheck = maze.isValidMazeShape();
+      if (!validCheck.success) {
+        $.showErrorMessageFunc(validCheck.result);
+        $.setModeFunc($.mode);
+        return;
+      }
+      maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
+      $.mode = mode;
+    }
+  }
 
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
@@ -88,22 +110,6 @@ const sketch = p => {
   p.keyPressed = () => {
     if (!$.mouseOverSketch) {
       return;
-    }
-    if (p.key === ' ') {
-      if ($.mode === $.CREATE) {
-        // TODO: Move to maze.
-        let validCheck = maze.isValidMazeShape();
-        if (validCheck.success) {
-          maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
-          $.mode = $.SOLVE;
-        }
-        else {
-          $.showErrorMessageFunc(validCheck.result);
-        }
-      }
-      else if ($.mode === $.SOLVE) {
-        $.mode = $.CREATE;
-      }
     }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);

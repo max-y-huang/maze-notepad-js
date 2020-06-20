@@ -5,6 +5,7 @@ import P5Wrapper from 'react-p5-wrapper';
 
 import stylesheet from './css/App.module.css';
 
+import Toolbar from './Toolbar';
 import sketch from './js/p5/sketch';
 
 class App extends React.Component {
@@ -16,12 +17,15 @@ class App extends React.Component {
       canvasHeight: window.innerHeight,
       mouseOverCanvas: false,
       errorModalOpen: false,
-      errorModalMessage: ''
+      errorModalMessage: '',
+      canvasMode: 0
     }
     this.canvasWrapperRef = React.createRef();
   }
 
   setMouseOverCanvas = (val) => this.setState({ mouseOverCanvas: val });
+
+  setCanvasMode = (mode) => this.setState({ canvasMode: mode });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = () => this.setState({ errorModalOpen: false });
@@ -42,11 +46,16 @@ class App extends React.Component {
   }
 
   render() {
-    let { canvasWidth, canvasHeight, mouseOverCanvas, errorModalOpen, errorModalMessage } = this.state;
+    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, errorModalOpen, errorModalMessage } = this.state;
     return (
       <>
         <div className={stylesheet.wrapper}>
-          <div className={stylesheet.wrapper__toolbar}>Bar 1</div>
+          <div className={stylesheet.wrapper__toolbar}>
+            <Toolbar
+              canvasMode={canvasMode}
+              setCanvasModeFunc={this.setCanvasMode}
+            />
+          </div>
           <div className={stylesheet.wrapper__menubar}>Bar 2</div>
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
@@ -54,6 +63,8 @@ class App extends React.Component {
               width={canvasWidth}
               height={canvasHeight}
               mouseOverCanvas={mouseOverCanvas}
+              mode={canvasMode}
+              setModeFunc={this.setCanvasMode}
               showErrorMessageFunc={this.showErrorModal}
             />
           </div>
