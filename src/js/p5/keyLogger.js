@@ -3,29 +3,14 @@ class KeyLogger {
   keyDown = {};
   keyCodeDown = {};
 
-  isKeyPressed = (key) => {
-    return this.keyDown[key.toLowerCase()] ? true : false;
-  }
+  isKeyPressed = (key) => this.keyDown[key.toLowerCase()] ? true : false;
+  isKeyCodePressed = (keyCode) => this.keyCodeDown[keyCode.toString()] ? true : false;
 
-  isKeyCodePressed = (keyCode) => {
-    return this.keyCodeDown[keyCode.toString()] ? true : false;
-  }
+  onKeyDown = (key) => this.keyDown[key.toLowerCase()] = true;
+  onKeyCodeDown = (keyCode) => this.keyCodeDown[keyCode.toString()] = true;
 
-  onKeyDown = (key) => {
-    this.keyDown[key.toLowerCase()] = true;
-  }
-
-  onKeyCodeDown = (keyCode) => {
-    this.keyCodeDown[keyCode.toString()] = true;
-  }
-
-  onKeyUp = (key) => {
-    this.keyDown[key.toLowerCase()] = false;
-  }
-
-  onKeyCodeUp = (keyCode) => {
-    this.keyCodeDown[keyCode.toString()] = false;
-  }
+  onKeyUp = (key) => this.keyDown[key.toLowerCase()] = false;
+  onKeyCodeUp = (keyCode) => this.keyCodeDown[keyCode.toString()] = false;
 }
 
 let keyLogger = new KeyLogger();

@@ -70,17 +70,10 @@ class MazeGraph extends Graph {
 
   getActiveState = (index) => this.activeList[index];
   getActiveStateWithXY = (x, y) => this.getActiveState(y * this.w + x);
-  setActiveState = (index, state) => { this.activeList[index] = state; }
-  setActiveStateWithXY = (x, y, state) => { this.setActiveState(y * this.w + x, state); }
+  setActiveState = (index, state) => this.activeList[index] = state;
+  setActiveStateWithXY = (x, y, state) => this.setActiveState(y * this.w + x, state);
 
-  prepareFloodFillFilter = (target) => {
-    this.floodFillTarget = target;
-  }
-
-  floodFillFilterFunc = edge => {
-    return this.activeList[edge.a] === this.activeList[edge.b];
-  }
-
+  floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
 
   resetEdgeList = () => {

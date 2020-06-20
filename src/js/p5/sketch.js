@@ -14,13 +14,14 @@ const sketch = p => {
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     onResize(props.width, props.height);
     $.mouseOverSketch = props.mouseOverCanvas;
+    $.showErrorMessageFunc = props.showErrorMessageFunc;
   };
 
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
     p.noSmooth();
-    camera = new Camera(p, 0, 0, 1, 2, 1, 8);
+    camera = new Camera(p, 96, 96, 2, 2, 1, 8);
     maze = new Maze(p, 100, 100);
     cursor = new Cursor(p, camera, maze);
   };
@@ -86,9 +87,14 @@ const sketch = p => {
     }
     if (p.key === ' ') {
       if ($.mode === $.CREATE) {
-        if (maze.isValidMazeShape()) {
-          maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);  // TODO: Move to maze.
+        // TODO: Move to maze.
+        let validCheck = maze.isValidMazeShape();
+        if (validCheck.success) {
+          maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
           $.mode = $.SOLVE;
+        }
+        else {
+          $.showErrorMessageFunc(validCheck.result);
         }
       }
       else if ($.mode === $.SOLVE) {

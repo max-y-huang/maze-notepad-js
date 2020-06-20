@@ -26,11 +26,11 @@ class Maze {
     // Get the flood-fill graph of an active region.
     let bfsStart = this.graph.activeList.indexOf(true);
     if (bfsStart === -1) {
-      return false;
+      return { success: false, result: 'The maze must have a shape.' };
     }
     // A single cell is not valid.
     if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
-      return false;
+      return { success: false, result: 'The maze must be larger than 1x1.' };
     }
     let parents = this.graph.bfs(bfsStart, this.graph.floodFillFilterFunc);
     // Compare flood-fill with all active cells.
@@ -38,10 +38,10 @@ class Maze {
       let isActive = this.graph.activeList[i];
       let isParent = (parents[i] !== -1);
       if (isActive !== isParent) {
-        return false;
+        return { success: false, result: 'The maze must be contiguous.' };
       }
     }
-    return true;
+    return { success: true };
   }
 
   shape = (x, y, state, lastX, lastY) => {
