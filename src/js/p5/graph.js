@@ -20,7 +20,9 @@ class Graph {
 
   bfs = (start, filterFunc = (() => true)) => {
     let parents = Array(this.size).fill(-1);
-    let queue = [ start ];
+    let queue = [];
+
+    queue.push(start);
     parents[start] = 0;
     while (queue.length > 0) {
       let v = queue.shift();
@@ -32,6 +34,7 @@ class Graph {
         }
       });
     }
+    
     return parents;
   }
 
