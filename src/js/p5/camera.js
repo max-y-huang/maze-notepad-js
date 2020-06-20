@@ -1,11 +1,12 @@
+import keyLogger from './keyLogger';
+
 class Camera {
 
   zoomKeyboardSpeed = 100;
   zoomKeyboardSpeedCheck = 0;
 
-  constructor (p, keyLogger, x, y, z, zStep, zMin, zMax) {
+  constructor (p, x, y, z, zStep, zMin, zMax) {
     this.p = p;
-    this.keyLogger = keyLogger;
     this.pos = { x: x, y: y, z: z };
     this.zStep = zStep;
     this.zMin = zMin;
@@ -32,16 +33,16 @@ class Camera {
   translateWithKeyboard = () => {
     let speed = 30;
     let changeX = 0, changeY = 0;
-    if (this.keyLogger.isKeyPressed('w')) {
+    if (keyLogger.isKeyPressed('w')) {
       changeY -= speed;
     }
-    if (this.keyLogger.isKeyPressed('a')) {
+    if (keyLogger.isKeyPressed('a')) {
       changeX -= speed;
     }
-    if (this.keyLogger.isKeyPressed('s')) {
+    if (keyLogger.isKeyPressed('s')) {
       changeY += speed;
     }
-    if (this.keyLogger.isKeyPressed('d')) {
+    if (keyLogger.isKeyPressed('d')) {
       changeX += speed;
     }
     this.translate(changeX, changeY);
@@ -67,16 +68,16 @@ class Camera {
   }
 
   zoomWithKeyboard = () => {
-    if (!this.keyLogger.isKeyPressed('q') && !this.keyLogger.isKeyPressed('e')) {
+    if (!keyLogger.isKeyPressed('q') && !keyLogger.isKeyPressed('e')) {
       this.zoomKeyboardSpeedCheck = 0;
       return;
     }
 
     let delta = 1;
-    if (this.keyLogger.isKeyPressed('q')) {
+    if (keyLogger.isKeyPressed('q')) {
       delta /= this.zStep;
     }
-    if (this.keyLogger.isKeyPressed('e')) {
+    if (keyLogger.isKeyPressed('e')) {
       delta *= this.zStep;
     }
     if (this.p.millis() >= this.zoomKeyboardSpeed + this.zoomKeyboardSpeedCheck) {

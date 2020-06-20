@@ -1,4 +1,5 @@
 import $ from './global';
+import keyLogger from './keyLogger';
 import { Graph, MazeGraph } from './graph';
 
 class Maze {
@@ -13,9 +14,8 @@ class Maze {
   mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
 
-  constructor (p, keyLogger, w, h) {
+  constructor (p, w, h) {
     this.p = p;
-    this.keyLogger = keyLogger;
     this.w = w;
     this.h = h;
     this.graph = new MazeGraph(w, h);
@@ -26,7 +26,7 @@ class Maze {
     if ($.mode !== $.CREATE) {
       return;
     }
-    if (this.keyLogger.isKeyCodePressed(this.p.SHIFT)) {
+    if (keyLogger.isKeyCodePressed(this.p.SHIFT)) {
       this.shapeFill(x, y, state);
     }
     else {

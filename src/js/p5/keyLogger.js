@@ -3,10 +3,6 @@ class KeyLogger {
   keyDown = {};
   keyCodeDown = {};
 
-  constructor (p) {
-    this.p = p;
-  }
-
   isKeyPressed = (key) => {
     return this.keyDown[key.toLowerCase()] ? true : false;
   }
@@ -32,4 +28,5 @@ class KeyLogger {
   }
 }
 
-export { KeyLogger };
+let keyLogger = new KeyLogger();
+export default keyLogger;
