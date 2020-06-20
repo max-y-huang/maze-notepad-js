@@ -14,19 +14,21 @@ const sketch = p => {
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     onResize(props.width, props.height);
+    $.mouseOverSketch = props.mouseOverCanvas;
   };
 
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
     p.noSmooth();
-    keyLogger = new KeyLogger();
-    camera = new Camera(p, keyLogger, 0, 0, 1, Math.sqrt(2), 1, Math.pow(Math.sqrt(2), 6));
-    maze = new Maze(p, 100, 100);
+    keyLogger = new KeyLogger(p);
+    camera = new Camera(p, keyLogger, 0, 0, 1, 2, 1, 8);
+    maze = new Maze(p, keyLogger, 100, 100);
     cursor = new Cursor(p, camera, maze);
   };
 
   p.draw = () => {
+
     camera.translateWithKeyboard();
     camera.zoomWithKeyboard();
 
@@ -53,14 +55,20 @@ const sketch = p => {
   }
 
   p.mousePressed = () => {
+    if (!$.mouseOverSketch) {
+      return;
+    }
     if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT);
+      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT, cursor.getX(), cursor.getY());
     }
   }
 
   p.mouseDragged = () => {
+    if (!$.mouseOverSketch) {
+      return;
+    }
     if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT);
+      maze.shape(cursor.getX(), cursor.getY(), p.mouseButton === p.LEFT, cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
     }
     else if (p.mouseButton === p.CENTER) {
       camera.translateWithMouse();
@@ -68,10 +76,16 @@ const sketch = p => {
   }
 
   p.mouseWheel = (event) => {
+    if (!$.mouseOverSketch) {
+      return;
+    }
     camera.zoomWithMouse(event);
   }
 
   p.keyPressed = () => {
+    if (!$.mouseOverSketch) {
+      return;
+    }
     if (p.key === ' ') {
       if ($.mode === $.CREATE) {
         maze.solvedGraph = maze.graph.kruskal();  // TODO: Move to maze.
@@ -82,10 +96,12 @@ const sketch = p => {
       }
     }
     keyLogger.onKeyDown(p.key);
+    keyLogger.onKeyCodeDown(p.keyCode);
   }
 
   p.keyReleased = () => {
     keyLogger.onKeyUp(p.key);
+    keyLogger.onKeyCodeUp(p.keyCode);
   }
 };
 

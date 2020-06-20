@@ -3,29 +3,85 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  displayTileNumbers = false;
-
   canvasColour = [ 255, 255, 255 ];
-  mazeShapeColour = [ 208, 224, 255 ];
-  gridLineColour = [ 196, 196, 196 ];
+  mazeShapeColour = [ 64, 64, 64 ];
+  canvasOutlineColour = [ 32, 32, 32 ];
+  canvasOutlineWeight = 4;
+  gridLineColour = [ 224, 224, 224 ];
   gridLineWeight = 1;
   mazeColour = [ 255, 255, 255 ];
-  mazeStrokeColour = [ 0, 0, 0 ];
+  mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
 
-  constructor (p, w, h) {
+  constructor (p, keyLogger, w, h) {
     this.p = p;
+    this.keyLogger = keyLogger;
     this.w = w;
     this.h = h;
     this.graph = new MazeGraph(w, h);
     this.solvedGraph = new Graph(w * h);
   }
 
-  shape = (x, y, state) => {
+  shape = (x, y, state, lastX, lastY) => {
     if ($.mode !== $.CREATE) {
       return;
     }
-    this.graph.setActiveState(x, y, state);
+    if (this.keyLogger.isKeyCodePressed(this.p.SHIFT)) {
+      this.shapeFill(x, y, state);
+    }
+    else {
+      this.shapePen(x, y, state, lastX, lastY);
+    }
+  }
+
+  shapePen = (x, y, state, lastX, lastY) => {
+    this.graph.setActiveStateWithXY(lastX, lastY, state);
+    if (x === lastX && y === lastY) {
+      return;
+    }
+    // If mouse movement changed grids, setActiveState() for each grid along mouse path.
+    let offsetX = 0;
+    let offsetY = 0;
+    if (Math.abs(x - lastX) > Math.abs(y - lastY)) {
+      offsetX = lastX < x ? 1 : -1;
+    }
+    else {
+      offsetY = lastY < y ? 1 : -1;
+    }
+    this.shape(x, y, state, lastX + offsetX, lastY + offsetY);
+  }
+
+  shapeFill = (x, y, state) => {
+    // Return if filling same state as current state.
+    let targetState = this.graph.getActiveStateWithXY(x, y);
+    if (state === targetState) {
+      return;
+    }
+    // Perform a bfs to fill the shape.
+    let visited = Array(this.w * this.h).fill(false);
+    let queue = [ y * this.w + x ];
+    while (queue.length > 0) {
+      // Get point details and fill in single point.
+      let point = queue.shift();
+      let pointX = point % this.w;
+      let pointY = Math.floor(point / this.h);
+      this.graph.setActiveState(point, state);
+      // Fill in adjacent sides if applicable.
+      let loops = [
+        { condition: pointX > 0,          item: point - 1 },
+        { condition: pointX < this.w - 1, item: point + 1 },
+        { condition: pointY > 0,          item: point - this.w },
+        { condition: pointY < this.h - 1, item: point + this.w }
+      ];
+      loops.forEach(e => {
+        if (e.condition) {
+          if (this.graph.getActiveState(e.item) === targetState && !visited[e.item]) {
+            visited[e.item] = true;
+            queue.push(e.item);
+          }
+        }
+      })
+    }
   }
 
   draw = () => {
@@ -46,7 +102,7 @@ class Maze {
     this.p.fill(this.mazeShapeColour);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
-        if (this.graph.getActiveState(j, i)) {
+        if (this.graph.getActiveStateWithXY(j, i)) {
           this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }
@@ -55,32 +111,18 @@ class Maze {
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.PROJECT);
     this.p.strokeWeight(this.gridLineWeight);
-    for (let i = 1; i < this.h; i++) {
+    for (let i = 0; i <= this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = 1; i < this.w; i++) {
+    for (let i = 0; i <= this.w; i++) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
     // Draw canvas outline.
-    this.p.stroke(0);
-    this.p.line(0, 0, $.tileSize * this.w, 0);
-    this.p.line(0, $.tileSize * this.h, $.tileSize * this.w, $.tileSize * this.h);
-    this.p.line(0, 0, 0, $.tileSize * this.h);
-    this.p.line($.tileSize * this.w, 0, $.tileSize * this.w, $.tileSize * this.h);
-    // Add numbers for easy identification.
-    if (this.displayTileNumbers) {
-      this.p.textSize(4);
-      this.p.textAlign(this.p.CENTER, this.p.CENTER);
-      this.p.fill(0);
-      this.p.noStroke();
-      let counter = 0;
-      for (let i = 0; i < this.h; i++) {
-        for (let j = 0; j < this.w; j++) {
-          this.p.text(counter, (j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize);
-          counter++;
-        }
-      }
-    }
+    this.p.stroke(this.canvasOutlineColour);
+    this.p.strokeWeight(this.canvasOutlineWeight);
+    this.p.noFill();
+    let outlineBuffer = (this.gridLineWeight + this.canvasOutlineWeight) / 2;
+    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);
   }
 
   drawSolve = () => {
@@ -90,7 +132,7 @@ class Maze {
     this.p.fill(this.mazeStrokeColour);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
-        if (this.graph.getActiveState(j, i)) {
+        if (this.graph.getActiveStateWithXY(j, i)) {
           this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }

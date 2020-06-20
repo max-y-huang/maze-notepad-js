@@ -12,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       canvasWidth: window.innerWidth,
-      canvasHeight: window.innerHeight
+      canvasHeight: window.innerHeight,
+      mouseOverCanvas: false
     }
     this.canvasWrapperRef = React.createRef();
   }
@@ -28,16 +29,18 @@ class App extends React.Component {
   componentDidMount() {
     this.onResize();
     window.addEventListener('resize', debounce(this.onResize, 200));
+    this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setState({ mouseOverCanvas: true }));
+    this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setState({ mouseOverCanvas: false }));
   }
 
   render() {
-    let { canvasWidth, canvasHeight } = this.state;
+    let { canvasWidth, canvasHeight, mouseOverCanvas } = this.state;
     return (
       <div className={stylesheet.wrapper}>
         <div className={stylesheet.wrapper__toolbar}>Bar 1</div>
         <div className={stylesheet.wrapper__menubar}>Bar 2</div>
         <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
-          <P5Wrapper sketch={sketch} width={canvasWidth} height={canvasHeight} />
+          <P5Wrapper sketch={sketch} width={canvasWidth} height={canvasHeight} mouseOverCanvas={mouseOverCanvas} />
         </div>
       </div>
     );

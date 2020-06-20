@@ -11,10 +11,13 @@ class Cursor {
     this.maze = maze;
   }
 
-  getX = () => clamp(Math.floor((this.p.mouseX - this.camera.pos.x) / this.camera.pos.z / $.tileSize), 0, this.maze.w - 1);
-  getY = () => clamp(Math.floor((this.p.mouseY - this.camera.pos.y) / this.camera.pos.z / $.tileSize), 0, this.maze.h - 1);
+  getX = (x = this.p.mouseX) => clamp(Math.floor((x - this.camera.pos.x) / this.camera.pos.z / $.tileSize), 0, this.maze.w - 1);
+  getY = (y = this.p.mouseY) => clamp(Math.floor((y - this.camera.pos.y) / this.camera.pos.z / $.tileSize), 0, this.maze.h - 1);
 
   draw = () => {
+    if (!$.mouseOverSketch) {
+      return;
+    }
     if ($.mode === $.CREATE) {
       this.drawCreate();
     }

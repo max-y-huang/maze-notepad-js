@@ -20,6 +20,9 @@ class Camera {
   translate = (changeX, changeY) => {
     this.pos.x -= changeX;
     this.pos.y -= changeY;
+    // Integer coordinates eliminate anti-aliasing.
+    this.pos.x = Math.round(this.pos.x);
+    this.pos.y = Math.round(this.pos.y);
   }
 
   translateWithMouse = () => {
@@ -45,12 +48,18 @@ class Camera {
   }
 
   zoom = (delta) => {
-    if (this.pos.z * delta < this.zMin || this.pos.z * delta > this.zMax) {
-      return;
+    if (this.pos.z * delta < this.zMin) {
+      delta = this.zMin / this.pos.z;
+    }
+    else if (this.pos.z * delta > this.zMax) {
+      delta = this.zMax / this.pos.z;
     }
     this.pos.x = (this.pos.x - this.p.mouseX) * delta + this.p.mouseX;
     this.pos.y = (this.pos.y - this.p.mouseY) * delta + this.p.mouseY;
     this.pos.z *= delta;
+    // Integer coordinates eliminate anti-aliasing.
+    this.pos.x = Math.round(this.pos.x);
+    this.pos.y = Math.round(this.pos.y);
   }
 
   zoomWithMouse = (event) => {

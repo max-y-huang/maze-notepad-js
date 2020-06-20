@@ -10,12 +10,13 @@ class Graph {
     this.edgeList.push({ a: a, b: b, weight: weight });
   }
 
+  activeEdgesFilter = () => true;
+
   kruskal = () => {
-    const activeEdgesFilter = edge => this.activeList[edge.a] && this.activeList[edge.b];
     const edgeWeightSort = (a, b) => a.weight - b.weight;
 
     let mst = new Graph(this.size);
-    let edges = this.edgeList.filter(activeEdgesFilter).sort(edgeWeightSort);
+    let edges = this.edgeList.filter(this.activeEdgesFilter).sort(edgeWeightSort);
     let ds = new DisjointSet(this.w * this.h);
 
     edges.forEach(edge => {
@@ -41,8 +42,12 @@ class MazeGraph extends Graph {
     this.resetEdgeList();
   }
 
-  getActiveState = (x, y) => this.activeList[y * this.w + x];
-  setActiveState = (x, y, state) => { this.activeList[y * this.w + x] = state; }
+  getActiveState = (index) => this.activeList[index];
+  getActiveStateWithXY = (x, y) => this.getActiveState(y * this.w + x);
+  setActiveState = (index, state) => { this.activeList[index] = state; }
+  setActiveStateWithXY = (x, y, state) => { this.setActiveState(y * this.w + x, state); }
+
+  activeEdgesFilter = edge => this.activeList[edge.a] && this.activeList[edge.b];
 
   resetEdgeList = () => {
     for (let i = 0; i < this.h; i++) {
