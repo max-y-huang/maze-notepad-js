@@ -24,11 +24,15 @@ class Maze {
 
   isValidMazeShape = () => {
     // Get the flood-fill graph of an active region.
-    let bfsStart = this.graph.activeList.findIndex(x => x);
+    let bfsStart = this.graph.activeList.indexOf(true);
     if (bfsStart === -1) {
       return false;
     }
-    let parents = this.graph.bfs(this.graph.activeList.findIndex(x => x), this.graph.floodFillFilterFunc);
+    // A single cell is not valid.
+    if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
+      return false;
+    }
+    let parents = this.graph.bfs(bfsStart, this.graph.floodFillFilterFunc);
     // Compare flood-fill with all active cells.
     for (let i = 0; i < this.graph.size; i++) {
       let isActive = this.graph.activeList[i];
