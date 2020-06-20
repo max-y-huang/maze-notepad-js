@@ -22,17 +22,17 @@ class Toolbar extends React.Component {
           color={this.props.canvasCreateTool === consts.SHAPE ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.SHAPE)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge'
+        <Button className={stylesheet.wrapper__item} basic size='huge' disabled
           icon='map'
           color={this.props.canvasCreateTool === consts.PATHS ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.PATHS)}
         />
         <Button className={stylesheet.wrapper__item} basic size='huge'
           icon='map marker alternate'
-          color={this.props.canvasCreateTool === consts.GOALS ? 'blue' : 'black'}
-          onClick={() => this.setCanvasCreateTool(consts.GOALS)}
+          color={this.props.canvasCreateTool === consts.MARKERS ? 'blue' : 'black'}
+          onClick={() => this.setCanvasCreateTool(consts.MARKERS)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge'
+        <Button className={stylesheet.wrapper__item} basic size='huge' disabled
           icon='rocket'
           color={this.props.canvasCreateTool === consts.PORTALS ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.PORTALS)}

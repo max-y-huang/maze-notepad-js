@@ -43,6 +43,7 @@ const sketch = p => {
   }
 
   const changeCreateTool = (tool) => {
+    maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
     $.createTool = tool;
   }
 
@@ -56,7 +57,6 @@ const sketch = p => {
   };
 
   p.draw = () => {
-
     camera.translateWithKeyboard();
     camera.zoomWithKeyboard();
 
@@ -87,6 +87,7 @@ const sketch = p => {
       return;
     }
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
+    maze.setMarkerWithMouse(cursor.getX(), cursor.getY());
   }
 
   p.mouseDragged = () => {

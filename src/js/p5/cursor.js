@@ -4,7 +4,7 @@ import { clamp } from '../funcs';
 
 class Cursor {
 
-  colour = [ 41, 148, 209 ];
+  colour = consts.COLOURS[0];
 
   constructor (p, camera, maze) {
     this.p = p;
@@ -20,6 +20,12 @@ class Cursor {
       return;
     }
     if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
+      this.drawSquareCursor();
+    }
+    if ($.mode === consts.CREATE && $.createTool === consts.MARKERS) {
+      this.drawSquareCursor();
+    }
+    if ($.mode === consts.CREATE && $.createTool === consts.PORTALS) {
       this.drawSquareCursor();
     }
   }
