@@ -4,37 +4,34 @@ class Graph {
 
   constructor (size) {
     this.size = size;
+    this.adjList = [];
+    for (let i = 0; i < size; i++) {
+      this.adjList.push([]);
+    }
   }
 
   addEdge = (a, b, weight) => {
-    this.edgeList.push({ a: a, b: b, weight: weight });
+    let itemA = { a: a, b: b, weight: weight };
+    let itemB = { a: b, b: a, weight: weight };
+    this.edgeList.push(itemA);
+    this.adjList[a].push(itemA);
+    this.adjList[b].push(itemB);
   }
-
-  getEdgesFromIndex = (index) => {
-    return this.edgeList.filter(edge => edge.a === index || edge.b === index);
-  }
-
-  activeEdgesFilter = () => true;
 
   bfs = (start, filterFunc = (() => true)) => {
-
     let parents = Array(this.size).fill(-1);
-    
     let queue = [ start ];
     parents[start] = 0;
-
     while (queue.length > 0) {
-
       let v = queue.shift();
-      this.getEdgesFromIndex(v).filter(filterFunc).forEach(edge => {
-        let t = (edge.a === v) ? edge.b : edge.a;
-        if (parents[t] === -1) {
-          parents[t] = v;
-          queue.push(t);
+      this.adjList[v].filter(filterFunc).forEach(edge => {
+        // edge.a is always v.
+        if (parents[edge.b] === -1) {
+          parents[edge.b] = v;
+          queue.push(edge.b);
         }
       });
     }
-
     return parents;
   }
 
@@ -81,7 +78,7 @@ class MazeGraph extends Graph {
     return this.activeList[edge.a] === this.activeList[edge.b];
   }
 
-  activeEdgesFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
+  generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
 
   resetEdgeList = () => {
     for (let i = 0; i < this.h; i++) {
