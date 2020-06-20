@@ -86,7 +86,7 @@ const sketch = p => {
     }
     if (p.key === ' ') {
       if ($.mode === $.CREATE) {
-        maze.solvedGraph = maze.graph.kruskal();  // TODO: Move to maze.
+        maze.solvedGraph = maze.graph.kruskal(maze.graph.activeEdgesFilterFunc);  // TODO: Move to maze.
         $.mode = $.SOLVE;
       }
       else if ($.mode === $.SOLVE) {

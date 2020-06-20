@@ -10,13 +10,39 @@ class Graph {
     this.edgeList.push({ a: a, b: b, weight: weight });
   }
 
+  getEdgesFromIndex = (index) => {
+    return this.edgeList.filter(edge => edge.a === index || edge.b === index);
+  }
+
   activeEdgesFilter = () => true;
 
-  kruskal = () => {
+  bfs = (start, filterFunc = (() => true)) => {
+
+    let parents = Array(this.size).fill(-1);
+    
+    let queue = [ start ];
+    parents[start] = 0;
+
+    while (queue.length > 0) {
+
+      let v = queue.shift();
+      this.getEdgesFromIndex(v).filter(filterFunc).forEach(edge => {
+        let t = (edge.a === v) ? edge.b : edge.a;
+        if (parents[t] === -1) {
+          parents[t] = v;
+          queue.push(t);
+        }
+      });
+    }
+
+    return parents;
+  }
+
+  kruskal = (filterFunc = (() => true)) => {
     const edgeWeightSort = (a, b) => a.weight - b.weight;
 
     let mst = new Graph(this.size);
-    let edges = this.edgeList.filter(this.activeEdgesFilter).sort(edgeWeightSort);
+    let edges = this.edgeList.filter(filterFunc).sort(edgeWeightSort);
     let ds = new DisjointSet(this.w * this.h);
 
     edges.forEach(edge => {
@@ -47,7 +73,15 @@ class MazeGraph extends Graph {
   setActiveState = (index, state) => { this.activeList[index] = state; }
   setActiveStateWithXY = (x, y, state) => { this.setActiveState(y * this.w + x, state); }
 
-  activeEdgesFilter = edge => this.activeList[edge.a] && this.activeList[edge.b];
+  prepareFloodFillFilter = (target) => {
+    this.floodFillTarget = target;
+  }
+
+  floodFillFilterFunc = edge => {
+    return this.activeList[edge.a] === this.activeList[edge.b];
+  }
+
+  activeEdgesFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
 
   resetEdgeList = () => {
     for (let i = 0; i < this.h; i++) {

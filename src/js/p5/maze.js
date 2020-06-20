@@ -39,7 +39,7 @@ class Maze {
     if (x === lastX && y === lastY) {
       return;
     }
-    // If mouse movement changed grids, setActiveState() for each grid along mouse path.
+    // If mouse movement changed grids, setActiveState() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
     if (Math.abs(x - lastX) > Math.abs(y - lastY)) {
@@ -57,30 +57,12 @@ class Maze {
     if (state === targetState) {
       return;
     }
-    // Perform a bfs to fill the shape.
-    let visited = Array(this.w * this.h).fill(false);
-    let queue = [ y * this.w + x ];
-    while (queue.length > 0) {
-      // Get point details and fill in single point.
-      let point = queue.shift();
-      let pointX = point % this.w;
-      let pointY = Math.floor(point / this.h);
-      this.graph.setActiveState(point, state);
-      // Fill in adjacent sides if applicable.
-      let loops = [
-        { condition: pointX > 0,          item: point - 1 },
-        { condition: pointX < this.w - 1, item: point + 1 },
-        { condition: pointY > 0,          item: point - this.w },
-        { condition: pointY < this.h - 1, item: point + this.w }
-      ];
-      loops.forEach(e => {
-        if (e.condition) {
-          if (this.graph.getActiveState(e.item) === targetState && !visited[e.item]) {
-            visited[e.item] = true;
-            queue.push(e.item);
-          }
-        }
-      })
+    // BFS to find flood fill region, and setActiveState() for each cell in the region.
+    let parents = this.graph.bfs(y * this.w + x, this.graph.floodFillFilterFunc);
+    for (let i = 0; i < parents.length; i++) {
+      if (parents[i] !== -1) {
+        this.graph.setActiveState(i, state);
+      }
     }
   }
 
