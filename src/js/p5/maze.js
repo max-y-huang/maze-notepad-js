@@ -22,6 +22,24 @@ class Maze {
     this.solvedGraph = new Graph(w * h);
   }
 
+  isValidMazeShape = () => {
+    // Get the flood-fill graph of an active region.
+    let bfsStart = this.graph.activeList.findIndex(x => x);
+    if (bfsStart === -1) {
+      return false;
+    }
+    let parents = this.graph.bfs(this.graph.activeList.findIndex(x => x), this.graph.floodFillFilterFunc);
+    // Compare flood-fill with all active cells.
+    for (let i = 0; i < this.graph.size; i++) {
+      let isActive = this.graph.activeList[i];
+      let isParent = (parents[i] !== -1);
+      if (isActive !== isParent) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   shape = (x, y, state, lastX, lastY) => {
     if ($.mode !== $.CREATE) {
       return;
@@ -111,7 +129,7 @@ class Maze {
     // Draw maze shape.
     this.p.stroke(this.mazeStrokeColour);
     this.p.strokeWeight(this.mazeStrokeWeight);
-    this.p.fill(this.mazeStrokeColour);
+    this.p.fill(this.mazeColour);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
         if (this.graph.getActiveStateWithXY(j, i)) {
