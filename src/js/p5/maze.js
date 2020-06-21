@@ -109,11 +109,11 @@ class Maze {
     }
     // BFS to find flood fill region, and shapeFill() for each cell in the region.
     let parents = this.graph.bfs(y * this.w + x, this.graph.floodFillFilterFunc);
-    for (let i = 0; i < parents.length; i++) {
-      if (parents[i] !== -1) {
+    parents.forEach((parent, i) => {
+      if (parent !== -1) {
         this.shapePoint(i, state);
       }
-    }
+    })
   }
 
   shapeWithMouse(x, y, currX, currY) {
@@ -262,15 +262,14 @@ class Maze {
     this.p.stroke(this.mazeColour);
     this.p.strokeWeight($.tileSize - this.mazeStrokeWeight);
     this.p.strokeCap(this.p.PROJECT);
-    for (let i = 0; i < this.solvedGraph.edgeList.length; i++) {
-      let { a, b } = this.solvedGraph.edgeList[i];
+    this.solvedGraph.edgeList.forEach(e => {
       // Shift everything by 0.5 units in both directions.
-      let xa = 0.5 + a % this.w;
-      let ya = 0.5 + Math.floor(a / this.h);
-      let xb = 0.5 + b % this.w;
-      let yb = 0.5 + Math.floor(b / this.h);
+      let xa = 0.5 + e.a % this.w;
+      let ya = 0.5 + Math.floor(e.a / this.h);
+      let xb = 0.5 + e.b % this.w;
+      let yb = 0.5 + Math.floor(e.b / this.h);
       this.p.line(xa * $.tileSize, ya * $.tileSize, xb * $.tileSize, yb * $.tileSize);
-    }
+    });
     // Draw toShapeList.
     this.p.strokeWeight(this.mazeStrokeWeight);
     for (let i = 0; i < this.h; i++) {
