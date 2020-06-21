@@ -7,7 +7,7 @@ import { Maze } from './maze';
 
 const sketch = p => {
 
-  let testingMode = false;
+  let testingMode = true;
 
   let camera;
   let cursor;

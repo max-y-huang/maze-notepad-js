@@ -14,6 +14,10 @@ class Maze {
   markerDiameter = 6;
   suggestedPathsColour = consts.COLOURS[0];
   suggestedPathsWeight = 2;
+  toShapeAddColour = [ 192, 255, 192 ];
+  toShapeAddStrokeColour = [ 96, 128, 96 ];
+  toShapeRemoveColour = [ 255, 192, 192 ];
+  toShapeRemoveStrokeColour = [ 128, 96, 96 ];
 
   constructor(p, w, h) {
     this.p = p;
@@ -191,7 +195,7 @@ class Maze {
 
   drawGrid() {
     this.p.stroke(this.gridLineColour);
-    this.p.strokeCap(this.p.SQUARE);
+    this.p.strokeCap(this.p.PROJECT);
     this.p.strokeWeight(this.gridLineWeight);
     for (let i = 0; i <= this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
@@ -273,13 +277,13 @@ class Maze {
       for (let j = 0; j < this.w; j++) {
         let index = i * this.w + j;
         if (this.toShapeList[index] === 1) {
-          this.p.stroke(64, 128, 64);
-          this.p.fill(128, 255, 128);
+          this.p.stroke(this.toShapeAddStrokeColour);
+          this.p.fill(this.toShapeAddColour);
           this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
         if (this.toShapeList[index] === -1) {
-          this.p.stroke(128, 64, 64);
-          this.p.fill(255, 128, 128);
+          this.p.stroke(this.toShapeRemoveStrokeColour);
+          this.p.fill(this.toShapeRemoveColour);
           this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }
