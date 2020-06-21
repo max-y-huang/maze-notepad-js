@@ -5,10 +5,7 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  canvasColour = [ 255, 255, 255 ];
   mazeShapeColour = [ 224, 224, 224 ];
-  canvasOutlineColour = [ 0, 0, 0 ];
-  canvasOutlineWeight = 4;
   gridLineColour = [ 176, 176, 176 ];
   gridLineWeight = 1;
   mazeColour = [ 224, 224, 224 ];
@@ -22,6 +19,14 @@ class Maze {
     this.h = h;
     this.graph = new MazeGraph(w, h);
     this.solvedGraph = new Graph(w * h);
+    this.toShapeList = Array(w * h).fill(0);  // -1 = remove, 1 = add, 0 = nothing.
+  }
+
+  update = () => {
+    this.solvedGraph = this.graph.kruskal(this.graph.generateMazeFilterFunc);
+    for (let i = 0; i < this.toShapeList.length; i++) {
+      this.toShapeList[i] = 0;
+    }
   }
 
   isValidMazeShape = () => {
@@ -57,8 +62,16 @@ class Maze {
     }
   }
 
+  shapePoint = (index, state) => {
+    if (state !== this.graph.getActiveState(index)) {
+      this.toShapeList[index] = state ? 1 : -1;
+    }
+    this.graph.setActiveState(index, state);
+  }
+  shapePointWithXY = (x, y, state) => this.shapePoint(y * this.w + x, state);
+
   shapePen = (x, y, prevX, prevY, state) => {
-    this.graph.setActiveStateWithXY(prevX, prevY, state);
+    this.shapePointWithXY(prevX, prevY, state);
     if (x === prevX && y === prevY) {
       return;
     }
@@ -71,7 +84,7 @@ class Maze {
     else {
       offsetY = prevY < y ? 1 : -1;
     }
-    this.shape(x, y, prevX + offsetX, prevY + offsetY, state);
+    this.shapePen(x, y, prevX + offsetX, prevY + offsetY, state);
   }
 
   shapeFill = (x, y, state) => {
@@ -84,7 +97,7 @@ class Maze {
     let parents = this.graph.bfs(y * this.w + x, this.graph.floodFillFilterFunc);
     for (let i = 0; i < parents.length; i++) {
       if (parents[i] !== -1) {
-        this.graph.setActiveState(i, state);
+        this.shapePoint(i, state);
       }
     }
   }
@@ -112,34 +125,14 @@ class Maze {
   }
 
   draw = () => {
-    /*if ($.mode === consts.CREATE) {
-      this.drawCanvas();
-    }*/
-    if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
-      this.drawMazeShape()
-      this.drawGridLines();
+    if ($.mode === consts.CREATE) {
+      this.drawGrid();
     }
-    else if ($.mode === consts.CREATE) {
-      this.drawGridLines();
-      this.drawMaze();
-    }
-    else {
-      this.drawMaze();
-    }
+    this.drawMaze();
     this.drawMarkers();
   }
 
-  drawCanvas = () => {
-    this.p.noStroke();
-    this.p.fill(this.canvasColour);
-    this.p.rect(0, 0, $.tileSize * this.w, $.tileSize * this.h);
-    /*this.p.stroke(this.canvasOutlineColour);
-    this.p.strokeWeight(this.canvasOutlineWeight);
-    let outlineBuffer = (this.gridLineWeight + this.canvasOutlineWeight) / 2;
-    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);*/
-  }
-
-  drawGridLines = () => {
+  drawGrid = () => {
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.SQUARE);
     this.p.strokeWeight(this.gridLineWeight);
@@ -177,6 +170,7 @@ class Maze {
     }
   }
 
+  // drawMaze() has graphical glitches when adding new cells into activeList without calling update(). Drawing toShapeList hides these glitches.
   drawMaze = () => {
     // Draw cells.
     this.p.stroke(this.mazeStrokeColour);
@@ -194,14 +188,30 @@ class Maze {
     this.p.strokeWeight($.tileSize - this.mazeStrokeWeight);
     this.p.strokeCap(this.p.PROJECT);
     for (let i = 0; i < this.solvedGraph.edgeList.length; i++) {
-      let a = this.solvedGraph.edgeList[i].a;
-      let b = this.solvedGraph.edgeList[i].b;
+      let { a, b } = this.solvedGraph.edgeList[i];
       // Shift everything by 0.5 units in both directions.
       let xa = 0.5 + a % this.w;
       let ya = 0.5 + Math.floor(a / this.h);
       let xb = 0.5 + b % this.w;
       let yb = 0.5 + Math.floor(b / this.h);
       this.p.line(xa * $.tileSize, ya * $.tileSize, xb * $.tileSize, yb * $.tileSize);
+    }
+    // Draw toShapeList.
+    this.p.strokeWeight(this.mazeStrokeWeight);
+    for (let i = 0; i < this.h; i++) {
+      for (let j = 0; j < this.w; j++) {
+        let index = i * this.w + j;
+        if (this.toShapeList[index] === 1) {
+          this.p.stroke(64, 128, 64);
+          this.p.fill(128, 255, 128);
+          this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
+        }
+        if (this.toShapeList[index] === -1) {
+          this.p.stroke(128, 64, 64);
+          this.p.fill(255, 128, 128);
+          this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
+        }
+      }
     }
   }
 }

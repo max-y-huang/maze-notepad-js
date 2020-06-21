@@ -34,13 +34,11 @@ const sketch = p => {
         $.setModeFunc($.mode);
         return;
       }
-      maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
       $.mode = mode;
     }
   }
 
   const changeCreateTool = (tool) => {
-    maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
     $.createTool = tool;
   }
 
@@ -108,6 +106,10 @@ const sketch = p => {
     }
     camera.translateWithMouse();
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
+  }
+
+  p.mouseReleased = () => {
+    maze.update();
   }
 
   p.mouseWheel = (event) => {
