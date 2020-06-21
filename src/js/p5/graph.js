@@ -58,15 +58,19 @@ class Graph {
 
 class MazeGraph extends Graph {
 
-  activeList = [];
-
   constructor (w, h) {
     super(w * h);
     this.w = w;
     this.h = h;
     this.activeList = Array(w * h).fill(false);
+    this.markerList = Array(w * h).fill(null);
     this.resetEdgeList();
   }
+
+  setMarker = (index, state) => {
+    this.markerList[index] = state;
+  }
+  setMarkerWithXY = (x, y, state) => this.setMarker(y * this.w + x, state);
 
   getActiveState = (index) => this.activeList[index];
   getActiveStateWithXY = (x, y) => this.getActiveState(y * this.w + x);

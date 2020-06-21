@@ -1,23 +1,34 @@
+@import 'imports';
+
 .wrapper {
   display: grid;
-  grid-template-columns: 4em auto 4em;
+  grid-template-columns: auto 1fr; 
+  grid-template-rows: 1fr auto; 
   width: 100%;
   height: 100%;
 
   &__toolbar {
     grid-column: 1 / span 1;
-    grid-row: 1 / span 1;
+    grid-row: 1 / span 2;
+    overflow-y: auto;
+    background-color: #202020;
+    border-right: 4px solid #000000;
   }
 
-  &__menubar {
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
+  &__colourPicker {
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+    overflow-x: auto;
+    background-color: #202020;
+    border-top: 4px solid #000000;
+    transition: height 0.2s;
   }
 
   &__canvas {
     grid-column: 2 / span 1;
     grid-row: 1 / span 1;
     overflow: hidden;
+    background-color: #404040;
 
     // div added by P5Wrapper.
     > div {

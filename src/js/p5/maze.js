@@ -1,3 +1,4 @@
+import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
 import { Graph, MazeGraph } from './graph';
@@ -5,14 +6,15 @@ import { Graph, MazeGraph } from './graph';
 class Maze {
 
   canvasColour = [ 255, 255, 255 ];
-  mazeShapeColour = [ 64, 64, 64 ];
-  canvasOutlineColour = [ 32, 32, 32 ];
+  mazeShapeColour = [ 224, 224, 224 ];
+  canvasOutlineColour = [ 0, 0, 0 ];
   canvasOutlineWeight = 4;
-  gridLineColour = [ 224, 224, 224 ];
+  gridLineColour = [ 176, 176, 176 ];
   gridLineWeight = 1;
-  mazeColour = [ 255, 255, 255 ];
+  mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
+  markerDiameter = 6;
 
   constructor (p, w, h) {
     this.p = p;
@@ -28,8 +30,7 @@ class Maze {
     if (bfsStart === -1) {
       return { success: false, result: 'The maze must have a shape.' };
     }
-    // A single cell is not valid.
-    if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
+    if (bfsStart === this.graph.activeList.lastIndexOf(true)) {  // Check if there is only 1 active cell.
       return { success: false, result: 'The maze must be larger than 1x1.' };
     }
     let parents = this.graph.bfs(bfsStart, this.graph.floodFillFilterFunc);
@@ -45,7 +46,7 @@ class Maze {
   }
 
   shape = (x, y, prevX, prevY, state) => {
-    if ($.mode !== $.CREATE) {
+    if ($.mode !== consts.CREATE) {
       return;
     }
     if (keyLogger.isKeyCodePressed(this.p.SHIFT)) {
@@ -88,21 +89,84 @@ class Maze {
     }
   }
 
-  draw = () => {
-    if ($.mode === $.CREATE) {
-      this.drawCreate();
+  shapeWithMouse = (x, y, prevX, prevY) => {
+    if (!($.mode === consts.CREATE && $.createTool === consts.SHAPE)) {
+      return;
     }
-    else if ($.mode === $.SOLVE) {
-      this.drawSolve();
+    if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
+      return;
     }
+    let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+    this.shape(x, y, prevX, prevY, state);
   }
- 
-  drawCreate = () => {
-    // Fill canvas colour.
+
+  setMarkerWithMouse = (x, y) => {
+    if (!($.mode === consts.CREATE && $.createTool === consts.MARKERS)) {
+      return;
+    }
+    if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
+      return;
+    }
+    let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+    this.graph.setMarkerWithXY(x, y, state ? $.markerColour : null);
+  }
+
+  draw = () => {
+    /*if ($.mode === consts.CREATE) {
+      this.drawCanvas();
+    }*/
+    if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
+      this.drawMazeShape()
+      this.drawGridLines();
+    }
+    else if ($.mode === consts.CREATE) {
+      this.drawGridLines();
+      this.drawMaze();
+    }
+    else {
+      this.drawMaze();
+    }
+    this.drawMarkers();
+  }
+
+  drawCanvas = () => {
     this.p.noStroke();
     this.p.fill(this.canvasColour);
     this.p.rect(0, 0, $.tileSize * this.w, $.tileSize * this.h);
-    // Draw maze shape.
+    /*this.p.stroke(this.canvasOutlineColour);
+    this.p.strokeWeight(this.canvasOutlineWeight);
+    let outlineBuffer = (this.gridLineWeight + this.canvasOutlineWeight) / 2;
+    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);*/
+  }
+
+  drawGridLines = () => {
+    this.p.stroke(this.gridLineColour);
+    this.p.strokeCap(this.p.SQUARE);
+    this.p.strokeWeight(this.gridLineWeight);
+    for (let i = 0; i <= this.h; i++) {
+      this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
+    }
+    for (let i = 0; i <= this.w; i++) {
+      this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
+    }
+  }
+
+  drawMarkers = () => {
+    this.p.noFill();
+    this.p.strokeWeight(this.mazeStrokeWeight);
+    for (let i = 0; i < this.h; i++) {
+      for (let j = 0; j < this.w; j++) {
+        let code = this.graph.markerList[i * this.w + j];
+        if (code !== null) {
+          this.p.stroke(consts.COLOURS[code]);
+          this.p.ellipse((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerDiameter, this.markerDiameter);
+        }
+      }
+    }
+  }
+
+  drawMazeShape = () => {
+    this.p.noStroke();
     this.p.fill(this.mazeShapeColour);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
@@ -111,26 +175,10 @@ class Maze {
         }
       }
     }
-    // Draw canvas grid lines.
-    this.p.stroke(this.gridLineColour);
-    this.p.strokeCap(this.p.PROJECT);
-    this.p.strokeWeight(this.gridLineWeight);
-    for (let i = 0; i <= this.h; i++) {
-      this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
-    }
-    for (let i = 0; i <= this.w; i++) {
-      this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
-    }
-    // Draw canvas outline.
-    this.p.stroke(this.canvasOutlineColour);
-    this.p.strokeWeight(this.canvasOutlineWeight);
-    this.p.noFill();
-    let outlineBuffer = (this.gridLineWeight + this.canvasOutlineWeight) / 2;
-    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);
   }
 
-  drawSolve = () => {
-    // Draw maze shape.
+  drawMaze = () => {
+    // Draw cells.
     this.p.stroke(this.mazeStrokeColour);
     this.p.strokeWeight(this.mazeStrokeWeight);
     this.p.fill(this.mazeColour);

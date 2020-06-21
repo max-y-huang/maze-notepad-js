@@ -1,10 +1,19 @@
+import consts from './../consts';
+
 class Global {
 
-  CREATE = 0;
-  SOLVE = 1;
+  setModeFunc = null;
+  showErrorMessageFunc = null;
+
+  width = 0;
+  height = 0;
+  mouseOverSketch = false;
 
   mouseOverSketch = false;
-  mode = this.CREATE;
+  mode = consts.CREATE;
+  createTool = consts.SHAPE;
+  markerColour = 0;
+
   tileSize = 14;
 }
 

@@ -1,3 +1,4 @@
+import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
 import { Camera } from './camera';
@@ -6,19 +7,49 @@ import { Maze } from './maze';
 
 const sketch = p => {
 
-  let setupWidth = 0, setupHeight = 0;
   let camera;
   let cursor;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
-    onResize(props.width, props.height);
-    $.mouseOverSketch = props.mouseOverCanvas;
-    $.showErrorMessageFunc = props.showErrorMessageFunc;
+    if (props.mode !== $.mode) {
+      changeMode(props.mode);
+    }
+    if (props.createTool !== $.createTool) {
+      changeCreateTool(props.createTool);
+    }
+    if (props.markerColour !== $.markerColour) {
+      changeMarkerColour(props.markerColour);
+    }
   };
 
+  const changeMode = (mode) => {
+    if (mode === consts.CREATE) {
+      $.mode = mode;
+    }
+    else if (mode === consts.SOLVE) {
+      let validCheck = maze.isValidMazeShape();
+      if (!validCheck.success) {
+        $.showErrorMessageFunc(validCheck.result);
+        $.setModeFunc($.mode);
+        return;
+      }
+      maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
+      $.mode = mode;
+    }
+  }
+
+  const changeCreateTool = (tool) => {
+    maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
+    $.createTool = tool;
+  }
+
+  const changeMarkerColour = (colour) => {
+    $.markerColour = colour;
+  }
+
   p.setup = () => {
-    p.createCanvas(setupWidth, setupHeight);
+    p.createCanvas($.width, $.height);
     p.frameRate(60);
     p.noSmooth();
     camera = new Camera(p, 96, 96, 2, 2, 1, 8);
@@ -27,11 +58,12 @@ const sketch = p => {
   };
 
   p.draw = () => {
+    onResize();
 
     camera.translateWithKeyboard();
     camera.zoomWithKeyboard();
 
-    p.background(241);
+    p.background(64);
 
     p.push();
     camera.focus();
@@ -41,41 +73,41 @@ const sketch = p => {
 
     p.pop();
 
+    p.stroke(255, 0, 0);
+    p.strokeWeight(8);
+    p.strokeCap(p.PROJECT);
+    p.line(4, 4, 4, 32);
+    p.line(4, 4, 32, 4);
+    p.line(p.width - 4, p.height - 4, p.width - 4, p.height - 32);
+    p.line(p.width - 4, p.height - 4, p.width - 32, p.height - 4);
+    p.noStroke();
+    p.fill(255, 0, 0);
     p.textSize(16);
-    p.text(Math.round(p.frameRate()) + ' FPS', 4, 16);
+    p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
   };
 
   // Used instead of default windowResized() to keep track of new width and height.
-  const onResize = (width, height) => {
-    // setupWidth and setupHeight are used in case setup runs after this function.
-    setupWidth = width;
-    setupHeight = height;
-    p.resizeCanvas(width, height);
+  const onResize = () => {
+    if (p.width === $.width && p.height === $.height) {
+      return;
+    }
+    p.resizeCanvas($.width, $.height);
   }
 
   p.mousePressed = () => {
     if (!$.mouseOverSketch) {
       return;
     }
-    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-      maze.shape(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY(), state);
-    }
+    maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
+    maze.setMarkerWithMouse(cursor.getX(), cursor.getY());
   }
 
   p.mouseDragged = () => {
     if (!$.mouseOverSketch) {
       return;
     }
-    if (p.mouseButton === p.LEFT || p.mouseButton === p.RIGHT) {
-      let prevX = cursor.getX(p.mouseX - p.movedX);
-      let prevY = cursor.getY(p.mouseY - p.movedY);
-      let state = (p.mouseButton === p.LEFT) !== keyLogger.isKeyCodePressed(p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-      maze.shape(cursor.getX(), cursor.getY(), prevX, prevY, state);
-    }
-    else if (p.mouseButton === p.CENTER) {
-      camera.translateWithMouse();
-    }
+    camera.translateWithMouse();
+    maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
   }
 
   p.mouseWheel = (event) => {
@@ -88,22 +120,6 @@ const sketch = p => {
   p.keyPressed = () => {
     if (!$.mouseOverSketch) {
       return;
-    }
-    if (p.key === ' ') {
-      if ($.mode === $.CREATE) {
-        // TODO: Move to maze.
-        let validCheck = maze.isValidMazeShape();
-        if (validCheck.success) {
-          maze.solvedGraph = maze.graph.kruskal(maze.graph.generateMazeFilterFunc);
-          $.mode = $.SOLVE;
-        }
-        else {
-          $.showErrorMessageFunc(validCheck.result);
-        }
-      }
-      else if ($.mode === $.SOLVE) {
-        $.mode = $.CREATE;
-      }
     }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);

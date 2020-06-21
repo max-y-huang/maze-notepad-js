@@ -1,9 +1,10 @@
+import consts from './../consts';
 import $ from './global';
 import { clamp } from '../funcs';
 
 class Cursor {
 
-  colour = [ 64, 128, 255 ];
+  colour = consts.COLOURS[2];
 
   constructor (p, camera, maze) {
     this.p = p;
@@ -18,22 +19,20 @@ class Cursor {
     if (!$.mouseOverSketch) {
       return;
     }
-    if ($.mode === $.CREATE) {
-      this.drawCreate();
+    if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
+      this.drawSquareCursor();
     }
-    else if ($.mode === $.SOLVE) {
-      this.drawSolve();
+    if ($.mode === consts.CREATE && $.createTool === consts.MARKERS) {
+      this.drawSquareCursor();
     }
   }
 
-  drawCreate = () => {
+  drawSquareCursor = () => {
     this.p.noFill();
     this.p.stroke(this.colour);
     this.p.strokeWeight(2);
     this.p.rect(this.getX() * $.tileSize, this.getY() * $.tileSize, $.tileSize, $.tileSize);
   }
-
-  drawSolve = () => {}
 }
 
 export { Cursor };
