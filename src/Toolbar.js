@@ -22,7 +22,7 @@ class ToolBar extends React.Component {
           color={this.props.canvasCreateTool === consts.SHAPE ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.SHAPE)}
         />
-        <Button className={stylesheet.wrapper__item} inverted size='huge' disabled
+        <Button className={stylesheet.wrapper__item} inverted size='huge'
           icon='map'
           color={this.props.canvasCreateTool === consts.PATHS ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.PATHS)}

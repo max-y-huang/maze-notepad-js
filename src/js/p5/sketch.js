@@ -101,6 +101,7 @@ const sketch = p => {
       return;
     }
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
+    maze.setSuggestedPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
     maze.setMarkerWithMouse(cursor.getX(), cursor.getY());
   }
 
@@ -110,6 +111,7 @@ const sketch = p => {
     }
     camera.translateWithMouse();
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
+    maze.setSuggestedPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
   }
 
   p.mouseReleased = () => {
