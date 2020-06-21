@@ -5,6 +5,7 @@ import P5Wrapper from 'react-p5-wrapper';
 import stylesheet from './css/App.module.css';
 
 import consts from './js/consts';
+import $p5 from './js/p5/global';
 import Toolbar from './Toolbar';
 import ColourPicker from './ColourPicker';
 import sketch from './js/p5/sketch';
@@ -14,9 +15,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      canvasWidth: window.innerWidth,
-      canvasHeight: window.innerHeight,
-      mouseOverCanvas: false,
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
       canvasMarkerColour: 0,
@@ -26,7 +24,7 @@ class App extends React.Component {
     this.canvasWrapperRef = React.createRef();
   }
 
-  setMouseOverCanvas = (val) => this.setState({ mouseOverCanvas: val });
+  setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
   setCanvasMode = (mode) => this.setState({ canvasMode: mode });
   setCanvasCreateTool = (tool) => this.setState({ canvasCreateTool: tool });
@@ -37,21 +35,22 @@ class App extends React.Component {
 
   onResize = () => {
     let { offsetWidth, offsetHeight } = this.canvasWrapperRef.current;
-    this.setState({
-      canvasWidth: offsetWidth,
-      canvasHeight: offsetHeight
-    });
+    $p5.width = offsetWidth;
+    $p5.height = offsetHeight;
   }
 
   componentDidMount() {
+    $p5.setModeFunc = this.setCanvasMode;
+    $p5.showErrorMessageFunc = this.showErrorModal;
     this.onResize();
     window.addEventListener('resize', this.onResize);
-    this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setState({ mouseOverCanvas: true }));
-    this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setState({ mouseOverCanvas: false }));
+    this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setMouseOverCanvas(true));
+    this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
   }
 
   render() {
-    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, canvasCreateTool, canvasMarkerColour, errorModalOpen, errorModalMessage } = this.state;
+    let { canvasMode, canvasCreateTool, canvasMarkerColour, errorModalOpen, errorModalMessage } = this.state;
+    let showColourPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
     return (
       <>
         <div className={stylesheet.wrapper}>
@@ -64,9 +63,9 @@ class App extends React.Component {
               setCanvasCreateToolFunc={this.setCanvasCreateTool}
             />
           </div>
-          <div className={stylesheet.wrapper__colourPicker}>
+          <div className={stylesheet.wrapper__colourPicker} style={{height: showColourPicker ? 'calc(4em + 16px + 16px + 4px)' : 0 }}>  {/* Set max-height to the expected height */}
             <ColourPicker
-              show={canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS}
+              show={showColourPicker}
               canvasMarkerColour={canvasMarkerColour}
               setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
             />
@@ -74,14 +73,9 @@ class App extends React.Component {
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
               sketch={sketch}
-              width={canvasWidth}
-              height={canvasHeight}
-              mouseOverCanvas={mouseOverCanvas}
               mode={canvasMode}
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
-              setModeFunc={this.setCanvasMode}
-              showErrorMessageFunc={this.showErrorModal}
             />
           </div>
         </div>

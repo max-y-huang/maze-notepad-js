@@ -18,11 +18,13 @@
   overflow-x: auto;
   background-color: #202020;
   border-top: 4px solid #000000;
+  transition: height 0.2s;
 }
 .wrapper__canvas {
   grid-column: 2/span 1;
   grid-row: 1/span 1;
   overflow: hidden;
+  background-color: #404040;
 }
 .wrapper__canvas > div {
   width: 100%;

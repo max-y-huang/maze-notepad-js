@@ -5,11 +5,11 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  canvasColour = [ 224, 224, 224 ];
-  mazeShapeColour = [ 20, 73, 104 ];
+  canvasColour = [ 255, 255, 255 ];
+  mazeShapeColour = [ 224, 224, 224 ];
   canvasOutlineColour = [ 0, 0, 0 ];
   canvasOutlineWeight = 4;
-  gridLineColour = [ 192, 192, 192 ];
+  gridLineColour = [ 176, 176, 176 ];
   gridLineWeight = 1;
   mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];
@@ -112,9 +112,9 @@ class Maze {
   }
 
   draw = () => {
-    if ($.mode === consts.CREATE) {
+    /*if ($.mode === consts.CREATE) {
       this.drawCanvas();
-    }
+    }*/
     if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
       this.drawMazeShape()
       this.drawGridLines();
@@ -143,10 +143,10 @@ class Maze {
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.SQUARE);
     this.p.strokeWeight(this.gridLineWeight);
-    for (let i = 1; i < this.h; i++) {
+    for (let i = 0; i <= this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = 1; i < this.w; i++) {
+    for (let i = 0; i <= this.w; i++) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
   }
