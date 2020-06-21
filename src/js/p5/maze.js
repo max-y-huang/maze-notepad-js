@@ -57,7 +57,7 @@ class Maze {
     return { success: true };
   }
 
-  shape = (x, y, prevX, prevY, state) => {
+  shape = (x, y, currX, currY, state) => {
     if ($.mode !== consts.CREATE) {
       return;
     }
@@ -65,7 +65,7 @@ class Maze {
       this.shapeFill(x, y, state);
     }
     else {
-      this.shapePen(x, y, prevX, prevY, state);
+      this.shapePen(x, y, currX, currY, state);
     }
   }
 
@@ -78,21 +78,21 @@ class Maze {
   }
   shapePointWithXY = (x, y, state) => this.shapePoint(y * this.w + x, state);
 
-  shapePen = (x, y, prevX, prevY, state) => {
-    this.shapePointWithXY(prevX, prevY, state);
-    if (x === prevX && y === prevY) {
+  shapePen = (x, y, currX, currY, state) => {
+    this.shapePointWithXY(currX, currY, state);
+    if (x === currX && y === currY) {
       return;
     }
     // If mouse movement changed grids, shapePen() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
-    if (Math.abs(x - prevX) > Math.abs(y - prevY)) {
-      offsetX = prevX < x ? 1 : -1;
+    if (Math.abs(x - currX) > Math.abs(y - currY)) {
+      offsetX = currX < x ? 1 : -1;
     }
     else {
-      offsetY = prevY < y ? 1 : -1;
+      offsetY = currY < y ? 1 : -1;
     }
-    this.shapePen(x, y, prevX + offsetX, prevY + offsetY, state);
+    this.shapePen(x, y, currX + offsetX, currY + offsetY, state);
   }
 
   shapeFill = (x, y, state) => {
@@ -110,7 +110,7 @@ class Maze {
     }
   }
 
-  shapeWithMouse = (x, y, prevX, prevY) => {
+  shapeWithMouse = (x, y, currX, currY) => {
     if (!($.mode === consts.CREATE && $.createTool === consts.SHAPE)) {
       return;
     }
@@ -118,27 +118,40 @@ class Maze {
       return;
     }
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    this.shape(x, y, prevX, prevY, state);
+    this.shape(x, y, currX, currY, state);
   }
 
-  setSuggestedPathPen = (x, y, prevX, prevY, state) => {
-    let indexCurr = y * this.w + x;
+  setSuggestedPath = (x, y, currX, currY, state) => {
+    this.setSuggestedPathPen(x, y, currX, currY, state);
+    this.needsUpdate = true;
+  }
+
+  setSuggestedPathPen = (x, y, currX, currY, state, prevX=currX, prevY=currY) => {
     let indexPrev = prevY * this.w + prevX;
-    this.graph.editEdgeNotes(indexPrev, indexCurr, { suggestedPath: state });
-    if (x === prevX && y === prevY) {
+    let indexCurr = currY * this.w + currX;
+    // Treat like pen if state = true
+    if (state) {
+      this.graph.editEdgeNotes(indexPrev, indexCurr, { suggestedPath: state });
+    }
+    // Treat like eraser if state = false
+    else {
+      this.graph.adjList[indexCurr].forEach(e => {
+        this.graph.editEdgeNotes(e.a, e.b, { suggestedPath: state });
+      });
+    }
+    if (x === currX && y === currY) {
       return;
     }
     // If mouse movement changed grids, setSuggestedPathWithMouse() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
-    if (Math.abs(x - prevX) > Math.abs(y - prevY)) {
-      offsetX = prevX < x ? 1 : -1;
+    if (Math.abs(x - currX) > Math.abs(y - currY)) {
+      offsetX = currX < x ? 1 : -1;
     }
     else {
-      offsetY = prevY < y ? 1 : -1;
+      offsetY = currY < y ? 1 : -1;
     }
-    this.setSuggestedPathPen(x, y, prevX + offsetX, prevY + offsetY, state);
-    this.needsUpdate = true;
+    this.setSuggestedPathPen(x, y, currX + offsetX, currY + offsetY, state, currX, currY);
   }
 
   setSuggestedPathWithMouse = (x, y, prevX, prevY) => {
@@ -149,7 +162,7 @@ class Maze {
       return;
     }
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    this.setSuggestedPathPen(x, y, prevX, prevY, state);
+    this.setSuggestedPath(x, y, prevX, prevY, state);
   }
 
   setMarkerWithMouse = (x, y) => {
