@@ -5,13 +5,13 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  canvasColour = [ 255, 255, 255 ];
-  mazeShapeColour = [ 64, 64, 64 ];
-  canvasOutlineColour = [ 32, 32, 32 ];
+  canvasColour = [ 224, 224, 224 ];
+  mazeShapeColour = [ 20, 73, 104 ];
+  canvasOutlineColour = [ 0, 0, 0 ];
   canvasOutlineWeight = 4;
-  gridLineColour = [ 224, 224, 224 ];
+  gridLineColour = [ 192, 192, 192 ];
   gridLineWeight = 1;
-  mazeColour = [ 255, 255, 255 ];
+  mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
   markerDiameter = 6;
@@ -108,8 +108,7 @@ class Maze {
       return;
     }
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    let code = Math.floor(Math.random() * 4);
-    this.graph.setMarkerWithXY(x, y, state ? code : null);
+    this.graph.setMarkerWithXY(x, y, state ? $.markerColour : null);
   }
 
   draw = () => {
@@ -134,20 +133,20 @@ class Maze {
     this.p.noStroke();
     this.p.fill(this.canvasColour);
     this.p.rect(0, 0, $.tileSize * this.w, $.tileSize * this.h);
-    this.p.stroke(this.canvasOutlineColour);
+    /*this.p.stroke(this.canvasOutlineColour);
     this.p.strokeWeight(this.canvasOutlineWeight);
     let outlineBuffer = (this.gridLineWeight + this.canvasOutlineWeight) / 2;
-    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);
+    this.p.rect(-outlineBuffer, -outlineBuffer, $.tileSize * this.w + 2 * outlineBuffer, $.tileSize * this.h + 2 * outlineBuffer);*/
   }
 
   drawGridLines = () => {
     this.p.stroke(this.gridLineColour);
-    this.p.strokeCap(this.p.PROJECT);
+    this.p.strokeCap(this.p.SQUARE);
     this.p.strokeWeight(this.gridLineWeight);
-    for (let i = 0; i <= this.h; i++) {
+    for (let i = 1; i < this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = 0; i <= this.w; i++) {
+    for (let i = 1; i < this.w; i++) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
   }

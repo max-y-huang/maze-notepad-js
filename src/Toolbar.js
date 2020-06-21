@@ -17,25 +17,20 @@ class Toolbar extends React.Component {
     return (
       <>
         <Divider />
-        <Button className={stylesheet.wrapper__item} basic size='huge'
+        <Button className={stylesheet.wrapper__item} inverted size='huge'
           icon='square'
           color={this.props.canvasCreateTool === consts.SHAPE ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.SHAPE)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge' disabled
+        <Button className={stylesheet.wrapper__item} inverted size='huge' disabled
           icon='map'
           color={this.props.canvasCreateTool === consts.PATHS ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.PATHS)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge'
+        <Button className={stylesheet.wrapper__item} inverted size='huge'
           icon='map marker alternate'
           color={this.props.canvasCreateTool === consts.MARKERS ? 'blue' : 'black'}
           onClick={() => this.setCanvasCreateTool(consts.MARKERS)}
-        />
-        <Button className={stylesheet.wrapper__item} basic size='huge' disabled
-          icon='rocket'
-          color={this.props.canvasCreateTool === consts.PORTALS ? 'blue' : 'black'}
-          onClick={() => this.setCanvasCreateTool(consts.PORTALS)}
         />
       </>
     );
@@ -44,13 +39,13 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <Button className={stylesheet.wrapper__item} basic size='huge'
+        <Button className={stylesheet.wrapper__item} inverted size='huge'
           icon='wrench'
           color={this.props.canvasMode === consts.CREATE ? 'blue' : 'black'}
           onClick={() => this.setCanvasMode(consts.CREATE)}
         />
-        <Button className={stylesheet.wrapper__item} basic size='huge'
-          icon='pencil'
+        <Button className={stylesheet.wrapper__item} inverted size='huge'
+          icon='eye'
           color={this.props.canvasMode === consts.SOLVE ? 'blue' : 'black'}
           onClick={() => this.setCanvasMode(consts.SOLVE)}
         />

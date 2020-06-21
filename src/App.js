@@ -1,11 +1,12 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
-import { debounce } from 'debounce';
 import P5Wrapper from 'react-p5-wrapper';
 
 import stylesheet from './css/App.module.css';
 
+import consts from './js/consts';
 import Toolbar from './Toolbar';
+import ColourPicker from './ColourPicker';
 import sketch from './js/p5/sketch';
 
 class App extends React.Component {
@@ -16,8 +17,9 @@ class App extends React.Component {
       canvasWidth: window.innerWidth,
       canvasHeight: window.innerHeight,
       mouseOverCanvas: false,
-      canvasMode: 0,
-      canvasCreateTool: 0,
+      canvasMode: consts.CREATE,
+      canvasCreateTool: consts.SHAPE,
+      canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: ''
     }
@@ -27,7 +29,8 @@ class App extends React.Component {
   setMouseOverCanvas = (val) => this.setState({ mouseOverCanvas: val });
 
   setCanvasMode = (mode) => this.setState({ canvasMode: mode });
-  setCanvasCreateTool = (mode) => this.setState({ canvasCreateTool: mode });
+  setCanvasCreateTool = (tool) => this.setState({ canvasCreateTool: tool });
+  setCanvasMarkerColour = (colour) => this.setState({ canvasMarkerColour: colour });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = () => this.setState({ errorModalOpen: false });
@@ -42,13 +45,13 @@ class App extends React.Component {
 
   componentDidMount() {
     this.onResize();
-    window.addEventListener('resize', debounce(this.onResize, 200));
+    window.addEventListener('resize', this.onResize);
     this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setState({ mouseOverCanvas: true }));
     this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setState({ mouseOverCanvas: false }));
   }
 
   render() {
-    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, canvasCreateTool, errorModalOpen, errorModalMessage } = this.state;
+    let { canvasWidth, canvasHeight, mouseOverCanvas, canvasMode, canvasCreateTool, canvasMarkerColour, errorModalOpen, errorModalMessage } = this.state;
     return (
       <>
         <div className={stylesheet.wrapper}>
@@ -56,8 +59,16 @@ class App extends React.Component {
             <Toolbar
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
+              canvasMarkerColour={canvasMarkerColour}
               setCanvasModeFunc={this.setCanvasMode}
               setCanvasCreateToolFunc={this.setCanvasCreateTool}
+            />
+          </div>
+          <div className={stylesheet.wrapper__colourPicker}>
+            <ColourPicker
+              show={canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS}
+              canvasMarkerColour={canvasMarkerColour}
+              setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
             />
           </div>
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
@@ -68,6 +79,7 @@ class App extends React.Component {
               mouseOverCanvas={mouseOverCanvas}
               mode={canvasMode}
               createTool={canvasCreateTool}
+              markerColour={canvasMarkerColour}
               setModeFunc={this.setCanvasMode}
               showErrorMessageFunc={this.showErrorModal}
             />
@@ -77,7 +89,7 @@ class App extends React.Component {
           open={errorModalOpen}
           header='Error!'
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
-          actions={[{ key: 'confirm', content: 'Got it', positive: true, onClick: this.hideErrorModal }]}
+          actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
         />
       </>
     );

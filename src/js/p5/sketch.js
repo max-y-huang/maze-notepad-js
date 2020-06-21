@@ -24,6 +24,9 @@ const sketch = p => {
     if (props.createTool !== $.createTool) {
       changeCreateTool(props.createTool);
     }
+    if (props.markerColour !== $.markerColour) {
+      changeMarkerColour(props.markerColour);
+    }
   };
 
   const changeMode = (mode) => {
@@ -47,6 +50,10 @@ const sketch = p => {
     $.createTool = tool;
   }
 
+  const changeMarkerColour = (colour) => {
+    $.markerColour = colour;
+  }
+
   p.setup = () => {
     p.createCanvas(setupWidth, setupHeight);
     p.frameRate(60);
@@ -60,7 +67,7 @@ const sketch = p => {
     camera.translateWithKeyboard();
     camera.zoomWithKeyboard();
 
-    p.background(241);
+    p.background(64);
 
     p.push();
     camera.focus();
@@ -70,6 +77,7 @@ const sketch = p => {
 
     p.pop();
 
+    p.fill(255);
     p.textSize(16);
     p.text(Math.round(p.frameRate()) + ' FPS', 4, 16);
   };
