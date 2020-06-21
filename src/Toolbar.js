@@ -5,7 +5,7 @@ import stylesheet from './css/Toolbar.module.css';
 
 import consts from './js/consts';
 
-class Toolbar extends React.Component {
+class ToolBar extends React.Component {
 
   setCanvasMode = (mode) => this.props.setCanvasModeFunc(mode);
   setCanvasCreateTool = (tool) => this.props.setCanvasCreateToolFunc(tool);
@@ -55,4 +55,4 @@ class Toolbar extends React.Component {
   }
 }
 
-export default Toolbar;
+export default ToolBar;

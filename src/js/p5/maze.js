@@ -20,13 +20,18 @@ class Maze {
     this.graph = new MazeGraph(w, h);
     this.solvedGraph = new Graph(w * h);
     this.toShapeList = Array(w * h).fill(0);  // -1 = remove, 1 = add, 0 = nothing.
+    this.needsUpdate = false;
   }
 
   update = () => {
+    if (!this.needsUpdate) {
+      return;
+    }
     this.solvedGraph = this.graph.kruskal(this.graph.generateMazeFilterFunc);
     for (let i = 0; i < this.toShapeList.length; i++) {
       this.toShapeList[i] = 0;
     }
+    this.needsUpdate = false;
   }
 
   isValidMazeShape = () => {
@@ -67,6 +72,7 @@ class Maze {
       this.toShapeList[index] = state ? 1 : -1;
     }
     this.graph.setActiveState(index, state);
+    this.needsUpdate = true;
   }
   shapePointWithXY = (x, y, state) => this.shapePoint(y * this.w + x, state);
 

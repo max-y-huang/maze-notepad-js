@@ -6,7 +6,7 @@ import stylesheet from './css/App.module.css';
 
 import consts from './js/consts';
 import $p5 from './js/p5/global';
-import Toolbar from './Toolbar';
+import ToolBar from './ToolBar';
 import ColourPicker from './ColourPicker';
 import sketch from './js/p5/sketch';
 
@@ -39,6 +39,12 @@ class App extends React.Component {
     $p5.height = offsetHeight;
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
+      this.onResize();
+    }
+  }
+
   componentDidMount() {
     $p5.setModeFunc = this.setCanvasMode;
     $p5.showErrorMessageFunc = this.showErrorModal;
@@ -48,28 +54,37 @@ class App extends React.Component {
     this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
   }
 
+  renderSelectionBar = () => {
+    let { canvasMode, canvasCreateTool, canvasMarkerColour } = this.state;
+    let showColourPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
+    if (!showColourPicker) {
+      return null;
+    }
+    return (
+      <div className={stylesheet.wrapper__selectionBar}>
+        <ColourPicker
+          show={showColourPicker}
+          canvasMarkerColour={canvasMarkerColour}
+          setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
+        />
+      </div>
+    );
+  }
+
   render() {
     let { canvasMode, canvasCreateTool, canvasMarkerColour, errorModalOpen, errorModalMessage } = this.state;
-    let showColourPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
     return (
       <>
         <div className={stylesheet.wrapper}>
-          <div className={stylesheet.wrapper__toolbar}>
-            <Toolbar
+          <div className={stylesheet.wrapper__toolBar}>
+            <ToolBar
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
-              canvasMarkerColour={canvasMarkerColour}
               setCanvasModeFunc={this.setCanvasMode}
               setCanvasCreateToolFunc={this.setCanvasCreateTool}
             />
           </div>
-          <div className={stylesheet.wrapper__colourPicker} style={{height: showColourPicker ? 'calc(4em + 16px + 16px + 4px)' : 0 }}>  {/* Set max-height to the expected height */}
-            <ColourPicker
-              show={showColourPicker}
-              canvasMarkerColour={canvasMarkerColour}
-              setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
-            />
-          </div>
+          {this.renderSelectionBar()}
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
               sketch={sketch}

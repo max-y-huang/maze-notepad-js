@@ -7,6 +7,8 @@ import { Maze } from './maze';
 
 const sketch = p => {
 
+  let testingMode = false;
+
   let camera;
   let cursor;
   let maze;
@@ -71,17 +73,19 @@ const sketch = p => {
 
     p.pop();
 
-    p.stroke(255, 0, 0);
-    p.strokeWeight(8);
-    p.strokeCap(p.PROJECT);
-    p.line(4, 4, 4, 32);
-    p.line(4, 4, 32, 4);
-    p.line(p.width - 4, p.height - 4, p.width - 4, p.height - 32);
-    p.line(p.width - 4, p.height - 4, p.width - 32, p.height - 4);
-    p.noStroke();
-    p.fill(255, 0, 0);
-    p.textSize(16);
-    p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
+    if (testingMode) {
+      p.stroke(255, 0, 0);
+      p.strokeWeight(8);
+      p.strokeCap(p.PROJECT);
+      p.line(4, 4, 4, 32);
+      p.line(4, 4, 32, 4);
+      p.line(p.width - 4, p.height - 4, p.width - 4, p.height - 32);
+      p.line(p.width - 4, p.height - 4, p.width - 32, p.height - 4);
+      p.noStroke();
+      p.fill(255, 0, 0);
+      p.textSize(16);
+      p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
+    }
   };
 
   // Used instead of default windowResized() to keep track of new width and height.
