@@ -10,12 +10,28 @@ class Graph {
     }
   }
 
-  addEdge = (a, b, weight) => {
-    let itemA = { a: a, b: b, weight: weight };
-    let itemB = { a: b, b: a, weight: weight };
+  addEdge(a, b, weight, notes=null) {
+    let itemA = { a: a, b: b, weight: weight, notes: notes };
+    let itemB = { a: b, b: a, weight: weight, notes: notes };
     this.edgeList.push(itemA);
     this.adjList[a].push(itemA);
     this.adjList[b].push(itemB);
+  }
+  editEdgeNotes = (a, b, newNotes) => {
+    const sameEdgeFilter = e => (e.a === a && e.b === b) || (e.b === a && e.a === b);
+    // Update in all 3 locations.
+    let edgeListIndex = this.edgeList.findIndex(sameEdgeFilter);
+    let adjListAIndex = this.adjList[a].findIndex(sameEdgeFilter);
+    let adjListBIndex = this.adjList[b].findIndex(sameEdgeFilter);
+    if (edgeListIndex !== -1) {
+      this.edgeList[edgeListIndex].notes = newNotes;
+    }
+    if (adjListAIndex !== -1) {
+      this.adjList[a][adjListAIndex].notes = newNotes;
+    }
+    if (adjListBIndex !== -1) {
+      this.adjList[b][adjListBIndex].notes = newNotes;
+    }
   }
 
   bfs = (start, filterFunc = (() => true)) => {
@@ -38,11 +54,10 @@ class Graph {
     return parents;
   }
 
-  kruskal = (filterFunc = (() => true)) => {
-    const edgeWeightSort = (a, b) => a.weight - b.weight;
+  kruskal = (filterFunc = (() => true), sortFunc = ((a, b) => a.weight - b.weight)) => {
 
     let mst = new Graph(this.size);
-    let edges = this.edgeList.filter(filterFunc).sort(edgeWeightSort);
+    let edges = this.edgeList.filter(filterFunc).sort(sortFunc);
     let ds = new DisjointSet(this.w * this.h);
 
     edges.forEach(edge => {
@@ -67,6 +82,10 @@ class MazeGraph extends Graph {
     this.resetEdgeList();
   }
 
+  addEdge = (a, b, weight) => {
+    super.addEdge(a, b, weight, { suggestedPath: false });
+  }
+
   setMarker = (index, state) => {
     this.markerList[index] = state;
   }
@@ -79,6 +98,17 @@ class MazeGraph extends Graph {
 
   floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
+  generateMazeSortFunc = (a, b) => {
+    let aWeight = a.weight, bWeight = b.weight;
+    // Suggested path has weight from 0 to 1.
+    if (a.notes.suggestedPath) {
+      aWeight -= 1;
+    }
+    if (b.notes.suggestedPath) {
+      bWeight -= 1;
+    }
+    return aWeight - bWeight;
+  }
 
   resetEdgeList = () => {
     for (let i = 0; i < this.h; i++) {
@@ -95,6 +125,8 @@ class MazeGraph extends Graph {
       }
     }
   }
+
+  generateMazeGraph = () => this.kruskal(this.generateMazeFilterFunc, this.generateMazeSortFunc);
 }
 
 class DisjointSet {
