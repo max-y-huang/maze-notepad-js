@@ -5,7 +5,7 @@ class Camera {
   zoomKeyboardSpeed = 100;
   zoomKeyboardSpeedCheck = 0;
 
-  constructor (p, x, y, z, zStep, zMin, zMax) {
+  constructor(p, x, y, z, zStep, zMin, zMax) {
     this.p = p;
     this.pos = { x: x, y: y, z: z };
     this.zStep = zStep;
@@ -13,12 +13,12 @@ class Camera {
     this.zMax = zMax;
   }
 
-  focus = () => {
+  focus() {
     this.p.translate(this.pos.x, this.pos.y);
     this.p.scale(this.pos.z);
   }
 
-  translate = (changeX, changeY) => {
+  translate(changeX, changeY) {
     this.pos.x -= changeX;
     this.pos.y -= changeY;
     // Integer coordinates eliminate anti-aliasing.
@@ -26,14 +26,14 @@ class Camera {
     this.pos.y = Math.round(this.pos.y);
   }
 
-  translateWithMouse = () => {
+  translateWithMouse() {
     if (!(this.p.mouseIsPressed && this.p.mouseButton === this.p.CENTER)) {
       return;
     }
     this.translate(-this.p.movedX, -this.p.movedY);
   }
 
-  translateWithKeyboard = () => {
+  translateWithKeyboard() {
     let speed = 30;
     let changeX = 0, changeY = 0;
     if (keyLogger.isKeyPressed('w')) {
@@ -51,7 +51,7 @@ class Camera {
     this.translate(changeX, changeY);
   }
 
-  zoom = (delta) => {
+  zoom(delta) {
     if (this.pos.z * delta < this.zMin) {
       delta = this.zMin / this.pos.z;
     }
@@ -66,11 +66,11 @@ class Camera {
     this.pos.y = Math.round(this.pos.y);
   }
 
-  zoomWithMouse = (event) => {
+  zoomWithMouse(event) {
     this.zoom(event.delta > 0 ? 1 / this.zStep : this.zStep);
   }
 
-  zoomWithKeyboard = () => {
+  zoomWithKeyboard() {
     if (!keyLogger.isKeyPressed('q') && !keyLogger.isKeyPressed('e')) {
       this.zoomKeyboardSpeedCheck = 0;
       return;

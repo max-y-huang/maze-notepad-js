@@ -25,7 +25,7 @@ const sketch = p => {
     }
   };
 
-  const changeMode = (mode) => {
+  const changeMode = function(mode) {
     if (mode === consts.CREATE) {
       $.mode = mode;
     }
@@ -40,11 +40,11 @@ const sketch = p => {
     }
   }
 
-  const changeCreateTool = (tool) => {
+  const changeCreateTool = function(tool) {
     $.createTool = tool;
   }
 
-  const changeMarkerColour = (colour) => {
+  const changeMarkerColour = function(colour) {
     $.markerColour = colour;
   }
 
@@ -89,14 +89,14 @@ const sketch = p => {
   };
 
   // Used instead of default windowResized() to keep track of new width and height.
-  const onResize = () => {
+  const onResize = function() {
     if (p.width === $.width && p.height === $.height) {
       return;
     }
     p.resizeCanvas($.width, $.height);
   }
 
-  p.mousePressed = () => {
+  p.mousePressed = function() {
     if (!$.mouseOverSketch) {
       return;
     }
@@ -105,7 +105,7 @@ const sketch = p => {
     maze.setMarkerWithMouse(cursor.getX(), cursor.getY());
   }
 
-  p.mouseDragged = () => {
+  p.mouseDragged = function() {
     if (!$.mouseOverSketch) {
       return;
     }
@@ -114,18 +114,18 @@ const sketch = p => {
     maze.setSuggestedPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
   }
 
-  p.mouseReleased = () => {
+  p.mouseReleased = function() {
     maze.update();
   }
 
-  p.mouseWheel = (event) => {
+  p.mouseWheel = function(event) {
     if (!$.mouseOverSketch) {
       return;
     }
     camera.zoomWithMouse(event);
   }
 
-  p.keyPressed = () => {
+  p.keyPressed = function() {
     if (!$.mouseOverSketch) {
       return;
     }

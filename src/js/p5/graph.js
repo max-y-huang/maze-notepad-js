@@ -2,7 +2,7 @@ class Graph {
 
   edgeList = [];
 
-  constructor (size) {
+  constructor(size) {
     this.size = size;
     this.adjList = [];
     for (let i = 0; i < size; i++) {
@@ -17,7 +17,8 @@ class Graph {
     this.adjList[a].push(itemA);
     this.adjList[b].push(itemB);
   }
-  editEdgeNotes = (a, b, newNotes) => {
+  
+  editEdgeNotes(a, b, newNotes) {
     const sameEdgeFilter = e => (e.a === a && e.b === b) || (e.b === a && e.a === b);
     // Update in all 3 locations.
     let edgeListIndex = this.edgeList.findIndex(sameEdgeFilter);
@@ -34,7 +35,7 @@ class Graph {
     }
   }
 
-  bfs = (start, filterFunc = (() => true)) => {
+  bfs(start, filterFunc = (() => true)) {
     let parents = Array(this.size).fill(-1);
     let queue = [];
 
@@ -54,7 +55,7 @@ class Graph {
     return parents;
   }
 
-  kruskal = (filterFunc = (() => true), sortFunc = ((a, b) => a.weight - b.weight)) => {
+  kruskal(filterFunc = (() => true), sortFunc = ((a, b) => a.weight - b.weight)) {
 
     let mst = new Graph(this.size);
     let edges = this.edgeList.filter(filterFunc).sort(sortFunc);
@@ -73,7 +74,7 @@ class Graph {
 
 class MazeGraph extends Graph {
 
-  constructor (w, h) {
+  constructor(w, h) {
     super(w * h);
     this.w = w;
     this.h = h;
@@ -82,19 +83,29 @@ class MazeGraph extends Graph {
     this.resetEdgeList();
   }
 
-  addEdge = (a, b, weight) => {
+  addEdge(a, b, weight) {
     super.addEdge(a, b, weight, { suggestedPath: false });
   }
 
-  setMarker = (index, state) => {
+  setMarker(index, state) {
     this.markerList[index] = state;
   }
-  setMarkerWithXY = (x, y, state) => this.setMarker(y * this.w + x, state);
+  setMarkerWithXY(x, y, state) {
+    this.setMarker(y * this.w + x, state);
+  }
 
-  getActiveState = (index) => this.activeList[index];
-  getActiveStateWithXY = (x, y) => this.getActiveState(y * this.w + x);
-  setActiveState = (index, state) => this.activeList[index] = state;
-  setActiveStateWithXY = (x, y, state) => this.setActiveState(y * this.w + x, state);
+  getActiveState(index) {
+    return this.activeList[index];
+  }
+  getActiveStateWithXY(x, y) {
+    return this.getActiveState(y * this.w + x);
+  }
+  setActiveState(index, state) {
+    this.activeList[index] = state;
+  }
+  setActiveStateWithXY(x, y, state) {
+    this.setActiveState(y * this.w + x, state);
+  }
 
   floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
@@ -110,7 +121,7 @@ class MazeGraph extends Graph {
     return aWeight - bWeight;
   }
 
-  resetEdgeList = () => {
+  resetEdgeList() {
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
         let v = i * this.w + j;
@@ -126,25 +137,27 @@ class MazeGraph extends Graph {
     }
   }
 
-  generateMazeGraph = () => this.kruskal(this.generateMazeFilterFunc, this.generateMazeSortFunc);
+  generateMazeGraph() {
+    return this.kruskal(this.generateMazeFilterFunc, this.generateMazeSortFunc);
+  }
 }
 
 class DisjointSet {
 
-  constructor (size) {
+  constructor(size) {
     this.size = size;
     this.parentList = Array(size).fill(0).map((x, i) => i);
     this.rankList = Array(size).fill(0);
   }
 
-  find = (n) => {
+  find(n) {
     if (this.parentList[n] !== n) {
       this.parentList[n] = this.find(this.parentList[n]);
     }
     return this.parentList[n];
   }
 
-  union = (a, b) => {
+  union(a, b) {
     let rootA = this.find(a);
     let rootB = this.find(b);
     if (rootA === rootB) {

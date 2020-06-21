@@ -15,7 +15,7 @@ class Maze {
   suggestedPathsColour = consts.COLOURS[0];
   suggestedPathsWeight = 2;
 
-  constructor (p, w, h) {
+  constructor(p, w, h) {
     this.p = p;
     this.w = w;
     this.h = h;
@@ -25,7 +25,7 @@ class Maze {
     this.needsUpdate = false;
   }
 
-  update = () => {
+  update() {
     if (!this.needsUpdate) {
       return;
     }
@@ -36,7 +36,7 @@ class Maze {
     this.needsUpdate = false;
   }
 
-  isValidMazeShape = () => {
+  isValidMazeShape() {
     // Get the flood-fill graph of an active region.
     let bfsStart = this.graph.activeList.indexOf(true);
     if (bfsStart === -1) {
@@ -57,7 +57,7 @@ class Maze {
     return { success: true };
   }
 
-  shape = (x, y, currX, currY, state) => {
+  shape(x, y, currX, currY, state) {
     if ($.mode !== consts.CREATE) {
       return;
     }
@@ -69,16 +69,18 @@ class Maze {
     }
   }
 
-  shapePoint = (index, state) => {
+  shapePoint(index, state) {
     if (state !== this.graph.getActiveState(index)) {
       this.toShapeList[index] = state ? 1 : -1;
     }
     this.graph.setActiveState(index, state);
     this.needsUpdate = true;
   }
-  shapePointWithXY = (x, y, state) => this.shapePoint(y * this.w + x, state);
+  shapePointWithXY(x, y, state) {
+    this.shapePoint(y * this.w + x, state);
+  }
 
-  shapePen = (x, y, currX, currY, state) => {
+  shapePen(x, y, currX, currY, state) {
     this.shapePointWithXY(currX, currY, state);
     if (x === currX && y === currY) {
       return;
@@ -95,7 +97,7 @@ class Maze {
     this.shapePen(x, y, currX + offsetX, currY + offsetY, state);
   }
 
-  shapeFill = (x, y, state) => {
+  shapeFill(x, y, state) {
     // Return if filling same state as current state.
     let targetState = this.graph.getActiveStateWithXY(x, y);
     if (state === targetState) {
@@ -110,7 +112,7 @@ class Maze {
     }
   }
 
-  shapeWithMouse = (x, y, currX, currY) => {
+  shapeWithMouse(x, y, currX, currY) {
     if (!($.mode === consts.CREATE && $.createTool === consts.SHAPE)) {
       return;
     }
@@ -121,12 +123,12 @@ class Maze {
     this.shape(x, y, currX, currY, state);
   }
 
-  setSuggestedPath = (x, y, currX, currY, state) => {
+  setSuggestedPath(x, y, currX, currY, state) {
     this.setSuggestedPathPen(x, y, currX, currY, state);
     this.needsUpdate = true;
   }
 
-  setSuggestedPathPen = (x, y, currX, currY, state, prevX=currX, prevY=currY) => {
+  setSuggestedPathPen(x, y, currX, currY, state, prevX=currX, prevY=currY) {
     let indexPrev = prevY * this.w + prevX;
     let indexCurr = currY * this.w + currX;
     // Treat like pen if state = true
@@ -154,7 +156,7 @@ class Maze {
     this.setSuggestedPathPen(x, y, currX + offsetX, currY + offsetY, state, currX, currY);
   }
 
-  setSuggestedPathWithMouse = (x, y, prevX, prevY) => {
+  setSuggestedPathWithMouse(x, y, prevX, prevY) {
     if (!($.mode === consts.CREATE && $.createTool === consts.PATHS)) {
       return;
     }
@@ -165,7 +167,7 @@ class Maze {
     this.setSuggestedPath(x, y, prevX, prevY, state);
   }
 
-  setMarkerWithMouse = (x, y) => {
+  setMarkerWithMouse(x, y) {
     if (!($.mode === consts.CREATE && $.createTool === consts.MARKERS)) {
       return;
     }
@@ -176,7 +178,7 @@ class Maze {
     this.graph.setMarkerWithXY(x, y, state ? $.markerColour : null);
   }
 
-  draw = () => {
+  draw() {
     if ($.mode === consts.CREATE) {
       this.drawGrid();
     }
@@ -187,7 +189,7 @@ class Maze {
     this.drawMarkers();
   }
 
-  drawGrid = () => {
+  drawGrid() {
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.SQUARE);
     this.p.strokeWeight(this.gridLineWeight);
@@ -199,7 +201,7 @@ class Maze {
     }
   }
 
-  drawSuggestedPaths = () => {
+  drawSuggestedPaths() {
     this.p.stroke(this.suggestedPathsColour);
     this.p.strokeWeight(this.suggestedPathsWeight);
     this.p.strokeCap(this.p.ROUND);
@@ -213,7 +215,7 @@ class Maze {
     })
   }
 
-  drawMarkers = () => {
+  drawMarkers() {
     this.p.noFill();
     this.p.strokeWeight(this.mazeStrokeWeight);
     for (let i = 0; i < this.h; i++) {
@@ -227,7 +229,7 @@ class Maze {
     }
   }
 
-  drawMazeShape = () => {
+  drawMazeShape() {
     this.p.noStroke();
     this.p.fill(this.mazeShapeColour);
     for (let i = 0; i < this.h; i++) {
@@ -240,7 +242,7 @@ class Maze {
   }
 
   // drawMaze() has graphical glitches when adding new cells into activeList without calling update(). Drawing toShapeList hides these glitches.
-  drawMaze = () => {
+  drawMaze() {
     // Draw cells.
     this.p.stroke(this.mazeStrokeColour);
     this.p.strokeWeight(this.mazeStrokeWeight);
