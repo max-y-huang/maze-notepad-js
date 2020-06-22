@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
+import classnames from 'classnames';
 
 import stylesheet from './css/Toolbar.module.css';
 
@@ -17,9 +18,9 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarButton value={consts.SHAPE}   icon='square'               currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarButton value={consts.PATHS}   icon='map'                  currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarButton value={consts.MARKERS} icon='map marker alternate' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.SHAPE}   text='Shape Tool'  icon='square'  currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.PATHS}   text='Path Tool'   icon='map'     currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.MARKERS} text='Marker Tool' icon='map-pin' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
       </>
     );
   }
@@ -27,23 +28,33 @@ class ToolBar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <ToolbarButton value={consts.CREATE} icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
-        <ToolbarButton value={consts.SOLVE}  icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarItem value={consts.CREATE} text='Edit Maze' icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarItem value={consts.SOLVE}  text='View Maze' icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <Divider />
+        <ToolbarItem value={consts.CREATE} text='Open'   icon='folder-open' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
+        <ToolbarItem value={consts.SOLVE}  text='Save'   icon='save'        currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
         {this.renderCreateToolsButtons()}
       </div>
     )
   }
 }
 
-class ToolbarButton extends React.Component {
+class ToolbarItem extends React.Component {
 
   render() {
     return (
-      <Button className={stylesheet.wrapper__item} inverted size='huge'
-        icon={this.props.icon}
-        color={this.props.currentValue === this.props.value ? 'blue' : 'black'}
+      <button
+        className={classnames(stylesheet.wrapper__item, this.props.currentValue === this.props.value ? stylesheet.active : stylesheet.inactive)}
         onClick={() => this.props.runFunc(this.props.value)}
-      />
+        disabled={this.props.disabled}
+      >
+        <div className={stylesheet.wrapper__item__icon}>
+          <i className={classnames('fas', `fa-${this.props.icon}`, 'fa-fw')} />
+        </div>
+        <div className={stylesheet.wrapper__item__text}>
+          {this.props.text}
+        </div>
+      </button>
     );
   }
 }

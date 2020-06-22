@@ -10,15 +10,8 @@ class ColourPicker extends React.Component {
   setCanvasMarkerColour = (colour) => this.props.setCanvasMarkerColourFunc(colour);
 
   renderColourButton = (colourCode) => {
-    let colour = consts.COLOURS[colourCode];
-    let colourString = `rgb(${colour[0]}, ${colour[1]}, ${colour[2]})`;
     return (
-      <button
-        key={colourCode}
-        className={classnames(stylesheet.wrapper__item, this.props.canvasMarkerColour === colourCode ? stylesheet.active : stylesheet.inactive)}
-        style={{backgroundColor: colourString, borderColor: colourString}}
-        onClick={() => this.setCanvasMarkerColour(colourCode)}
-      />
+      <ColourPickerItem key={colourCode} value={colourCode} currentValue={this.props.canvasMarkerColour} runFunc={this.setCanvasMarkerColour} />
     );
   }
 
@@ -31,6 +24,41 @@ class ColourPicker extends React.Component {
         {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
       </div>
     )
+  }
+}
+
+class ColourPickerItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    let c = consts.COLOURS[props.value];
+    this.state = {
+      colourString: `rgb(${c[0]}, ${c[1]}, ${c[2]})`
+    }
+  }
+
+  updateColourString = (props = this.props) => {
+    let c = consts.COLOURS[props.value];
+    this.setState({
+      colourString: `rgb(${c[0]}, ${c[1]}, ${c[2]})`
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    // Resize on mode change or tool change.
+    if (prevProps.value !== this.props.value) {
+      this.updateColourString();
+    }
+  }
+
+  render() {
+    return (
+      <button
+        className={classnames(stylesheet.wrapper__item, this.props.currentValue === this.props.value ? stylesheet.active : stylesheet.inactive)}
+        style={{backgroundColor: this.state.colourString, borderColor: this.state.colourString}}
+        onClick={() => this.props.runFunc(this.props.value)}
+      />
+    );
   }
 }
 
