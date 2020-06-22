@@ -25,12 +25,8 @@ class Cursor {
     if (!$.mouseOverSketch) {
       return;
     }
-    // Draw square cursor if using SHAPE tool.
-    if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
-      this.drawSquareCursor();
-    }
-    // Draw square cursor if using MARKERS tool.
-    else if ($.mode === consts.CREATE && $.createTool === consts.MARKERS) {
+    // Draw square cursor in CREATE mode.
+    if ($.mode === consts.CREATE) {
       this.drawSquareCursor();
     }
   }
