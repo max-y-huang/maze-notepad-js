@@ -43,7 +43,7 @@ class Graph {
     parents[start] = 0;
     while (queue.length > 0) {
       let v = queue.shift();
-      this.adjList[v].filter(filterFunc).forEach(edge => {
+      this.adjList[v].filter(filterFunc).forEach(edge => {  // Loop through connecting edges.
         // edge.a is always v.
         if (parents[edge.b] === -1) {
           parents[edge.b] = v;
@@ -59,6 +59,7 @@ class Graph {
     let edges = this.edgeList.filter(filterFunc).sort(sortFunc);
     let ds = new DisjointSet(this.w * this.h);
     edges.forEach(edge => {
+      // Attached vertices if not already connected.
       if (ds.find(edge.a) !== ds.find(edge.b)) {
         ds.union(edge.a, edge.b);
         mst.addEdge(edge.a, edge.b, edge.weight);
@@ -146,6 +147,7 @@ class DisjointSet {
     this.rankList = Array(size).fill(0);
   }
 
+  // Uses path compression.
   find(n) {
     if (this.parentList[n] !== n) {
       this.parentList[n] = this.find(this.parentList[n]);
@@ -153,6 +155,7 @@ class DisjointSet {
     return this.parentList[n];
   }
 
+  // Uses union by rank.
   union(a, b) {
     let rootA = this.find(a);
     let rootB = this.find(b);

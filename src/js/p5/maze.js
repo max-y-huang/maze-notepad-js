@@ -5,7 +5,6 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  mazeShapeColour = [ 224, 224, 224 ];
   gridLineColour = [ 192, 192, 192 ];
   gridLineWeight = 1;
   mazeColour = [ 224, 224, 224 ];
@@ -24,29 +23,34 @@ class Maze {
     this.w = w;
     this.h = h;
     this.graph = new MazeGraph(w, h);
-    this.solvedGraph = new Graph(w * h);
+    this.solvedGraph = new Graph(w * h);  // Graph used to draw the maze.
     this.toShapeList = Array(w * h).fill(0);  // -1 = remove, 1 = add, 0 = nothing.
-    this.needsUpdate = false;
+    this.needsUpdate = false;  // Set to true when an update is requested. Set to false in update().
   }
 
   update() {
+    // Check run condition.
     if (!this.needsUpdate) {
       return;
     }
-    this.solvedGraph = this.graph.generateMazeGraph();
-    for (let i = 0; i < this.toShapeList.length; i++) {
+
+    this.solvedGraph = this.graph.generateMazeGraph();  // Generate maze.
+    for (let i = 0; i < this.toShapeList.length; i++) {  // toShapeList needs to be cleared.
       this.toShapeList[i] = 0;
     }
+    // Allow update requests.
     this.needsUpdate = false;
   }
 
   isValidMazeShape() {
     // Get the flood-fill graph of an active region.
     let bfsStart = this.graph.activeList.indexOf(true);
+    // No shape error.
     if (bfsStart === -1) {
       return { success: false, result: 'The maze must have a shape.' };
     }
-    if (bfsStart === this.graph.activeList.lastIndexOf(true)) {  // Check if there is only 1 active cell.
+    // 1x1 cell error
+    if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
       return { success: false, result: 'The maze must be larger than 1x1.' };
     }
     let parents = this.graph.bfs(bfsStart, this.graph.floodFillFilterFunc);
@@ -54,17 +58,21 @@ class Maze {
     for (let i = 0; i < this.graph.size; i++) {
       let isActive = this.graph.activeList[i];
       let isParent = (parents[i] !== -1);
+      // Not continuous error.
       if (isActive !== isParent) {
         return { success: false, result: 'The maze must be contiguous.' };
       }
     }
+    // No errors.
     return { success: true };
   }
 
   shape(x, y, currX, currY, state) {
+    // Check run condition.
     if ($.mode !== consts.CREATE) {
       return;
     }
+    
     if (keyLogger.isKeyCodePressed(this.p.SHIFT)) {
       this.shapeFill(x, y, state);
     }
@@ -78,18 +86,20 @@ class Maze {
       this.toShapeList[index] = state ? 1 : -1;
     }
     this.graph.setActiveState(index, state);
-    this.needsUpdate = true;
+    this.needsUpdate = true;  // Request update.
   }
   shapePointWithXY(x, y, state) {
     this.shapePoint(y * this.w + x, state);
   }
 
   shapePen(x, y, currX, currY, state) {
+    // Update current point.
     this.shapePointWithXY(currX, currY, state);
+    // Finish if reached target.
     if (x === currX && y === currY) {
       return;
     }
-    // If mouse movement changed grids, shapePen() for each cell along mouse path.
+    // Call shapePen() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
     if (Math.abs(x - currX) > Math.abs(y - currY)) {
@@ -102,7 +112,7 @@ class Maze {
   }
 
   shapeFill(x, y, state) {
-    // Return if filling same state as current state.
+    // Check run condition (not filling the same state as the selected cell).
     let targetState = this.graph.getActiveStateWithXY(x, y);
     if (state === targetState) {
       return;
@@ -117,19 +127,21 @@ class Maze {
   }
 
   shapeWithMouse(x, y, currX, currY) {
+    // Check run condition (SHAPE mode and left or right click).
     if (!($.mode === consts.CREATE && $.createTool === consts.SHAPE)) {
       return;
     }
     if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
       return;
     }
+
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
     this.shape(x, y, currX, currY, state);
   }
 
   setSuggestedPath(x, y, currX, currY, state) {
     this.setSuggestedPathPen(x, y, currX, currY, state);
-    this.needsUpdate = true;
+    this.needsUpdate = true;  // Request update.
   }
 
   setSuggestedPathPen(x, y, currX, currY, state, prevX=currX, prevY=currY) {
@@ -145,10 +157,11 @@ class Maze {
         this.graph.editEdgeNotes(e.a, e.b, { suggestedPath: state });
       });
     }
+    // Finish if reached target.
     if (x === currX && y === currY) {
       return;
     }
-    // If mouse movement changed grids, setSuggestedPathWithMouse() for each cell along mouse path.
+    // Call setSuggestedPathPen() for each cell along mouse path.
     let offsetX = 0;
     let offsetY = 0;
     if (Math.abs(x - currX) > Math.abs(y - currY)) {
@@ -161,23 +174,27 @@ class Maze {
   }
 
   setSuggestedPathWithMouse(x, y, prevX, prevY) {
+    // Check run condition (PATHS mode and left or right click).
     if (!($.mode === consts.CREATE && $.createTool === consts.PATHS)) {
       return;
     }
     if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
       return;
     }
+
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
     this.setSuggestedPath(x, y, prevX, prevY, state);
   }
 
   setMarkerWithMouse(x, y) {
+    // Check run condition (MARKERS mode and left or right click).
     if (!($.mode === consts.CREATE && $.createTool === consts.MARKERS)) {
       return;
     }
     if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
       return;
     }
+    
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
     this.graph.setMarkerWithXY(x, y, state ? $.markerColour : null);
   }
@@ -228,18 +245,6 @@ class Maze {
         if (code !== null) {
           this.p.stroke(consts.COLOURS[code]);
           this.p.ellipse((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerDiameter, this.markerDiameter);
-        }
-      }
-    }
-  }
-
-  drawMazeShape() {
-    this.p.noStroke();
-    this.p.fill(this.mazeShapeColour);
-    for (let i = 0; i < this.h; i++) {
-      for (let j = 0; j < this.w; j++) {
-        if (this.graph.getActiveStateWithXY(j, i)) {
-          this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }
     }

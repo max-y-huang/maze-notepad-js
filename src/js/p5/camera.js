@@ -29,7 +29,7 @@ class Camera {
   }
 
   translateWithMouse() {
-    // Check for run condition (middle-click + drag). Called in mouseDragged().
+    // Check for run condition (middle-click).
     if (!(this.p.mouseIsPressed && this.p.mouseButton === this.p.CENTER)) {
       return;
     }
