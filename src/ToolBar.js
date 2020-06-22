@@ -17,21 +17,9 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <Button className={stylesheet.wrapper__item} inverted size='huge'
-          icon='square'
-          color={this.props.canvasCreateTool === consts.SHAPE ? 'blue' : 'black'}
-          onClick={() => this.setCanvasCreateTool(consts.SHAPE)}
-        />
-        <Button className={stylesheet.wrapper__item} inverted size='huge'
-          icon='map'
-          color={this.props.canvasCreateTool === consts.PATHS ? 'blue' : 'black'}
-          onClick={() => this.setCanvasCreateTool(consts.PATHS)}
-        />
-        <Button className={stylesheet.wrapper__item} inverted size='huge'
-          icon='map marker alternate'
-          color={this.props.canvasCreateTool === consts.MARKERS ? 'blue' : 'black'}
-          onClick={() => this.setCanvasCreateTool(consts.MARKERS)}
-        />
+        <ToolbarButton value={consts.SHAPE}   icon='square'               currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarButton value={consts.PATHS}   icon='map'                  currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarButton value={consts.MARKERS} icon='map marker alternate' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
       </>
     );
   }
@@ -39,19 +27,24 @@ class ToolBar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <Button className={stylesheet.wrapper__item} inverted size='huge'
-          icon='wrench'
-          color={this.props.canvasMode === consts.CREATE ? 'blue' : 'black'}
-          onClick={() => this.setCanvasMode(consts.CREATE)}
-        />
-        <Button className={stylesheet.wrapper__item} inverted size='huge'
-          icon='eye'
-          color={this.props.canvasMode === consts.SOLVE ? 'blue' : 'black'}
-          onClick={() => this.setCanvasMode(consts.SOLVE)}
-        />
+        <ToolbarButton value={consts.CREATE} icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarButton value={consts.SOLVE}  icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
         {this.renderCreateToolsButtons()}
       </div>
     )
+  }
+}
+
+class ToolbarButton extends React.Component {
+
+  render() {
+    return (
+      <Button className={stylesheet.wrapper__item} inverted size='huge'
+        icon={this.props.icon}
+        color={this.props.currentValue === this.props.value ? 'blue' : 'black'}
+        onClick={() => this.props.runFunc(this.props.value)}
+      />
+    );
   }
 }
 
