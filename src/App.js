@@ -26,12 +26,12 @@ class App extends React.Component {
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
-  setCanvasMode = (mode) => this.setState({ canvasMode: mode });
-  setCanvasCreateTool = (tool) => this.setState({ canvasCreateTool: tool });
+  setCanvasMode         = (mode)   => this.setState({ canvasMode: mode });
+  setCanvasCreateTool   = (tool)   => this.setState({ canvasCreateTool: tool });
   setCanvasMarkerColour = (colour) => this.setState({ canvasMarkerColour: colour });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
-  hideErrorModal = () => this.setState({ errorModalOpen: false });
+  hideErrorModal = ()    => this.setState({ errorModalOpen: false });
 
   onResize = () => {
     let { offsetWidth, offsetHeight } = this.canvasWrapperRef.current;
@@ -40,6 +40,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // Resize on mode change or tool change.
     if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
       this.onResize();
     }
@@ -48,7 +49,9 @@ class App extends React.Component {
   componentDidMount() {
     $p5.setModeFunc = this.setCanvasMode;
     $p5.showErrorMessageFunc = this.showErrorModal;
+
     this.onResize();
+    
     window.addEventListener('resize', this.onResize);
     this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setMouseOverCanvas(true));
     this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
