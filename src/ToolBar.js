@@ -11,16 +11,28 @@ class ToolBar extends React.Component {
   setCanvasMode = (mode) => this.props.setCanvasModeFunc(mode);
   setCanvasCreateTool = (tool) => this.props.setCanvasCreateToolFunc(tool);
 
-  renderCreateToolsButtons = () => {
+  renderCreateButtons = () => {
     if (this.props.canvasMode !== consts.CREATE) {
       return null;
     }
     return (
       <>
         <Divider />
-        <ToolbarItem value={consts.SHAPE}   text='Edit Shape'   icon='splotch' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarItem value={consts.PATHS}   text='Edit paths'   icon='map'     currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarItem value={consts.MARKERS} text='Edit Markers' icon='map-pin' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
+        <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
+        <ToolbarItem text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
+      </>
+    );
+  }
+
+  renderSolveButtons = () => {
+    if (this.props.canvasMode !== consts.SOLVE) {
+      return null;
+    }
+    return (
+      <>
+        <Divider />
+        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.setCanvasCreateTool} />
       </>
     );
   }
@@ -28,12 +40,13 @@ class ToolBar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <ToolbarItem value={consts.CREATE} text='Edit Mode' icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
-        <ToolbarItem value={consts.SOLVE}  text='View Mode' icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarItem text='Edit Mode' icon='wrench' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
+        <ToolbarItem text='View Mode' icon='eye'    active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
         <Divider />
-        <ToolbarItem value={consts.CREATE} text='Open' icon='folder-open' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
-        <ToolbarItem value={consts.SOLVE}  text='Save' icon='save'        currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
-        {this.renderCreateToolsButtons()}
+        <ToolbarItem disabled text='Open' icon='folder-open' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
+        <ToolbarItem disabled text='Save' icon='save'        active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
+        {this.renderCreateButtons()}
+        {this.renderSolveButtons()}
       </div>
     )
   }
@@ -44,8 +57,8 @@ class ToolbarItem extends React.Component {
   render() {
     return (
       <button
-        className={classnames(stylesheet.wrapper__item, this.props.currentValue === this.props.value ? stylesheet.active : stylesheet.inactive)}
-        onClick={() => this.props.runFunc(this.props.value)}
+        className={classnames(stylesheet.wrapper__item, this.props.active ? stylesheet.active : stylesheet.inactive)}
+        onClick={() => this.props.onClick()}
         disabled={this.props.disabled}
       >
         <div className={stylesheet.wrapper__item__icon}>
