@@ -52,7 +52,7 @@ class Maze {
     this.needsUpdate = false;
   }
 
-  // drawMaze() has graphical glitches when adding new cells into activeList without calling update(). Drawing toShapeList hides these glitches.
+  // Creating a maze image because it massively improves performance.
   updateMazeImg() {
     this.mazeImg = this.p.createGraphics(this.w * $.tileSize + this.mazeStrokeWeight, this.h * $.tileSize + this.mazeStrokeWeight);  // Padding to accomodate stroke weight.
     // Shift to accomodate stroke weight.

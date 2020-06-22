@@ -108,10 +108,11 @@ class MazeGraph extends Graph {
         }
         // Connect down with a random edge with weight between 1 and 2.
         if (i < this.h - 1) {
-          this.addEdge(v, v + this.h, Math.random() + 1);
+          this.addEdge(v, v + this.w, Math.random() + 1);
         }
       }
     }
+    console.log(this.edgeList);
   }
 
   generateMazeGraph() {
