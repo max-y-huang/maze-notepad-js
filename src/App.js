@@ -9,6 +9,7 @@ import $p5 from './js/p5/global';
 import ToolBar from './ToolBar';
 import ColourPicker from './ColourPicker';
 import sketch from './js/p5/sketch';
+import exportCanvas from './js/p5/exportCanvas';
 
 class App extends React.Component {
 
@@ -19,10 +20,14 @@ class App extends React.Component {
       canvasCreateTool: consts.SHAPE,
       canvasMarkerColour: 0,
       errorModalOpen: false,
-      errorModalMessage: ''
+      errorModalMessage: '',
+      exportMazeRequestFlag: 0,
+      exportMazeImg: null
     }
     this.canvasWrapperRef = React.createRef();
   }
+
+  requestExportMaze = (mazeImg) => this.setState((state) => ({exportMazeRequestFlag: state.exportMazeRequestFlag + 1, exportMazeImg: mazeImg}));
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -47,6 +52,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    $p5.requestExportFunc = this.requestExportMaze;
     $p5.setModeFunc = this.setCanvasMode;
     $p5.showErrorMessageFunc = this.showErrorModal;
 
@@ -103,6 +109,9 @@ class App extends React.Component {
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
         />
+        <div style={{display: 'none'}}>
+          <P5Wrapper className={stylesheet.exportCanvas} sketch={exportCanvas} requestFlag={this.state.exportMazeRequestFlag} mazeImg={this.state.exportMazeImg} />
+        </div>
       </>
     );
   }
