@@ -18,9 +18,9 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarItem value={consts.SHAPE}   text='Shape Tool'  icon='square'  currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarItem value={consts.PATHS}   text='Path Tool'   icon='map'     currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
-        <ToolbarItem value={consts.MARKERS} text='Marker Tool' icon='map-pin' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.SHAPE}   text='Edit Shape'   icon='splotch' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.PATHS}   text='Edit paths'   icon='map'     currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
+        <ToolbarItem value={consts.MARKERS} text='Edit Markers' icon='map-pin' currentValue={this.props.canvasCreateTool} runFunc={this.setCanvasCreateTool} />
       </>
     );
   }
@@ -28,11 +28,11 @@ class ToolBar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <ToolbarItem value={consts.CREATE} text='Edit Maze' icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
-        <ToolbarItem value={consts.SOLVE}  text='View Maze' icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarItem value={consts.CREATE} text='Edit Mode' icon='wrench' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
+        <ToolbarItem value={consts.SOLVE}  text='View Mode' icon='eye'    currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} />
         <Divider />
-        <ToolbarItem value={consts.CREATE} text='Open'   icon='folder-open' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
-        <ToolbarItem value={consts.SOLVE}  text='Save'   icon='save'        currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
+        <ToolbarItem value={consts.CREATE} text='Open' icon='folder-open' currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
+        <ToolbarItem value={consts.SOLVE}  text='Save' icon='save'        currentValue={this.props.canvasMode} runFunc={this.setCanvasMode} disabled />
         {this.renderCreateToolsButtons()}
       </div>
     )

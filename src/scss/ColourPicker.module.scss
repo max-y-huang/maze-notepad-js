@@ -5,12 +5,18 @@
   padding-right: 0;  // padding-right hack used.
   white-space: nowrap;
 
+  &__title {
+    color: #e0e0e0;
+    font-size: 16px;
+    padding-bottom: 26px;
+  }
+
   &__item {
     cursor: pointer;
     box-sizing: border-box;
-    width: 4em;
-    height: 4em;
-    border-radius: 6px;
+    width: 48px;
+    height: 48px;
+    border-radius: 25%;
     border-width: 4px;
     border-style: solid;
     outline: none;

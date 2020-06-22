@@ -63,6 +63,13 @@ const sketch = p => {
     camera = new Camera(p, 96, 96, 2, 2, 1, 8);
     maze = new Maze(p, 100, 100);
     cursor = new Cursor(p, camera, maze);
+    // Add multiple square mazes (with partial overlap) to create a non-square shape.
+    addStarterMaze(4, 4, 8, 8);
+    addStarterMaze(12, 4, 8, 8);
+    addStarterMaze(12, 12, 8, 8);
+    addStarterMaze(4, 20, 8, 8);
+    addStarterMaze(12, 20, 8, 8);
+    addStarterMaze(20, 20, 8, 8);
   };
 
   p.draw = () => {
@@ -98,6 +105,17 @@ const sketch = p => {
     p.fill(255, 0, 0);
     p.textSize(16);
     p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
+  }
+
+  const addStarterMaze = (x, y, w, h) => {
+    maze.needsUpdate = true;
+    for (let i = 0; i < h; i++) {
+      for (let j = 0; j < w; j++) {
+        let index = (i + y) * maze.w + (j + x);
+        maze.graph.activeList[index] = true;
+      }
+    }
+    maze.update();
   }
 
   // Used instead of default windowResized() to keep track of new width and height.
