@@ -49,6 +49,7 @@ class Maze {
       this.toShapeList[i] = 0;
     }
     this.updateMazeImg();
+    this.updateMarkersImg();
     // Allow update requests.
     this.needsUpdate = false;
   }
