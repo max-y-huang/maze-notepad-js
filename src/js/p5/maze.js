@@ -28,6 +28,14 @@ class Maze {
     this.needsUpdate = false;  // Set to true when an update is requested. Set to false in update().
   }
 
+  coordToIndex(x, y) {
+    return y * this.w + x;
+  }
+
+  indexToCoord(index) {
+    return { x: index % this.w, y: Math.floor(index / this.w) };
+  }
+
   update() {
     // Check run condition.
     if (!this.needsUpdate) {
@@ -82,19 +90,17 @@ class Maze {
   }
 
   shapePoint(index, state) {
-    if (state !== this.graph.getActiveState(index)) {
+    if (state !== this.graph.activeList[index]) {
       this.toShapeList[index] = state ? 1 : -1;
     }
-    this.graph.setActiveState(index, state);
+    this.graph.activeList[index] = state;
     this.needsUpdate = true;  // Request update.
-  }
-  shapePointWithXY(x, y, state) {
-    this.shapePoint(y * this.w + x, state);
   }
 
   shapePen(x, y, currX, currY, state) {
+    let currIndex = this.coordToIndex(currX, currY);
     // Update current point.
-    this.shapePointWithXY(currX, currY, state);
+    this.shapePoint(currIndex, state);
     // Finish if reached target.
     if (x === currX && y === currY) {
       return;
@@ -112,13 +118,14 @@ class Maze {
   }
 
   shapeFill(x, y, state) {
+    let index = this.coordToIndex(x, y);
     // Check run condition (not filling the same state as the selected cell).
-    let targetState = this.graph.getActiveStateWithXY(x, y);
+    let targetState = this.graph.activeList[index];
     if (state === targetState) {
       return;
     }
     // BFS to find flood fill region, and shapeFill() for each cell in the region.
-    let parents = this.graph.bfs(y * this.w + x, this.graph.floodFillFilterFunc);
+    let parents = this.graph.bfs(index, this.graph.floodFillFilterFunc);
     parents.forEach((parent, i) => {
       if (parent !== -1) {
         this.shapePoint(i, state);
@@ -145,8 +152,8 @@ class Maze {
   }
 
   setSuggestedPathPen(x, y, currX, currY, state, prevX=currX, prevY=currY) {
-    let indexPrev = prevY * this.w + prevX;
-    let indexCurr = currY * this.w + currX;
+    let indexPrev = this.coordToIndex(prevX, prevY);
+    let indexCurr = this.coordToIndex(currX, currY);
     // Treat like pen if state = true
     if (state) {
       this.graph.editEdgeNotes(indexPrev, indexCurr, { suggestedPath: state });
@@ -195,8 +202,9 @@ class Maze {
       return;
     }
     
+    let index = this.coordToIndex(x, y);
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    this.graph.setMarkerWithXY(x, y, state ? $.markerColour : null);
+    this.graph.setMarker(index, state ? $.markerColour : null);
   }
 
   draw() {
@@ -227,12 +235,9 @@ class Maze {
     this.p.strokeWeight(this.suggestedPathsWeight);
     this.p.strokeCap(this.p.ROUND);
     this.graph.edgeList.filter(e => e.notes.suggestedPath).forEach(e => {
-      // Shift everything by 0.5 units in both directions.
-      let xa = 0.5 + e.a % this.w;
-      let ya = 0.5 + Math.floor(e.a / this.h);
-      let xb = 0.5 + e.b % this.w;
-      let yb = 0.5 + Math.floor(e.b / this.h);
-      this.p.line(xa * $.tileSize, ya * $.tileSize, xb * $.tileSize, yb * $.tileSize);
+      let a = this.indexToCoord(e.a);
+      let b = this.indexToCoord(e.b);
+      this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     })
   }
 
@@ -241,7 +246,8 @@ class Maze {
     this.p.strokeWeight(this.mazeStrokeWeight);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
-        let code = this.graph.markerList[i * this.w + j];
+        let index = this.coordToIndex(j, i);
+        let code = this.graph.markerList[index];
         if (code !== null) {
           this.p.stroke(consts.COLOURS[code]);
           this.p.ellipse((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerDiameter, this.markerDiameter);
@@ -258,7 +264,8 @@ class Maze {
     this.p.fill(this.mazeColour);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
-        if (this.graph.getActiveStateWithXY(j, i)) {
+        let index = this.coordToIndex(j, i);
+        if (this.graph.activeList[index]) {
           this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }
@@ -268,18 +275,15 @@ class Maze {
     this.p.strokeWeight($.tileSize - this.mazeStrokeWeight);
     this.p.strokeCap(this.p.PROJECT);
     this.solvedGraph.edgeList.forEach(e => {
-      // Shift everything by 0.5 units in both directions.
-      let xa = 0.5 + e.a % this.w;
-      let ya = 0.5 + Math.floor(e.a / this.h);
-      let xb = 0.5 + e.b % this.w;
-      let yb = 0.5 + Math.floor(e.b / this.h);
-      this.p.line(xa * $.tileSize, ya * $.tileSize, xb * $.tileSize, yb * $.tileSize);
+      let a = this.indexToCoord(e.a);
+      let b = this.indexToCoord(e.b);
+      this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     });
     // Draw toShapeList.
     this.p.strokeWeight(this.mazeStrokeWeight);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
-        let index = i * this.w + j;
+        let index = this.coordToIndex(j, i);
         if (this.toShapeList[index] === 1) {
           this.p.stroke(this.toShapeAddStrokeColour);
           this.p.fill(this.toShapeAddColour);
