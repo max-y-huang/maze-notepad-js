@@ -244,7 +244,7 @@ class Maze {
   setMarker(x, y, state) {
     let index = this.coordToIndex(x, y);
     this.graph.markerList[index] = state ? $.markerColour : null;
-    this.needsUpdate = true;  // Request update.
+    this.updateMazeImg();  // Maze image must be updated with markers. The maze path does not.
   }
 
   setMarkerWithMouse(x, y) {
