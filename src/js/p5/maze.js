@@ -6,7 +6,7 @@ import { Graph, MazeGraph } from './graph';
 class Maze {
 
   mazeShapeColour = [ 224, 224, 224 ];
-  gridLineColour = [ 176, 176, 176 ];
+  gridLineColour = [ 192, 192, 192 ];
   gridLineWeight = 1;
   mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];

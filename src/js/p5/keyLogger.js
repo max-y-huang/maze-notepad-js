@@ -4,10 +4,10 @@ class KeyLogger {
   keyCodeDown = {};
 
   isKeyPressed(key) {
-    return this.keyDown[key.toLowerCase()] ? true : false;
+    return this.keyDown[key.toLowerCase()] ? true : false;  // Force true or false to be returned (no undefined).
   }
   isKeyCodePressed(keyCode) {
-    return this.keyCodeDown[keyCode.toString()] ? true : false;
+    return this.keyCodeDown[keyCode.toString()] ? true : false;  // Force true or false to be returned (no undefined).
   }
 
   onKeyDown(key) {

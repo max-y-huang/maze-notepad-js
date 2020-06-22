@@ -12,6 +12,7 @@ class Cursor {
     this.maze = maze;
   }
 
+  // Get grid coordinates of mouse.
   getX(x = this.p.mouseX) {
     return clamp(Math.floor((x - this.camera.pos.x) / this.camera.pos.z / $.tileSize), 0, this.maze.w - 1);
   }
@@ -20,13 +21,16 @@ class Cursor {
   }
 
   draw() {
+    // Check run conditions.
     if (!$.mouseOverSketch) {
       return;
     }
+    // Draw square cursor if using SHAPE tool.
     if ($.mode === consts.CREATE && $.createTool === consts.SHAPE) {
       this.drawSquareCursor();
     }
-    if ($.mode === consts.CREATE && $.createTool === consts.MARKERS) {
+    // Draw square cursor if using MARKERS tool.
+    else if ($.mode === consts.CREATE && $.createTool === consts.MARKERS) {
       this.drawSquareCursor();
     }
   }

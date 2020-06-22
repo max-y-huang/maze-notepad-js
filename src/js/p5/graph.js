@@ -13,6 +13,7 @@ class Graph {
   addEdge(a, b, weight, notes=null) {
     let itemA = { a: a, b: b, weight: weight, notes: notes };
     let itemB = { a: b, b: a, weight: weight, notes: notes };
+    // Add in 3 different locations. Adjacency lists always have its own node as node a.
     this.edgeList.push(itemA);
     this.adjList[a].push(itemA);
     this.adjList[b].push(itemB);
@@ -20,7 +21,7 @@ class Graph {
   
   editEdgeNotes(a, b, newNotes) {
     const sameEdgeFilter = e => (e.a === a && e.b === b) || (e.b === a && e.a === b);
-    // Update in all 3 locations.
+    // Update notes in all 3 locations.
     let edgeListIndex = this.edgeList.findIndex(sameEdgeFilter);
     let adjListAIndex = this.adjList[a].findIndex(sameEdgeFilter);
     let adjListBIndex = this.adjList[b].findIndex(sameEdgeFilter);
@@ -38,7 +39,6 @@ class Graph {
   bfs(start, filterFunc = (() => true)) {
     let parents = Array(this.size).fill(-1);
     let queue = [];
-
     queue.push(start);
     parents[start] = 0;
     while (queue.length > 0) {
@@ -51,23 +51,19 @@ class Graph {
         }
       });
     }
-    
     return parents;
   }
 
   kruskal(filterFunc = (() => true), sortFunc = ((a, b) => a.weight - b.weight)) {
-
     let mst = new Graph(this.size);
     let edges = this.edgeList.filter(filterFunc).sort(sortFunc);
     let ds = new DisjointSet(this.w * this.h);
-
     edges.forEach(edge => {
       if (ds.find(edge.a) !== ds.find(edge.b)) {
         ds.union(edge.a, edge.b);
         mst.addEdge(edge.a, edge.b, edge.weight);
       }
     });
-
     return mst;
   }
 }
@@ -111,7 +107,7 @@ class MazeGraph extends Graph {
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
   generateMazeSortFunc = (a, b) => {
     let aWeight = a.weight, bWeight = b.weight;
-    // Suggested path has weight from 0 to 1.
+    // If suggested path, convert edge weight from [1, 2) to [0, 1).
     if (a.notes.suggestedPath) {
       aWeight -= 1;
     }
