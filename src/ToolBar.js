@@ -2,7 +2,7 @@ import React from 'react';
 import { Divider } from 'semantic-ui-react';
 import classnames from 'classnames';
 
-import stylesheet from './css/Toolbar.module.css';
+import stylesheet from './css/ToolBar.module.css';
 
 import consts from './js/consts';
 
