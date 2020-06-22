@@ -26,6 +26,7 @@ class Maze {
     this.solvedGraph = new Graph(w * h);  // Graph used to draw the maze.
     this.toShapeList = Array(w * h).fill(0);  // -1 = remove, 1 = add, 0 = nothing.
     this.needsUpdate = false;  // Set to true when an update is requested. Set to false in update().
+    this.mazeImg = p.createGraphics(0, 0);  // Placeholder. Is set in updateMazeImg().
   }
 
   coordToIndex(x, y) {
@@ -46,8 +47,40 @@ class Maze {
     for (let i = 0; i < this.toShapeList.length; i++) {  // toShapeList needs to be cleared.
       this.toShapeList[i] = 0;
     }
+    this.updateMazeImg();
     // Allow update requests.
     this.needsUpdate = false;
+  }
+
+  // drawMaze() has graphical glitches when adding new cells into activeList without calling update(). Drawing toShapeList hides these glitches.
+  updateMazeImg() {
+    this.mazeImg = this.p.createGraphics(this.w * $.tileSize + this.mazeStrokeWeight, this.h * $.tileSize + this.mazeStrokeWeight);  // Padding to accomodate stroke weight.
+    // Shift to accomodate stroke weight.
+    this.mazeImg.push();
+    this.mazeImg.translate(this.mazeStrokeWeight / 2, this.mazeStrokeWeight / 2);
+    // Draw cells.
+    this.mazeImg.stroke(this.mazeStrokeColour);
+    this.mazeImg.strokeWeight(this.mazeStrokeWeight);
+    this.mazeImg.fill(this.mazeColour);
+    for (let i = 0; i < this.h; i++) {
+      for (let j = 0; j < this.w; j++) {
+        let index = this.coordToIndex(j, i);
+        if (this.graph.activeList[index]) {
+          this.mazeImg.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
+        }
+      }
+    }
+    // Draw corridors.
+    this.mazeImg.stroke(this.mazeColour);
+    this.mazeImg.strokeWeight($.tileSize - this.mazeStrokeWeight);
+    this.mazeImg.strokeCap(this.p.PROJECT);
+    this.solvedGraph.edgeList.forEach(e => {
+      let a = this.indexToCoord(e.a);
+      let b = this.indexToCoord(e.b);
+      this.mazeImg.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
+    });
+
+    this.mazeImg.pop();
   }
 
   isValidMazeShape() {
@@ -256,29 +289,8 @@ class Maze {
     }
   }
 
-  // drawMaze() has graphical glitches when adding new cells into activeList without calling update(). Drawing toShapeList hides these glitches.
   drawMaze() {
-    // Draw cells.
-    this.p.stroke(this.mazeStrokeColour);
-    this.p.strokeWeight(this.mazeStrokeWeight);
-    this.p.fill(this.mazeColour);
-    for (let i = 0; i < this.h; i++) {
-      for (let j = 0; j < this.w; j++) {
-        let index = this.coordToIndex(j, i);
-        if (this.graph.activeList[index]) {
-          this.p.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
-        }
-      }
-    }
-    // Draw corridors.
-    this.p.stroke(this.mazeColour);
-    this.p.strokeWeight($.tileSize - this.mazeStrokeWeight);
-    this.p.strokeCap(this.p.PROJECT);
-    this.solvedGraph.edgeList.forEach(e => {
-      let a = this.indexToCoord(e.a);
-      let b = this.indexToCoord(e.b);
-      this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
-    });
+    this.p.image(this.mazeImg, -this.mazeStrokeWeight / 2, -this.mazeStrokeWeight / 2);  // Shift to accomodate stroke weight.
     // Draw toShapeList.
     this.p.strokeWeight(this.mazeStrokeWeight);
     for (let i = 0; i < this.h; i++) {
