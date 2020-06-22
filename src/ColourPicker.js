@@ -21,7 +21,7 @@ class ColourPicker extends React.Component {
     }
     return (
       <div className={stylesheet.wrapper}>
-        <div className={stylesheet.wrapper__title}>Pick Marker Colour:</div>
+        <div className={stylesheet.wrapper__title}>Marker Colour:</div>
         {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
       </div>
     )

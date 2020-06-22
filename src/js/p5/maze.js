@@ -10,7 +10,7 @@ class Maze {
   mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
-  markerDiameter = 6;
+  markerSize = 6;
   suggestedPathsColour = consts.COLOURS[0];
   suggestedPathsWeight = 2;
   toShapeAddColour = [ 192, 255, 192 ];
@@ -79,6 +79,21 @@ class Maze {
       let b = this.indexToCoord(e.b);
       this.mazeImg.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     });
+    // Draw markers.
+    this.mazeImg.noFill();
+    this.mazeImg.strokeWeight(this.mazeStrokeWeight);
+    this.mazeImg.rectMode(this.p.CENTER);
+    for (let i = 0; i < this.h; i++) {
+      for (let j = 0; j < this.w; j++) {
+        let index = this.coordToIndex(j, i);
+        let code = this.graph.markerList[index];
+        if (code !== null) {
+          this.mazeImg.stroke(consts.COLOURS[code]);
+          this.mazeImg.rect((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerSize, this.markerSize);
+        }
+      }
+    }
+    this.mazeImg.rectMode(this.p.CORNER);
 
     this.mazeImg.pop();
   }
@@ -226,6 +241,12 @@ class Maze {
     this.setSuggestedPath(x, y, prevX, prevY, state);
   }
 
+  setMarker(x, y, state) {
+    let index = this.coordToIndex(x, y);
+    this.graph.markerList[index] = state ? $.markerColour : null;
+    this.needsUpdate = true;  // Request update.
+  }
+
   setMarkerWithMouse(x, y) {
     // Check run condition (MARKERS mode and left or right click).
     if (!($.mode === consts.CREATE && $.createTool === consts.MARKERS)) {
@@ -235,9 +256,8 @@ class Maze {
       return;
     }
     
-    let index = this.coordToIndex(x, y);
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    this.graph.markerList[index] = state ? $.markerColour : null;
+    this.setMarker(x, y, state);
   }
 
   draw() {
@@ -248,7 +268,6 @@ class Maze {
     if ($.mode === consts.CREATE) {
       this.drawSuggestedPaths();
     }
-    this.drawMarkers();
   }
 
   drawGrid() {
@@ -272,21 +291,6 @@ class Maze {
       let b = this.indexToCoord(e.b);
       this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     })
-  }
-
-  drawMarkers() {
-    this.p.noFill();
-    this.p.strokeWeight(this.mazeStrokeWeight);
-    for (let i = 0; i < this.h; i++) {
-      for (let j = 0; j < this.w; j++) {
-        let index = this.coordToIndex(j, i);
-        let code = this.graph.markerList[index];
-        if (code !== null) {
-          this.p.stroke(consts.COLOURS[code]);
-          this.p.ellipse((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerDiameter, this.markerDiameter);
-        }
-      }
-    }
   }
 
   drawMaze() {
