@@ -16,7 +16,7 @@ const exportCanvas = p => {
   const exportImage = (img) => {
     p.resizeCanvas(img.width, img.height);
     p.image(img, 0, 0);
-    p.saveCanvas('test.png');
+    p.saveCanvas('maze', 'png');
   }
 }
 

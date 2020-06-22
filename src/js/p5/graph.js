@@ -112,7 +112,6 @@ class MazeGraph extends Graph {
         }
       }
     }
-    console.log(this.edgeList);
   }
 
   generateMazeGraph() {
