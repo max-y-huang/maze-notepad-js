@@ -204,7 +204,7 @@ class Maze {
     
     let index = this.coordToIndex(x, y);
     let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
-    this.graph.setMarker(index, state ? $.markerColour : null);
+    this.graph.markerList[index] = state ? $.markerColour : null;
   }
 
   draw() {

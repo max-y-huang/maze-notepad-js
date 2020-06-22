@@ -84,17 +84,6 @@ class MazeGraph extends Graph {
     super.addEdge(a, b, weight, { suggestedPath: false });
   }
 
-  setMarker(index, state) {
-    this.markerList[index] = state;
-  }
-
-  getActiveState(index) {
-    return this.activeList[index];
-  }
-  setActiveState(index, state) {
-    this.activeList[index] = state;
-  }
-
   floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
   generateMazeSortFunc = (a, b) => {
