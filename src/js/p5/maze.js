@@ -26,7 +26,8 @@ class Maze {
     this.solvedGraph = new Graph(w * h);  // Graph used to draw the maze.
     this.toShapeList = Array(w * h).fill(0);  // -1 = remove, 1 = add, 0 = nothing.
     this.needsUpdate = false;  // Set to true when an update is requested. Set to false in update().
-    this.mazeImg = p.createGraphics(0, 0);  // Placeholder. Is set in updateMazeImg().
+    this.mazeImg = p.createGraphics(10, 10);  // Placeholder. Is set in updateMazeImg().
+    this.markersImg = p.createGraphics(10, 10);  // Placeholder. Is set in updateMarkersImg().
   }
 
   coordToIndex(x, y) {
@@ -52,7 +53,6 @@ class Maze {
     this.needsUpdate = false;
   }
 
-  // Creating a maze image because it massively improves performance.
   updateMazeImg() {
     this.mazeImg = this.p.createGraphics(this.w * $.tileSize + this.mazeStrokeWeight, this.h * $.tileSize + this.mazeStrokeWeight);  // Padding to accomodate stroke weight.
     // Shift to accomodate stroke weight.
@@ -79,23 +79,36 @@ class Maze {
       let b = this.indexToCoord(e.b);
       this.mazeImg.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     });
+
+    this.mazeImg.pop();
+    // Pass image to App for export purposes.
+    $.app_setMazeImgFunc(this.mazeImg);
+  }
+
+  updateMarkersImg() {
+    this.markersImg = this.p.createGraphics(this.w * $.tileSize + this.mazeStrokeWeight, this.h * $.tileSize + this.mazeStrokeWeight);  // Padding to accomodate stroke weight.
+    // Shift to accomodate stroke weight.
+    this.markersImg.push();
+    this.markersImg.translate(this.mazeStrokeWeight / 2, this.mazeStrokeWeight / 2);
     // Draw markers.
-    this.mazeImg.noFill();
-    this.mazeImg.strokeWeight(this.mazeStrokeWeight);
-    this.mazeImg.rectMode(this.p.CENTER);
+    this.markersImg.noFill();
+    this.markersImg.strokeWeight(this.mazeStrokeWeight);
+    this.markersImg.rectMode(this.p.CENTER);
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
         let index = this.coordToIndex(j, i);
         let code = this.graph.markerList[index];
         if (code !== null) {
-          this.mazeImg.stroke(consts.COLOURS[code]);
-          this.mazeImg.rect((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerSize, this.markerSize);
+          this.markersImg.stroke(consts.COLOURS[code]);
+          this.markersImg.rect((j + 0.5) * $.tileSize, (i + 0.5) * $.tileSize, this.markerSize, this.markerSize);
         }
       }
     }
-    this.mazeImg.rectMode(this.p.CORNER);
+    this.markersImg.rectMode(this.p.CORNER);
 
-    this.mazeImg.pop();
+    this.markersImg.pop();
+    // Pass image to App for export purposes.
+    $.app_setMarkersImgFunc(this.markersImg);
   }
 
   isValidMazeShape() {
@@ -244,7 +257,7 @@ class Maze {
   setMarker(x, y, state) {
     let index = this.coordToIndex(x, y);
     this.graph.markerList[index] = state ? $.markerColour : null;
-    this.updateMazeImg();  // Maze image must be updated with markers. The maze path does not.
+    this.updateMarkersImg();
   }
 
   setMarkerWithMouse(x, y) {
@@ -265,6 +278,7 @@ class Maze {
       this.drawGrid();
     }
     this.drawMaze();
+    this.drawMarkers();
     if ($.mode === consts.CREATE) {
       this.drawSuggestedPaths();
     }
@@ -291,6 +305,10 @@ class Maze {
       let b = this.indexToCoord(e.b);
       this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     })
+  }
+
+  drawMarkers() {
+    this.p.image(this.markersImg, -this.mazeStrokeWeight / 2, -this.mazeStrokeWeight / 2);  // Shift to accomodate stroke weight.
   }
 
   drawMaze() {

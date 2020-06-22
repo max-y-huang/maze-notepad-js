@@ -9,6 +9,7 @@ import $p5 from './js/p5/global';
 import ToolBar from './ToolBar';
 import ColourPicker from './ColourPicker';
 import sketch from './js/p5/sketch';
+import exportCanvas from './js/p5/exportCanvas';
 
 class App extends React.Component {
 
@@ -19,10 +20,16 @@ class App extends React.Component {
       canvasCreateTool: consts.SHAPE,
       canvasMarkerColour: 0,
       errorModalOpen: false,
-      errorModalMessage: ''
+      errorModalMessage: '',
+      exportMazeRequestFlag: 0,
+      exportMazeImgs: { mazeImg: null, markersImg: null }
     }
     this.canvasWrapperRef = React.createRef();
   }
+
+  setMazeImg        = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: img, markersImg: state.exportMazeImgs.markersImg } }));
+  setMarkersImg     = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: state.exportMazeImgs.mazeImg, markersImg: img } }));
+  requestExportMaze = ()    => this.setState((state) => ({ exportMazeRequestFlag: state.exportMazeRequestFlag + 1 }));
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -47,8 +54,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    $p5.setModeFunc = this.setCanvasMode;
-    $p5.showErrorMessageFunc = this.showErrorModal;
+    $p5.app_setMazeImgFunc = this.setMazeImg;
+    $p5.app_setMarkersImgFunc = this.setMarkersImg;
+    $p5.app_setModeFunc = this.setCanvasMode;
+    $p5.app_showErrorMessageFunc = this.showErrorModal;
 
     this.onResize();
     
@@ -85,6 +94,7 @@ class App extends React.Component {
               canvasCreateTool={canvasCreateTool}
               setCanvasModeFunc={this.setCanvasMode}
               setCanvasCreateToolFunc={this.setCanvasCreateTool}
+              requestExportMazeFunc={this.requestExportMaze}
             />
           </div>
           {this.renderSelectionBar()}
@@ -103,6 +113,10 @@ class App extends React.Component {
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
         />
+        {/* Used to export maze image. Should not be displayed. */}
+        <div style={{display: 'none'}}>
+          <P5Wrapper className={stylesheet.exportCanvas} sketch={exportCanvas} requestFlag={this.state.exportMazeRequestFlag} exportImgs={this.state.exportMazeImgs} />
+        </div>
       </>
     );
   }

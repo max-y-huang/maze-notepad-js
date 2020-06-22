@@ -32,7 +32,7 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.setCanvasCreateTool} />
+        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.props.requestExportMazeFunc} />
       </>
     );
   }
