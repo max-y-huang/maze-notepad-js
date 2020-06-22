@@ -22,12 +22,13 @@ class App extends React.Component {
       errorModalOpen: false,
       errorModalMessage: '',
       exportMazeRequestFlag: 0,
-      exportMazeImg: null
+      exportMazeImgs: { mazeImg: null, markersImg: null }
     }
     this.canvasWrapperRef = React.createRef();
   }
 
-  setMazeImg        = (img) => this.setState({ exportMazeImg: img });
+  setMazeImg        = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: img, markersImg: state.exportMazeImgs.markersImg } }));
+  setMarkersImg     = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: state.exportMazeImgs.mazeImg, markersImg: img } }));
   requestExportMaze = ()    => this.setState((state) => ({ exportMazeRequestFlag: state.exportMazeRequestFlag + 1 }));
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
@@ -54,6 +55,7 @@ class App extends React.Component {
 
   componentDidMount() {
     $p5.app_setMazeImgFunc = this.setMazeImg;
+    $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
@@ -113,7 +115,7 @@ class App extends React.Component {
         />
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>
-          <P5Wrapper className={stylesheet.exportCanvas} sketch={exportCanvas} requestFlag={this.state.exportMazeRequestFlag} mazeImg={this.state.exportMazeImg} />
+          <P5Wrapper className={stylesheet.exportCanvas} sketch={exportCanvas} requestFlag={this.state.exportMazeRequestFlag} exportImgs={this.state.exportMazeImgs} />
         </div>
       </>
     );

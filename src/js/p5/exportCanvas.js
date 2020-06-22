@@ -8,14 +8,15 @@ const exportCanvas = p => {
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     if (props.requestFlag !== requestFlag) {
-      exportImage(props.mazeImg);
+      exportImage(props.exportImgs.mazeImg, props.exportImgs.markersImg);
       requestFlag = props.requestFlag;
     }
   };
 
-  const exportImage = (img) => {
-    p.resizeCanvas(img.width, img.height);
-    p.image(img, 0, 0);
+  const exportImage = (mazeImg, markersImg) => {
+    p.resizeCanvas(mazeImg.width, mazeImg.height);
+    p.image(mazeImg, 0, 0);
+    p.image(markersImg, 0, 0);
     p.saveCanvas('maze', 'png');
   }
 }
