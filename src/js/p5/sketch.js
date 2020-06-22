@@ -32,8 +32,8 @@ const sketch = p => {
       // Validate maze before changing mode to SOLVE.
       let validCheck = maze.isValidMazeShape();
       if (!validCheck.success) {
-        $.showErrorMessageFunc(validCheck.result);  // Display error message.
-        $.setModeFunc($.mode);  // Revert mode back from SOLVE.
+        $.app_showErrorMessageFunc(validCheck.result);  // Display error message.
+        $.app_setModeFunc($.mode);  // Revert mode back from SOLVE.
         return;
       }
       $.mode = mode;
@@ -119,10 +119,6 @@ const sketch = p => {
     maze.update();
   }
 
-  const exportImage = () => {
-    $.requestExportFunc(maze.mazeImg);
-  }
-
   // Used instead of default windowResized() to keep track of new width and height.
   const onResize = () => {
     // Check run conditions.
@@ -171,9 +167,6 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
-    if (p.key === 'p') {
-      exportImage();
-    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }

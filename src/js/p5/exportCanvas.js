@@ -9,7 +9,7 @@ const exportCanvas = p => {
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     if (props.requestFlag !== requestFlag) {
       exportImage(props.mazeImg);
-      requestFlag = props.request;
+      requestFlag = props.requestFlag;
     }
   };
 

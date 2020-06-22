@@ -27,7 +27,8 @@ class App extends React.Component {
     this.canvasWrapperRef = React.createRef();
   }
 
-  requestExportMaze = (mazeImg) => this.setState((state) => ({exportMazeRequestFlag: state.exportMazeRequestFlag + 1, exportMazeImg: mazeImg}));
+  setMazeImg        = (img) => this.setState({ exportMazeImg: img });
+  requestExportMaze = ()    => this.setState((state) => ({ exportMazeRequestFlag: state.exportMazeRequestFlag + 1 }));
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -52,9 +53,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    $p5.requestExportFunc = this.requestExportMaze;
-    $p5.setModeFunc = this.setCanvasMode;
-    $p5.showErrorMessageFunc = this.showErrorModal;
+    $p5.app_setMazeImgFunc = this.setMazeImg;
+    $p5.app_setModeFunc = this.setCanvasMode;
+    $p5.app_showErrorMessageFunc = this.showErrorModal;
 
     this.onResize();
     
@@ -91,6 +92,7 @@ class App extends React.Component {
               canvasCreateTool={canvasCreateTool}
               setCanvasModeFunc={this.setCanvasMode}
               setCanvasCreateToolFunc={this.setCanvasCreateTool}
+              requestExportMazeFunc={this.requestExportMaze}
             />
           </div>
           {this.renderSelectionBar()}
@@ -109,6 +111,7 @@ class App extends React.Component {
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
         />
+        {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>
           <P5Wrapper className={stylesheet.exportCanvas} sketch={exportCanvas} requestFlag={this.state.exportMazeRequestFlag} mazeImg={this.state.exportMazeImg} />
         </div>

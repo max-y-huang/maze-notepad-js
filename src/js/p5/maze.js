@@ -96,6 +96,8 @@ class Maze {
     this.mazeImg.rectMode(this.p.CORNER);
 
     this.mazeImg.pop();
+    // Pass image to App for export purposes.
+    $.app_setMazeImgFunc(this.mazeImg);
   }
 
   isValidMazeShape() {
