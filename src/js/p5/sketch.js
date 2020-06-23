@@ -40,8 +40,7 @@ const sketch = p => {
     });
     maze.graph.activeList = file.activeList;
     maze.graph.markerList = file.markerList;
-    maze.needsUpdate = true;
-    maze.update();
+    maze.update(true);
   }
 
   const saveMazeFile = (flag, fileName) => {
@@ -149,14 +148,13 @@ const sketch = p => {
   }
 
   const addStarterMaze = (x, y, w, h) => {
-    maze.needsUpdate = true;
     for (let i = 0; i < h; i++) {
       for (let j = 0; j < w; j++) {
         let index = (i + y) * maze.w + (j + x);
         maze.graph.activeList[index] = true;
       }
     }
-    maze.update();
+    maze.update(true);
   }
 
   // Used instead of default windowResized() to keep track of new width and height.
@@ -207,6 +205,9 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
+    if (p.key === ' ') {
+      maze.resetPattern();
+    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }

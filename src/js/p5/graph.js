@@ -18,21 +18,36 @@ class Graph {
     this.adjList[a].push(itemA);
     this.adjList[b].push(itemB);
   }
-  
-  editEdgeNotes(a, b, newNotes) {
+
+  editEdge(a, b, newVals) {
     const sameEdgeFilter = e => (e.a === a && e.b === b) || (e.b === a && e.a === b);
     // Update notes in all 3 locations.
     let edgeListIndex = this.edgeList.findIndex(sameEdgeFilter);
     let adjListAIndex = this.adjList[a].findIndex(sameEdgeFilter);
     let adjListBIndex = this.adjList[b].findIndex(sameEdgeFilter);
     if (edgeListIndex !== -1) {
-      this.edgeList[edgeListIndex].notes = newNotes;
+      if (newVals.weight) {
+        this.edgeList[edgeListIndex].weight = newVals.weight;
+      }
+      if (newVals.notes) {
+        this.edgeList[edgeListIndex].notes = newVals.notes;
+      }
     }
     if (adjListAIndex !== -1) {
-      this.adjList[a][adjListAIndex].notes = newNotes;
+      if (newVals.weight) {
+        this.adjList[a][adjListAIndex].weight = newVals.weight;
+      }
+      if (newVals.notes) {
+        this.adjList[a][adjListAIndex].notes = newVals.notes;
+      }
     }
     if (adjListBIndex !== -1) {
-      this.adjList[b][adjListBIndex].notes = newNotes;
+      if (newVals.weight) {
+        this.adjList[b][adjListBIndex].weight = newVals.weight;
+      }
+      if (newVals.notes) {
+        this.adjList[b][adjListBIndex].notes = newVals.notes;
+      }
     }
   }
 
@@ -77,7 +92,11 @@ class MazeGraph extends Graph {
     this.h = h;
     this.activeList = Array(w * h).fill(false);
     this.markerList = Array(w * h).fill(null);
-    this.resetEdgeList();
+    this.initializeEdgeList();
+  }
+
+  getRandomEdgeWeight() {  // Range: [1000, 2000).
+    return Math.floor(Math.random() * 1000) + 1000;
   }
 
   addEdge(a, b, weight) {
@@ -88,30 +107,36 @@ class MazeGraph extends Graph {
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
   generateMazeSortFunc = (a, b) => {
     let aWeight = a.weight, bWeight = b.weight;
-    // If suggested path, convert edge weight from [1, 2) to [0, 1).
+    // If suggested path, convert edge weight from [1000, 2000) to [0, 1000).
     if (a.notes.suggestedPath) {
-      aWeight -= 1;
+      aWeight -= 1000;
     }
     if (b.notes.suggestedPath) {
-      bWeight -= 1;
+      bWeight -= 1000;
     }
     return aWeight - bWeight;
   }
 
-  resetEdgeList() {
+  initializeEdgeList() {
     for (let i = 0; i < this.h; i++) {
       for (let j = 0; j < this.w; j++) {
         let v = i * this.w + j;
-        // Connect right with a random edge with weight between 1 and 2.
+        // Connect right.
         if (j < this.w - 1) {
-          this.addEdge(v, v + 1, Math.random() + 1);
+          this.addEdge(v, v + 1, this.getRandomEdgeWeight());
         }
-        // Connect down with a random edge with weight between 1 and 2.
+        // Connect down.
         if (i < this.h - 1) {
-          this.addEdge(v, v + this.w, Math.random() + 1);
+          this.addEdge(v, v + this.w, this.getRandomEdgeWeight());
         }
       }
     }
+  }
+
+  resetEdgeWeights() {
+    this.edgeList.forEach(edge => {
+      this.editEdge(edge.a, edge.b, { weight: this.getRandomEdgeWeight() });
+    });
   }
 
   generateMazeGraph() {

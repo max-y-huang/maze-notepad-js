@@ -38,9 +38,14 @@ class Maze {
     return { x: index % this.w, y: Math.floor(index / this.w) };
   }
 
-  update() {
+  resetPattern() {
+    this.graph.resetEdgeWeights();
+    this.update(true);
+  }
+
+  update(force = false) {
     // Check run condition.
-    if (!this.needsUpdate) {
+    if (!this.needsUpdate && !force) {
       return;
     }
 
@@ -218,12 +223,12 @@ class Maze {
     let indexCurr = this.coordToIndex(currX, currY);
     // Treat like pen if state = true
     if (state) {
-      this.graph.editEdgeNotes(indexPrev, indexCurr, { suggestedPath: state });
+      this.graph.editEdge(indexPrev, indexCurr, { notes: { suggestedPath: state } });
     }
     // Treat like eraser if state = false
     else {
       this.graph.adjList[indexCurr].forEach(e => {
-        this.graph.editEdgeNotes(e.a, e.b, { suggestedPath: state });
+        this.graph.editEdge(e.a, e.b, { notes: { suggestedPath: state } });
       });
     }
     // Finish if reached target.
