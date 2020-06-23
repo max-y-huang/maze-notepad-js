@@ -1,16 +1,27 @@
+import { saveAs } from 'file-saver';
+
 class Graph {
 
   edgeList = [];
 
   constructor(size) {
     this.size = size;
+    this.clearEdgeList();
+    this.clearAdjList();
+  }
+
+  clearEdgeList() {
+    this.edgeList = [];
+  }
+
+  clearAdjList() {
     this.adjList = [];
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < this.size; i++) {
       this.adjList.push([]);
     }
   }
 
-  addEdge(a, b, weight, notes=null) {
+  addEdge(a, b, weight, notes = null) {
     let itemA = { a: a, b: b, weight: weight, notes: notes };
     let itemB = { a: b, b: a, weight: weight, notes: notes };
     // Add in 3 different locations. Adjacency lists always have its own node as node a.
@@ -30,7 +41,7 @@ class Graph {
         this.edgeList[edgeListIndex].weight = newVals.weight;
       }
       if (newVals.notes) {
-        this.edgeList[edgeListIndex].notes = newVals.notes;
+        this.edgeList[edgeListIndex].notes = { ...this.edgeList[edgeListIndex].notes, ...newVals.notes };
       }
     }
     if (adjListAIndex !== -1) {
@@ -38,7 +49,7 @@ class Graph {
         this.adjList[a][adjListAIndex].weight = newVals.weight;
       }
       if (newVals.notes) {
-        this.adjList[a][adjListAIndex].notes = newVals.notes;
+        this.adjList[a][adjListAIndex].notes = { ...this.adjList[a][adjListAIndex].notes, ...newVals.notes };
       }
     }
     if (adjListBIndex !== -1) {
@@ -46,7 +57,7 @@ class Graph {
         this.adjList[b][adjListBIndex].weight = newVals.weight;
       }
       if (newVals.notes) {
-        this.adjList[b][adjListBIndex].notes = newVals.notes;
+        this.adjList[b][adjListBIndex].notes = { ...this.adjList[b][adjListBIndex].notes, ...newVals.notes };
       }
     }
   }
@@ -88,19 +99,29 @@ class MazeGraph extends Graph {
 
   constructor(w, h) {
     super(w * h);
+    this.clearActiveList();
+    this.clearMarkerList();
     this.w = w;
     this.h = h;
-    this.activeList = Array(w * h).fill(false);
-    this.markerList = Array(w * h).fill(null);
     this.initializeEdgeList();
+  }
+
+  getNotes(edge, key) {
+    if (!edge.notes) {
+      return false;
+    }
+    if (!edge.notes[key]) {
+      return false;
+    }
+    return edge.notes[key];
   }
 
   getRandomEdgeWeight() {  // Range: [1000, 2000).
     return Math.floor(Math.random() * 1000) + 1000;
   }
 
-  addEdge(a, b, weight) {
-    super.addEdge(a, b, weight, { suggestedPath: false });
+  addEdge(a, b, weight, notes = { suggestedPath: false }) {
+    super.addEdge(a, b, weight, notes);
   }
 
   floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
@@ -108,13 +129,50 @@ class MazeGraph extends Graph {
   generateMazeSortFunc = (a, b) => {
     let aWeight = a.weight, bWeight = b.weight;
     // If suggested path, convert edge weight from [1000, 2000) to [0, 1000).
-    if (a.notes.suggestedPath) {
+    if (this.getNotes(a, 'suggestedPath')) {
       aWeight -= 1000;
     }
-    if (b.notes.suggestedPath) {
+    if (this.getNotes(b, 'suggestedPath')) {
       bWeight -= 1000;
     }
     return aWeight - bWeight;
+  }
+
+  load(file) {
+    this.clearEdgeList();
+    this.clearAdjList();
+    this.clearActiveList();
+    this.clearMarkerList();
+    
+    file.edgeList.forEach(edge => {
+      this.addEdge(edge[0], edge[1], edge[2], { suggestedPath: edge[3] });
+    });
+    file.activeList.forEach(i => {
+      this.activeList[i] = true;
+    });
+    file.markerList.forEach(marker => {
+      this.markerList[marker.index] = marker.colour;
+    });
+  }
+
+  save(fileName) {
+    let edgeList = this.edgeList.map(edge => [ edge.a, edge.b, edge.weight, this.getNotes(edge, 'suggestedPath') ]);
+    let activeList = this.activeList.map((val, i) => (val === true) ? i : -1).filter(val => val !== -1);  // Log true values as indices.
+    let markerList = this.markerList.map((val, i) => (val !== null) ? [ i, val ] : -1).filter(val => val !== -1);  // Log non-null values as indices.
+    let content = {
+      edgeList: edgeList,
+      activeList: activeList,
+      markerList: markerList
+    };
+    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
+  }
+
+  clearActiveList() {
+    this.activeList = Array(this.size).fill(false);
+  }
+  
+  clearMarkerList() {
+    this.markerList = Array(this.size).fill(null);
   }
 
   initializeEdgeList() {

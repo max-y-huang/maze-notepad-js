@@ -25,6 +25,7 @@ class App extends React.Component {
       openMazeFile: null,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
+      requestResetMazePatternFlag: 0,
       exportMazeImgs: { mazeImg: null, markersImg: null }
     }
     this.canvasWrapperRef = React.createRef();
@@ -37,6 +38,8 @@ class App extends React.Component {
   setOpenMazeFile = (file) => this.setState({ openMazeFile: file });
   requestOpenMaze = ()     => this.setState({ requestOpenMazeFlag: Date.now() });
   requestSaveMaze = ()     => this.setState({ requestSaveMazeFlag: Date.now() });
+
+  requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -91,7 +94,12 @@ class App extends React.Component {
   }
 
   render() {
-    let { canvasMode, canvasCreateTool, canvasMarkerColour, errorModalOpen, errorModalMessage } = this.state;
+    let {
+      canvasMode, canvasCreateTool, canvasMarkerColour,
+      openMazeFile, exportMazeImgs,
+      errorModalOpen, errorModalMessage,
+      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag
+    } = this.state;
     return (
       <>
         <div className={stylesheet.wrapper}>
@@ -105,6 +113,7 @@ class App extends React.Component {
               requestOpenMazeFunc={this.requestOpenMaze}
               requestSaveMazeFunc={this.requestSaveMaze}
               requestExportMazeFunc={this.requestExportMaze}
+              requestResetMazePatternFunc={this.requestResetMazePattern}
             />
           </div>
           {this.renderSelectionBar()}
@@ -114,9 +123,10 @@ class App extends React.Component {
               mode={canvasMode}
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
-              openMazeFile={this.state.openMazeFile}
-              requestOpenMazeFlag={this.state.requestOpenMazeFlag}
-              requestSaveMazeFlag={this.state.requestSaveMazeFlag}
+              openMazeFile={openMazeFile}
+              requestOpenMazeFlag={requestOpenMazeFlag}
+              requestSaveMazeFlag={requestSaveMazeFlag}
+              requestResetMazePatternFlag={requestResetMazePatternFlag}
             />
           </div>
         </div>
@@ -131,8 +141,8 @@ class App extends React.Component {
           <P5Wrapper
             className={stylesheet.exportCanvas}
             sketch={exportCanvas}
-            requestExportMazeFlag={this.state.requestExportMazeFlag}
-            exportImgs={this.state.exportMazeImgs}
+            requestExportMazeFlag={requestExportMazeFlag}
+            exportImgs={exportMazeImgs}
           />
         </div>
       </>

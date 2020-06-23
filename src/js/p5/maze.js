@@ -38,6 +38,15 @@ class Maze {
     return { x: index % this.w, y: Math.floor(index / this.w) };
   }
 
+  loadFile(file) {
+    this.graph.load(file);
+    this.update(true);
+  }
+
+  saveFile(fileName) {
+    this.graph.save(fileName);
+  }
+
   resetPattern() {
     this.graph.resetEdgeWeights();
     this.update(true);
@@ -306,7 +315,7 @@ class Maze {
     this.p.stroke(this.suggestedPathsColour);
     this.p.strokeWeight(this.suggestedPathsWeight);
     this.p.strokeCap(this.p.ROUND);
-    this.graph.edgeList.filter(e => e.notes.suggestedPath).forEach(e => {
+    this.graph.edgeList.filter(e => this.graph.getNotes(e, 'suggestedPath')).forEach(e => {
       let a = this.indexToCoord(e.a);
       let b = this.indexToCoord(e.b);
       this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);

@@ -1,5 +1,3 @@
-import { saveAs } from 'file-saver';
-
 import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
@@ -13,6 +11,7 @@ const sketch = p => {
 
   let requestOpenMazeFlag = 0;
   let requestSaveMazeFlag = 0;
+  let requestResetMazePatternFlag = 0;
 
   let camera;
   let cursor;
@@ -21,6 +20,7 @@ const sketch = p => {
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     openMazeFile(props.requestOpenMazeFlag, props.openMazeFile);
     saveMazeFile(props.requestSaveMazeFlag, 'maze.mznp');
+    resetMazePattern(props.requestResetMazePatternFlag);
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
@@ -33,14 +33,7 @@ const sketch = p => {
     }
     requestOpenMazeFlag = flag;
 
-    // Adding edges with addEdge to update both edgeList and adjList.
-    maze.graph.edgeList = [];
-    file.edgeList.forEach(edge => {
-      maze.graph.addEdge(edge.a, edge.b, edge.weight, edge.notes);
-    });
-    maze.graph.activeList = file.activeList;
-    maze.graph.markerList = file.markerList;
-    maze.update(true);
+    maze.loadFile(file);
   }
 
   const saveMazeFile = (flag, fileName) => {
@@ -50,12 +43,17 @@ const sketch = p => {
     }
     requestSaveMazeFlag = flag;
 
-    let content = {
-      edgeList: maze.graph.edgeList,
-      activeList: maze.graph.activeList,
-      markerList: maze.graph.markerList
-    };
-    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
+    maze.saveFile(fileName);
+  }
+
+  const resetMazePattern = (flag) => {
+    // Check for run condition.
+    if (flag === requestResetMazePatternFlag) {
+      return;
+    }
+    requestResetMazePatternFlag = flag;
+
+    maze.resetPattern();
   }
 
   const changeMode = (mode) => {
@@ -205,9 +203,6 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
-    if (p.key === ' ') {
-      maze.resetPattern();
-    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }
