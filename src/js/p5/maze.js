@@ -139,7 +139,7 @@ class Maze {
     if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
       return { success: false, result: 'The maze must be larger than 1x1.' };
     }
-    let parents = this.graph.bfs(bfsStart, this.graph.floodFillFilterFunc);
+    let parents = this.graph.bfs(bfsStart, this.graph.floodFillShapeFilterFunc);
     // Compare flood-fill with all active cells.
     for (let i = 0; i < this.graph.size; i++) {
       let isActive = this.graph.activeList[i];
