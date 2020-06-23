@@ -37,6 +37,10 @@ class ToolBar extends React.Component {
     this.props.requestResetMazePatternFunc();
   }
 
+  toggleUseRuler = () => {
+    this.props.toggleUseRulerFunc();
+  }
+
   renderCreateButtons = () => {
     if (this.props.canvasMode !== consts.CREATE) {
       return null;
@@ -52,6 +56,8 @@ class ToolBar extends React.Component {
         <ToolbarItem text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
         <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
         <ToolbarItem text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
+        <Divider />
+        <ToolbarItem text='Toggle Ruler' icon='ruler' active={false} onClick={this.toggleUseRuler} />
       </>
     );
   }

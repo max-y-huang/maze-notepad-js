@@ -23,6 +23,7 @@ const sketch = p => {
     openMazeFile(props.requestOpenMazeFlag, props.openMazeFile);
     saveMazeFile(props.requestSaveMazeFlag, 'maze.mznp');
     resetMazePattern(props.requestResetMazePatternFlag);
+    changeUseRuler(props.useRuler);
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
@@ -58,6 +59,15 @@ const sketch = p => {
     maze.resetPattern();
   }
 
+  const changeUseRuler = (useRuler) => {
+    // Check for run condition.
+    if (useRuler === $.useRuler) {
+      return;
+    }
+
+    $.useRuler = useRuler;
+  }
+
   const changeMode = (mode) => {
     // Check for run condition.
     if (mode === $.mode) {
@@ -84,6 +94,7 @@ const sketch = p => {
     if (createTool === $.createTool) {
       return;
     }
+
     $.createTool = createTool;
   }
 
@@ -92,6 +103,7 @@ const sketch = p => {
     if (markerColour === $.markerColour) {
       return;
     }
+
     $.markerColour = markerColour;
   }
 
@@ -208,9 +220,6 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
-    if (p.key.toLowerCase() === 'r') {
-      $.useRuler = !$.useRuler;
-    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }
