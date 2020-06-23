@@ -3,6 +3,7 @@ import $ from './global';
 import keyLogger from './keyLogger';
 import { Camera } from './camera';
 import { Cursor } from './cursor';
+import { Ruler } from './ruler';
 import { Maze } from './maze';
 
 const sketch = p => {
@@ -15,12 +16,14 @@ const sketch = p => {
 
   let camera;
   let cursor;
+  let ruler;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     openMazeFile(props.requestOpenMazeFlag, props.openMazeFile);
     saveMazeFile(props.requestSaveMazeFlag, 'maze.mznp');
     resetMazePattern(props.requestResetMazePatternFlag);
+    changeUseRuler(props.useRuler);
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
@@ -56,6 +59,15 @@ const sketch = p => {
     maze.resetPattern();
   }
 
+  const changeUseRuler = (useRuler) => {
+    // Check for run condition.
+    if (useRuler === $.useRuler) {
+      return;
+    }
+
+    $.useRuler = useRuler;
+  }
+
   const changeMode = (mode) => {
     // Check for run condition.
     if (mode === $.mode) {
@@ -82,6 +94,7 @@ const sketch = p => {
     if (createTool === $.createTool) {
       return;
     }
+
     $.createTool = createTool;
   }
 
@@ -90,6 +103,7 @@ const sketch = p => {
     if (markerColour === $.markerColour) {
       return;
     }
+
     $.markerColour = markerColour;
   }
 
@@ -97,9 +111,10 @@ const sketch = p => {
     p.createCanvas($.width, $.height);
     p.frameRate(60);
     p.noSmooth();
-    camera = new Camera(p, 96, 96, 2, 2, 1, 8);
-    maze = new Maze(p, 100, 100);
+    camera = new Camera(p, 96, 96, 2, 2, 0.5, 4);
+    maze = new Maze(p, camera, 100, 100);
     cursor = new Cursor(p, camera, maze);
+    ruler = new Ruler(p, camera, maze);
     // Add multiple square mazes (with partial overlap) to create a non-square shape.
     addStarterMaze(4, 4, 8, 8);
     addStarterMaze(12, 4, 8, 8);
@@ -122,6 +137,8 @@ const sketch = p => {
     maze.draw();
     cursor.draw();
     p.pop();
+
+    ruler.draw();
 
     drawTestingWidgets();
   };

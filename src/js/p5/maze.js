@@ -5,7 +5,8 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  gridLineColour = [ 192, 192, 192 ];
+  gridLineColour = [ 128, 128, 128 ];
+  gridLineEmphasisColour = [ 224, 224, 224 ];
   gridLineWeight = 1;
   mazeColour = [ 224, 224, 224 ];
   mazeStrokeColour = [ 32, 32, 32 ];
@@ -18,8 +19,9 @@ class Maze {
   toShapeRemoveColour = [ 255, 192, 192 ];
   toShapeRemoveStrokeColour = [ 128, 96, 96 ];
 
-  constructor(p, w, h) {
+  constructor(p, camera, w, h) {
     this.p = p;
+    this.camera = camera;
     this.w = w;
     this.h = h;
     this.graph = new MazeGraph(w, h);
@@ -300,13 +302,27 @@ class Maze {
   }
 
   drawGrid() {
+    let regularIncrement = (this.camera.pos.z >= 1 || $.useRuler) ? 1 : $.rulerIncrement;
+    // Draw regular grid lines.
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.PROJECT);
-    this.p.strokeWeight(this.gridLineWeight);
-    for (let i = 0; i <= this.h; i++) {
+    this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
+    for (let i = 0; i <= this.h; i += regularIncrement) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = 0; i <= this.w; i++) {
+    for (let i = 0; i <= this.w; i += regularIncrement) {
+      this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
+    }
+    // Check run condition.
+    if (!$.useRuler) {
+      return;
+    }
+    // Draw emphasized grid lines.
+    this.p.stroke(this.gridLineEmphasisColour);
+    for (let i = $.rulerIncrement; i <= this.h - 1; i += $.rulerIncrement) {  // First and last lines should not be emphasized.
+      this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
+    }
+    for (let i = $.rulerIncrement; i <= this.w - 1; i += $.rulerIncrement) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
   }

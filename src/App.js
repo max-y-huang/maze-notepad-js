@@ -16,6 +16,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      canvasUseRuler: false,
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
       canvasMarkerColour: 0,
@@ -42,6 +43,8 @@ class App extends React.Component {
   requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
+
+  toggleUseRuler = () => this.setState((state) => ({ canvasUseRuler: !state.canvasUseRuler }));
 
   setCanvasMode         = (mode)   => this.setState({ canvasMode: mode });
   setCanvasCreateTool   = (tool)   => this.setState({ canvasCreateTool: tool });
@@ -95,7 +98,7 @@ class App extends React.Component {
 
   render() {
     let {
-      canvasMode, canvasCreateTool, canvasMarkerColour,
+      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
       openMazeFile, exportMazeImgs,
       errorModalOpen, errorModalMessage,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag
@@ -105,6 +108,7 @@ class App extends React.Component {
         <div className={stylesheet.wrapper}>
           <div className={stylesheet.wrapper__toolBar}>
             <ToolBar
+              canvasUseRuler={canvasUseRuler}
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
               setCanvasModeFunc={this.setCanvasMode}
@@ -114,12 +118,14 @@ class App extends React.Component {
               requestSaveMazeFunc={this.requestSaveMaze}
               requestExportMazeFunc={this.requestExportMaze}
               requestResetMazePatternFunc={this.requestResetMazePattern}
+              toggleUseRulerFunc={this.toggleUseRuler}
             />
           </div>
           {this.renderSelectionBar()}
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
               sketch={sketch}
+              useRuler={canvasUseRuler}
               mode={canvasMode}
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
