@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 import consts from './../consts';
 import $ from './global';
 import keyLogger from './keyLogger';
@@ -167,6 +169,9 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
+    if (p.key === 'z') {
+      saveMazeFile('maze.json');
+    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }
@@ -174,6 +179,15 @@ const sketch = p => {
   p.keyReleased = () => {
     keyLogger.onKeyUp(p.key);
     keyLogger.onKeyCodeUp(p.keyCode);
+  }
+
+  const saveMazeFile = (fileName) => {
+    let content = {
+      edgeList: maze.graph.edgeList,
+      activeList: maze.graph.activeList,
+      markerList: maze.graph.markerList
+    };
+    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
   }
 };
 
