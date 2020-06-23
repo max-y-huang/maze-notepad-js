@@ -3,6 +3,7 @@ import $ from './global';
 import keyLogger from './keyLogger';
 import { Camera } from './camera';
 import { Cursor } from './cursor';
+import { Ruler } from './ruler';
 import { Maze } from './maze';
 
 const sketch = p => {
@@ -15,6 +16,7 @@ const sketch = p => {
 
   let camera;
   let cursor;
+  let ruler;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
@@ -97,9 +99,10 @@ const sketch = p => {
     p.createCanvas($.width, $.height);
     p.frameRate(60);
     p.noSmooth();
-    camera = new Camera(p, 96, 96, 2, 2, 1, 8);
-    maze = new Maze(p, 100, 100);
+    camera = new Camera(p, 96, 96, 2, 2, 0.5, 4);
+    maze = new Maze(p, camera, 100, 100);
     cursor = new Cursor(p, camera, maze);
+    ruler = new Ruler(p, camera, maze);
     // Add multiple square mazes (with partial overlap) to create a non-square shape.
     addStarterMaze(4, 4, 8, 8);
     addStarterMaze(12, 4, 8, 8);
@@ -122,6 +125,8 @@ const sketch = p => {
     maze.draw();
     cursor.draw();
     p.pop();
+
+    ruler.draw();
 
     drawTestingWidgets();
   };
@@ -203,6 +208,9 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
+    if (p.key.toLowerCase() === 'r') {
+      $.useRuler = !$.useRuler;
+    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }
