@@ -153,12 +153,7 @@ class Maze {
     return { success: true };
   }
 
-  shape(x, y, currX, currY, state) {
-    // Check run condition.
-    if ($.mode !== consts.CREATE) {
-      return;
-    }
-    
+  shape(x, y, currX, currY, state) {  
     if (keyLogger.isKeyCodePressed(this.p.SHIFT)) {
       this.shapeFill(x, y, state);
     }
@@ -203,7 +198,7 @@ class Maze {
       return;
     }
     // BFS to find flood fill region, and shapeFill() for each cell in the region.
-    let parents = this.graph.bfs(index, this.graph.floodFillFilterFunc);
+    let parents = this.graph.bfs(index, this.graph.floodFillShapeFilterFunc);
     parents.forEach((parent, i) => {
       if (parent !== -1) {
         this.shapePoint(i, state);
@@ -225,7 +220,12 @@ class Maze {
   }
 
   setSuggestedPath(x, y, currX, currY, state) {
-    this.setSuggestedPathPen(x, y, currX, currY, state);
+    if (keyLogger.isKeyCodePressed(this.p.SHIFT) && !state) { // Only allow fill if erasing.
+      this.setSuggestedPathFill(x, y, state);
+    }
+    else {
+      this.setSuggestedPathPen(x, y, currX, currY, state);
+    }
     this.needsUpdate = true;  // Request update.
   }
 
@@ -256,6 +256,19 @@ class Maze {
       offsetY = currY < y ? 1 : -1;
     }
     this.setSuggestedPathPen(x, y, currX + offsetX, currY + offsetY, state, currX, currY);
+  }
+
+  setSuggestedPathFill(x, y, state) {
+    let index = this.coordToIndex(x, y);
+    // BFS to find flood fill region, and shapeFill() for each cell in the region.
+    let parents = this.graph.bfs(index, this.graph.floodFillSuggestedPathFilterFunc);
+    parents.forEach((parent, i) => {
+      if (parent !== -1) {
+        this.graph.adjList[i].forEach(e => {
+          this.graph.editEdge(e.a, e.b, { notes: { suggestedPath: state } });
+        });
+      }
+    })
   }
 
   setSuggestedPathWithMouse(x, y, prevX, prevY) {

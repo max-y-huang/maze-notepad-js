@@ -124,7 +124,8 @@ class MazeGraph extends Graph {
     super.addEdge(a, b, weight, notes);
   }
 
-  floodFillFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
+  floodFillShapeFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
+  floodFillSuggestedPathFilterFunc = edge => this.getNotes(edge, 'suggestedPath');
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
   generateMazeSortFunc = (a, b) => {
     let aWeight = a.weight, bWeight = b.weight;
