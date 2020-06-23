@@ -11,15 +11,49 @@ const sketch = p => {
 
   let testingMode = false;  // TODO: Set to false when deploying.
 
+  let requestOpenMazeFlag = 0;
+  let requestSaveMazeFlag = 0;
+
   let camera;
   let cursor;
   let maze;
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
+    openMazeFile(props.requestOpenMazeFlag, props.openMazeFile);
+    saveMazeFile(props.requestSaveMazeFlag, 'maze.mznp');
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
   };
+
+  const openMazeFile = (flag, file) => {
+    // Check for run condition.
+    if (flag === requestOpenMazeFlag) {
+      return;
+    }
+    requestOpenMazeFlag = flag;
+    
+    maze.graph.edgeList = file.edgeList;
+    maze.graph.activeList = file.activeList;
+    maze.graph.markerList = file.markerList;
+    maze.needsUpdate = true;
+    maze.update();
+  }
+
+  const saveMazeFile = (flag, fileName) => {
+    // Check for run condition.
+    if (flag === requestSaveMazeFlag) {
+      return;
+    }
+    requestSaveMazeFlag = flag;
+
+    let content = {
+      edgeList: maze.graph.edgeList,
+      activeList: maze.graph.activeList,
+      markerList: maze.graph.markerList
+    };
+    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
+  }
 
   const changeMode = (mode) => {
     // Check for run condition.
@@ -169,9 +203,6 @@ const sketch = p => {
   // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
-    if (p.key === 'z') {
-      saveMazeFile('maze.json');
-    }
     keyLogger.onKeyDown(p.key);
     keyLogger.onKeyCodeDown(p.keyCode);
   }
@@ -179,15 +210,6 @@ const sketch = p => {
   p.keyReleased = () => {
     keyLogger.onKeyUp(p.key);
     keyLogger.onKeyCodeUp(p.keyCode);
-  }
-
-  const saveMazeFile = (fileName) => {
-    let content = {
-      edgeList: maze.graph.edgeList,
-      activeList: maze.graph.activeList,
-      markerList: maze.graph.markerList
-    };
-    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
   }
 };
 

@@ -1,15 +1,15 @@
 const exportCanvas = p => {
 
-  let requestFlag = 0;
+  let requestExportMazeFlag = 0;
 
   p.setup = () => {
     p.createCanvas(100, 100);
   }
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
-    if (props.requestFlag !== requestFlag) {
+    if (props.requestExportMazeFlag !== requestExportMazeFlag) {
       exportImage(props.exportImgs.mazeImg, props.exportImgs.markersImg);
-      requestFlag = props.requestFlag;
+      requestExportMazeFlag = props.requestExportMazeFlag;
     }
   };
 

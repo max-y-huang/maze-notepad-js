@@ -8,8 +8,30 @@ import consts from './js/consts';
 
 class ToolBar extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.openFileRef = React.createRef();
+  }
+
   setCanvasMode = (mode) => this.props.setCanvasModeFunc(mode);
   setCanvasCreateTool = (tool) => this.props.setCanvasCreateToolFunc(tool);
+
+  openMaze = () => {
+    if (this.openFileRef.current.files.length > 0) {
+      this.openFileRef.current.files[0].text().then(text => {
+        this.props.setOpenMazeFileFunc(JSON.parse(text));
+        this.props.requestOpenMazeFunc();
+      });
+    }
+  }
+
+  saveMaze = () => {
+    this.props.requestSaveMazeFunc();
+  }
+
+  exportMaze = () => {
+    this.props.requestExportMazeFunc();
+  }
 
   renderCreateButtons = () => {
     if (this.props.canvasMode !== consts.CREATE) {
@@ -17,6 +39,9 @@ class ToolBar extends React.Component {
     }
     return (
       <>
+      <Divider />
+        <ToolbarItem text='Open' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
+        <ToolbarItem text='Save' icon='save'        active={false} onClick={this.saveMaze} />
         <Divider />
         <ToolbarItem text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
         <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
@@ -32,7 +57,8 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.props.requestExportMazeFunc} />
+        <ToolbarItem text='Save' icon='save'        active={false} onClick={this.saveMaze} />
+        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.exportMaze} />
       </>
     );
   }
@@ -42,11 +68,10 @@ class ToolBar extends React.Component {
       <div className={stylesheet.wrapper}>
         <ToolbarItem text='Edit Mode' icon='wrench' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
         <ToolbarItem text='View Mode' icon='eye'    active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
-        <Divider />
-        <ToolbarItem disabled text='Open' icon='folder-open' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
-        <ToolbarItem disabled text='Save' icon='save'        active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
         {this.renderCreateButtons()}
         {this.renderSolveButtons()}
+        {/* Used to import maze. Should not be displayed. */}
+        <input style={{display: 'none'}} ref={this.openFileRef} type='file' accept='.mznp' onInput={this.openMaze} />
       </div>
     )
   }
