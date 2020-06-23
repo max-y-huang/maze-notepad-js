@@ -32,8 +32,12 @@ const sketch = p => {
       return;
     }
     requestOpenMazeFlag = flag;
-    
-    maze.graph.edgeList = file.edgeList;
+
+    // Adding edges with addEdge to update both edgeList and adjList.
+    maze.graph.edgeList = [];
+    file.edgeList.forEach(edge => {
+      maze.graph.addEdge(edge.a, edge.b, edge.weight, edge.notes);
+    });
     maze.graph.activeList = file.activeList;
     maze.graph.markerList = file.markerList;
     maze.needsUpdate = true;
