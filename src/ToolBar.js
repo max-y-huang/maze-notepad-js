@@ -44,10 +44,10 @@ class ToolBar extends React.Component {
     return (
       <>
       <Divider />
-        <ToolbarItem text='Open' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
+        <ToolbarItem text='Load' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
         <ToolbarItem text='Save' icon='save'        active={false} onClick={this.saveMaze} />
         <Divider />
-        <ToolbarItem text='Change Pattern' icon='sync-alt' active={false} onClick={this.resetMazePattern} />
+        <ToolbarItem text='Change Pattern' icon='puzzle-piece' active={false} onClick={this.resetMazePattern} />
         <Divider />
         <ToolbarItem text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
         <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
@@ -63,8 +63,8 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarItem text='Save'         icon='save'        active={false} onClick={this.saveMaze} />
-        <ToolbarItem text='Export Image' icon='file-export' active={false} onClick={this.exportMaze} />
+        <ToolbarItem text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
+        <ToolbarItem text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
       </>
     );
   }
