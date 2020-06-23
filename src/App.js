@@ -108,6 +108,7 @@ class App extends React.Component {
         <div className={stylesheet.wrapper}>
           <div className={stylesheet.wrapper__toolBar}>
             <ToolBar
+              canvasUseRuler={canvasUseRuler}
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
               setCanvasModeFunc={this.setCanvasMode}
