@@ -19,28 +19,29 @@ class App extends React.Component {
       canvasUseRuler: false,
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
+      openMazeFile: null,
+      exportMazeImgs: { mazeImg: null, markersImg: null },
       canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
       requestOpenMazeFlag: 0,
-      openMazeFile: null,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
       requestResetMazePatternFlag: 0,
-      exportMazeImgs: { mazeImg: null, markersImg: null }
+      requestResetCameraFlag: 0
     }
     this.canvasWrapperRef = React.createRef();
   }
 
   setMazeImg        = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: img, markersImg: state.exportMazeImgs.markersImg } }));
   setMarkersImg     = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: state.exportMazeImgs.mazeImg, markersImg: img } }));
-  requestExportMaze = ()    => this.setState({ requestExportMazeFlag: Date.now() });
-
   setOpenMazeFile = (file) => this.setState({ openMazeFile: file });
-  requestOpenMaze = ()     => this.setState({ requestOpenMazeFlag: Date.now() });
-  requestSaveMaze = ()     => this.setState({ requestSaveMazeFlag: Date.now() });
 
+  requestOpenMaze         = () => this.setState({ requestOpenMazeFlag: Date.now() });
+  requestSaveMaze         = () => this.setState({ requestSaveMazeFlag: Date.now() });
+  requestExportMaze       = () => this.setState({ requestExportMazeFlag: Date.now() });
   requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
+  requestResetCamera      = () => this.setState({ requestResetCameraFlag: Date.now() });
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -101,7 +102,7 @@ class App extends React.Component {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
       openMazeFile, exportMazeImgs,
       errorModalOpen, errorModalMessage,
-      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag
+      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag
     } = this.state;
     return (
       <>
@@ -118,6 +119,7 @@ class App extends React.Component {
               requestSaveMazeFunc={this.requestSaveMaze}
               requestExportMazeFunc={this.requestExportMaze}
               requestResetMazePatternFunc={this.requestResetMazePattern}
+              requestResetCameraFunc={this.requestResetCamera}
               toggleUseRulerFunc={this.toggleUseRuler}
             />
           </div>
@@ -133,6 +135,7 @@ class App extends React.Component {
               requestOpenMazeFlag={requestOpenMazeFlag}
               requestSaveMazeFlag={requestSaveMazeFlag}
               requestResetMazePatternFlag={requestResetMazePatternFlag}
+              requestResetCameraFlag={requestResetCameraFlag}
             />
           </div>
         </div>

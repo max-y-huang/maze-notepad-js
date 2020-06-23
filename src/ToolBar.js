@@ -37,6 +37,10 @@ class ToolBar extends React.Component {
     this.props.requestResetMazePatternFunc();
   }
 
+  resetCamera = () => {
+    this.props.requestResetCameraFunc();
+  }
+
   toggleUseRuler = () => {
     this.props.toggleUseRulerFunc();
   }
@@ -55,8 +59,9 @@ class ToolBar extends React.Component {
         <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
         <ToolbarItem text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
         <Divider />
-        <ToolbarItem text='Change Pattern' icon='puzzle-piece' active={false} onClick={this.resetMazePattern} />
-        <ToolbarItem text='Ruler' icon='ruler' active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
+        <ToolbarItem text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
+        <ToolbarItem text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
+        <ToolbarItem text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
       </>
     );
   }

@@ -6,12 +6,21 @@ class Camera {
   zoomKeyboardSpeed = 100;  // In milliseconds.
   zoomKeyboardSpeedCheck = 0;
 
+  pos = {};
+
   constructor(p, x, y, z, zStep, zMin, zMax) {
     this.p = p;
-    this.pos = { x: x, y: y, z: z };
+    this.init_pos = { x: x, y: y, z: z };
     this.zStep = zStep;  // Zoom strength.
     this.zMin = zMin;
     this.zMax = zMax;
+    this.reset();
+  }
+
+  reset() {
+    this.pos.x = this.init_pos.x;
+    this.pos.y = this.init_pos.y;
+    this.pos.z = this.init_pos.z;
   }
 
   // Shifts the screen to reflect camera.
