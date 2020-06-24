@@ -128,13 +128,13 @@ const sketch = p => {
     cursor = new Cursor(p, camera, maze);
     ruler = new Ruler(p, camera, maze);
     // Add multiple square mazes (with partial overlap) to create a non-square shape.
-    addStarterMaze(4, 4, 8, 8);
+    /*addStarterMaze(4, 4, 8, 8);
     addStarterMaze(12, 4, 8, 8);
     addStarterMaze(12, 12, 8, 7);
     addStarterMaze(15, 19, 2, 1);
     addStarterMaze(4, 20, 8, 8);
     addStarterMaze(12, 20, 8, 8);
-    addStarterMaze(20, 20, 8, 8);
+    addStarterMaze(20, 20, 8, 8);*/
   };
 
   p.draw = () => {

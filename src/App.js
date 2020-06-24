@@ -1,6 +1,7 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
+import { Modal, Button, Divider } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
+import Cookies from 'js-cookie';
 
 import stylesheet from './css/App.module.css';
 
@@ -24,6 +25,8 @@ class App extends React.Component {
       canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
+      instructionsModalOpen: false,
+      instructionsOpen: false,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
@@ -54,6 +57,10 @@ class App extends React.Component {
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
 
+  showInstructionsModal = () => this.setState({ instructionsModalOpen: true });
+  hideInstructionsModal = () => this.setState({ instructionsModalOpen: false });
+  toggleInstructions    = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
+
   onResize = () => {
     let { offsetWidth, offsetHeight } = this.canvasWrapperRef.current;
     $p5.width = offsetWidth;
@@ -68,6 +75,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // Show instructions modal if first time visiting.
+    if (!Cookies.get('maze-notepad-js__visited')) {
+      this.showInstructionsModal();
+      Cookies.set('maze-notepad-js__visited', true);
+    }
+
     $p5.app_setMazeImgFunc = this.setMazeImg;
     $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
@@ -97,11 +110,23 @@ class App extends React.Component {
     );
   }
 
+  renderInstructions = (theme) => {
+    return (
+      <>
+        <p className={stylesheet[theme]}><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
+        <p className={stylesheet[theme]}><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
+        <p className={stylesheet[theme]}><em>Left click</em> to draw</p>
+        <p className={stylesheet[theme]}><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
+        <p className={stylesheet[theme]}>In some cases, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
+      </>
+    );
+  }
+
   render() {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
       openMazeFile, exportMazeImgs,
-      errorModalOpen, errorModalMessage,
+      errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag
     } = this.state;
     return (
@@ -139,11 +164,47 @@ class App extends React.Component {
             />
           </div>
         </div>
+        <div className={stylesheet.instructions}>
+          <Button
+            className={stylesheet.instructions__infoButton}
+            style={{display: instructionsOpen ? 'none' : 'block'}}
+            icon='info'
+            color='black'
+            onClick={this.toggleInstructions}
+          >
+          </Button>
+          <div
+            className={stylesheet.instructions__messageBox}
+            style={{display: instructionsOpen ? 'block' : 'none'}}
+          >
+            <Button
+              className={stylesheet.instructions__messageBox__closeButton}
+              icon='close'
+              onClick={this.toggleInstructions}
+            />
+            {this.renderInstructions('dark')}
+          </div>
+        </div>
         <Modal
           open={errorModalOpen}
           header='Error!'
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
+        />
+        <Modal
+          open={instructionsModalOpen}
+          header='Welcome to Maze Notepad!'
+          content={{
+            content: (
+              <div>
+                {this.renderInstructions('light')}
+                <Divider />
+                <p className={stylesheet.light}>Click the <i className='fas fa-info fa-fw' /> button in the bottom-right corner to view the instructions later</p>
+              </div>
+            ),
+            style: { fontSize: '16px' }
+          }}
+          actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideInstructionsModal }]}
         />
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>

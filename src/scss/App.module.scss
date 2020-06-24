@@ -35,3 +35,36 @@
     }
   }
 }
+
+.instructions {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+
+  &__messageBox {
+    padding: 1em;
+    background-color: #202020;
+    color: #e0e0e0;
+    border: 2px solid #000000;
+    border-radius: 6px;
+    font-size: 16px;
+
+    &__closeButton {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      background: none !important;
+      color: #e0e0e0 !important;
+    }
+  }
+}
+
+.dark em {
+  font-style: normal;
+  color: #66d3ff;
+}
+
+.light em {
+  font-style: normal;
+  color: #2994d1;
+}
