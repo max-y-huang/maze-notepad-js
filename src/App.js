@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
+import { Modal, Button } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
 
 import stylesheet from './css/App.module.css';
@@ -24,6 +24,7 @@ class App extends React.Component {
       canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
+      instructionsOpen: false,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
@@ -53,6 +54,8 @@ class App extends React.Component {
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
+
+  toggleInstructions = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
 
   onResize = () => {
     let { offsetWidth, offsetHeight } = this.canvasWrapperRef.current;
@@ -101,7 +104,7 @@ class App extends React.Component {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
       openMazeFile, exportMazeImgs,
-      errorModalOpen, errorModalMessage,
+      errorModalOpen, errorModalMessage, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag
     } = this.state;
     return (
@@ -145,6 +148,33 @@ class App extends React.Component {
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
         />
+        <div className={stylesheet.instructions}>
+          <Button
+            content='Instructions'
+            icon='info'
+            labelPosition='left'
+            className={stylesheet.instructions__infoButton}
+            style={{display: instructionsOpen ? 'none' : 'block'}}
+            color='black'
+            onClick={this.toggleInstructions}
+          >
+          </Button>
+          <div
+            className={stylesheet.instructions__messageBox}
+            style={{display: instructionsOpen ? 'block' : 'none'}}
+          >
+            <Button
+              className={stylesheet.instructions__messageBox__closeButton}
+              icon='close'
+              onClick={this.toggleInstructions}
+            />
+            <p><em>Middle click + drag</em> or use <em>WASD</em> to move the canvas.</p>
+            <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out.</p>
+            <p><em>Left click</em> to draw.</p>
+            <p><em>Right click</em> or <em>CTRL + left click</em> to erase.</p>
+            <p>In some cases, <em>SHIFT + left / right click</em> to draw / erase a contiguous area.</p>
+          </div>
+        </div>
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>
           <P5Wrapper
