@@ -1,3 +1,4 @@
+import consts from '../consts';
 import $ from './global';
 
 class Ruler {
@@ -19,6 +20,9 @@ class Ruler {
   draw() {
     // Check run condition.
     if (!$.useRuler) {
+      return;
+    }
+    if ($.mode !== consts.CREATE) {
       return;
     }
     // Draw ruler background.
