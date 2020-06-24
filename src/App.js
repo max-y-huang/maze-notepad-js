@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Divider } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
+import Cookies from 'js-cookie';
 
 import stylesheet from './css/App.module.css';
 
@@ -24,7 +25,7 @@ class App extends React.Component {
       canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
-      instructionsModalOpen: true,
+      instructionsModalOpen: false,
       instructionsOpen: false,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
@@ -74,6 +75,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // Show instructions modal if first time visiting.
+    if (!Cookies.get('maze-notepad-js__visited')) {
+      this.showInstructionsModal();
+      Cookies.set('maze-notepad-js__visited', true);
+    }
+
     $p5.app_setMazeImgFunc = this.setMazeImg;
     $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
