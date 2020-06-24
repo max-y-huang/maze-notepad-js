@@ -1,8 +1,8 @@
 # Maze Notepad JS
 
-Maze Notepad JS is a maze-making program created by [Max Huang](https://github.com/max-y-huang/).
+Maze Notepad JS is a maze-making Progressive Web App created by [Max Huang](https://github.com/max-y-huang/).
 
-You can view the program at: [https://max-y-huang.github.io/maze-notepad-js/](https://max-y-huang.github.io/maze-notepad-js/).
+Project hosted at: [https://max-y-huang.github.io/maze-notepad-js/](https://max-y-huang.github.io/maze-notepad-js/).
 
 ## Features
 
