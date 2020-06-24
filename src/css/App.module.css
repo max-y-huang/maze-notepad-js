@@ -51,9 +51,15 @@
   background: none !important;
   color: #e0e0e0 !important;
 }
-.instructions__messageBox em {
+
+.dark em {
   font-style: normal;
   color: #66d3ff;
+}
+
+.light em {
+  font-style: normal;
+  color: #2994d1;
 }
 
 /*# sourceMappingURL=App.module.css.map */

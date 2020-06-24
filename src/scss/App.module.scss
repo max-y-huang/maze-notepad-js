@@ -56,10 +56,15 @@
       background: none !important;
       color: #e0e0e0 !important;
     }
-
-    em {
-      font-style: normal;
-      color: #66d3ff;
-    }
   }
+}
+
+.dark em {
+  font-style: normal;
+  color: #66d3ff;
+}
+
+.light em {
+  font-style: normal;
+  color: #2994d1;
 }
