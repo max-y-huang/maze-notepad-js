@@ -174,6 +174,7 @@ const sketch = p => {
     p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
   }
 
+  // eslint-disable-next-line
   const addStarterMaze = (x, y, w, h) => {
     for (let i = 0; i < h; i++) {
       for (let j = 0; j < w; j++) {
