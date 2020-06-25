@@ -144,9 +144,14 @@ class Maze {
     for (let i = 0; i < this.graph.size; i++) {
       let isActive = this.graph.activeList[i];
       let isParent = (parents[i] !== -1);
+      let hasMarker = this.graph.markerList[i] !== null;
       // Not continuous error.
       if (isActive !== isParent) {
         return { success: false, result: 'The maze must be contiguous.' };
+      }
+      // Marker not on maze error.
+      if (hasMarker && !isActive) {
+        return { success: false, result: 'All markers must be on the maze.' };
       }
     }
     // No errors.
