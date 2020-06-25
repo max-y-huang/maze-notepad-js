@@ -14,6 +14,7 @@ const sketch = p => {
   let requestSaveMazeFlag = 0;
   let requestResetMazePatternFlag = 0;
   let requestResetCameraFlag = 0;
+  let requestKeyLoggerClearFlag = 0;
 
   let camera;
   let cursor;
@@ -25,6 +26,7 @@ const sketch = p => {
     saveMazeFile(props.requestSaveMazeFlag, 'maze.mznp');
     resetMazePattern(props.requestResetMazePatternFlag);
     resetCamera(props.requestResetCameraFlag);
+    keyLoggerClear(props.requestKeyLoggerClearFlag);
     changeUseRuler(props.useRuler);
     changeMode(props.mode);
     changeCreateTool(props.createTool);
@@ -69,6 +71,16 @@ const sketch = p => {
     requestResetCameraFlag = flag;
     
     camera.reset();
+  }
+
+  const keyLoggerClear = (flag) => {
+    // Check for run condition.
+    if (flag === requestKeyLoggerClearFlag) {
+      return;
+    }
+    requestKeyLoggerClearFlag = flag;
+
+    keyLogger.clear();
   }
 
   const changeUseRuler = (useRuler) => {

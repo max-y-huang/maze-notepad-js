@@ -3,6 +3,11 @@ class KeyLogger {
   keyDown = {};
   keyCodeDown = {};
 
+  clear() {
+    this.keyDown = {};
+    this.keyCodeDown = {};
+  }
+
   isKeyPressed(key) {
     return this.keyDown[key.toLowerCase()] ? true : false;  // Force true or false to be returned (no undefined).
   }

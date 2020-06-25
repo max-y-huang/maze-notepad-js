@@ -31,7 +31,8 @@ class App extends React.Component {
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
       requestResetMazePatternFlag: 0,
-      requestResetCameraFlag: 0
+      requestResetCameraFlag: 0,
+      requestKeyLoggerClearFlag: 0
     }
     this.canvasWrapperRef = React.createRef();
   }
@@ -45,6 +46,7 @@ class App extends React.Component {
   requestExportMaze       = () => this.setState({ requestExportMazeFlag: Date.now() });
   requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
   requestResetCamera      = () => this.setState({ requestResetCameraFlag: Date.now() });
+  requestKeyLoggerClear   = () => this.setState({ requestKeyLoggerClearFlag: Date.now() });
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -89,6 +91,7 @@ class App extends React.Component {
     this.onResize();
     
     window.addEventListener('resize', this.onResize);
+    window.addEventListener('blur', this.requestKeyLoggerClear);
     this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setMouseOverCanvas(true));
     this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
   }
@@ -127,7 +130,7 @@ class App extends React.Component {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
       openMazeFile, exportMazeImgs,
       errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
-      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag
+      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
     return (
       <>
@@ -161,6 +164,7 @@ class App extends React.Component {
               requestSaveMazeFlag={requestSaveMazeFlag}
               requestResetMazePatternFlag={requestResetMazePatternFlag}
               requestResetCameraFlag={requestResetCameraFlag}
+              requestKeyLoggerClearFlag={requestKeyLoggerClearFlag}
             />
           </div>
         </div>
