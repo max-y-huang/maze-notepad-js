@@ -2,8 +2,7 @@ import consts from './../consts';
 
 class Global {
 
-  app_setMazeImgFunc = null;
-  app_setMarkersImgFunc = null;
+  app__setExportMazeData = null;
   app_setModeFunc = null;
   app_showErrorMessageFunc = null;
 

@@ -21,7 +21,7 @@ class App extends React.Component {
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
       openMazeFile: null,
-      exportMazeImgs: { mazeImg: null, markersImg: null },
+      exportMazeData: { mazeImg: null, markersImg: null },
       canvasMarkerColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
@@ -37,9 +37,8 @@ class App extends React.Component {
     this.canvasWrapperRef = React.createRef();
   }
 
-  setMazeImg        = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: img, markersImg: state.exportMazeImgs.markersImg } }));
-  setMarkersImg     = (img) => this.setState((state) => ({ exportMazeImgs: { mazeImg: state.exportMazeImgs.mazeImg, markersImg: img } }));
-  setOpenMazeFile = (file) => this.setState({ openMazeFile: file });
+  setExportMazeData = (data) => this.setState({ exportMazeData: data });
+  setOpenMazeFile   = (file) => this.setState({ openMazeFile: file });
 
   requestOpenMaze         = () => this.setState({ requestOpenMazeFlag: Date.now() });
   requestSaveMaze         = () => this.setState({ requestSaveMazeFlag: Date.now() });
@@ -83,7 +82,7 @@ class App extends React.Component {
       Cookies.set('maze-notepad-js__visited', true);
     }
 
-    $p5.app_setMazeImgFunc = this.setMazeImg;
+    $p5.app__setExportMazeData = this.setExportMazeData;
     $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
@@ -128,7 +127,7 @@ class App extends React.Component {
   render() {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
-      openMazeFile, exportMazeImgs,
+      openMazeFile, exportMazeData,
       errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
@@ -216,7 +215,7 @@ class App extends React.Component {
             className={stylesheet.exportCanvas}
             sketch={exportCanvas}
             requestExportMazeFlag={requestExportMazeFlag}
-            exportImgs={exportMazeImgs}
+            data={exportMazeData}
           />
         </div>
       </>

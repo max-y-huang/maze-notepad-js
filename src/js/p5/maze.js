@@ -19,6 +19,11 @@ class Maze {
   toShapeRemoveColour = [ 255, 192, 192 ];
   toShapeRemoveStrokeColour = [ 128, 96, 96 ];
 
+  cropX1 = 0;
+  cropY1 = 0;
+  cropX2 = 0;
+  cropY2 = 0;
+
   constructor(p, camera, w, h) {
     this.p = p;
     this.camera = camera;
@@ -71,6 +76,12 @@ class Maze {
   }
 
   updateMazeImg() {
+    // Reset cropping points to the most unoptimal points. Will be optimized later.
+    this.cropX1 = this.w;
+    this.cropY1 = this.h;
+    this.cropX2 = 0;
+    this.cropY2 = 0;
+
     this.mazeImg = this.p.createGraphics(this.w * $.tileSize + this.mazeStrokeWeight, this.h * $.tileSize + this.mazeStrokeWeight);  // Padding to accomodate stroke weight.
     // Shift to accomodate stroke weight.
     this.mazeImg.push();
@@ -83,6 +94,12 @@ class Maze {
       for (let j = 0; j < this.w; j++) {
         let index = this.coordToIndex(j, i);
         if (this.graph.activeList[index]) {
+          // Update cropping points.
+          this.cropX1 = Math.min(this.cropX1, j);
+          this.cropY1 = Math.min(this.cropY1, i);
+          this.cropX2 = Math.max(this.cropX2, j);
+          this.cropY2 = Math.max(this.cropY2, i);
+
           this.mazeImg.rect(j * $.tileSize, i * $.tileSize, $.tileSize, $.tileSize);
         }
       }
@@ -99,7 +116,14 @@ class Maze {
 
     this.mazeImg.pop();
     // Pass image to App for export purposes.
-    $.app_setMazeImgFunc(this.mazeImg);
+    $.app__setExportMazeData({
+      mazeImg: this.mazeImg,
+      markersImg: this.markersImg,
+      cropX1: this.cropX1,
+      cropX2: this.cropX2,
+      cropY1: this.cropY1,
+      cropY2: this.cropY2,
+    });
   }
 
   updateMarkersImg() {
@@ -125,7 +149,14 @@ class Maze {
 
     this.markersImg.pop();
     // Pass image to App for export purposes.
-    $.app_setMarkersImgFunc(this.markersImg);
+    $.app__setExportMazeData({
+      mazeImg: this.mazeImg,
+      markersImg: this.markersImg,
+      cropX1: this.cropX1,
+      cropX2: this.cropX2,
+      cropY1: this.cropY1,
+      cropY2: this.cropY2,
+    });
   }
 
   isValidMazeShape() {
