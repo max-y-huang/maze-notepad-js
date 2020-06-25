@@ -59,9 +59,9 @@ class ToolBar extends React.Component {
         <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
         <ToolbarItem text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
         <Divider />
-        <ToolbarItem text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
-        <ToolbarItem text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
         <ToolbarItem text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
+        <ToolbarItem text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
+        <ToolbarItem text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
       </>
     );
   }
@@ -76,6 +76,7 @@ class ToolBar extends React.Component {
         <ToolbarItem text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
         <ToolbarItem text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
         <Divider />
+        <ToolbarItem text='Solutions'   icon='lightbulb'       active={false} onClick={this.resetCamera} disabled />
         <ToolbarItem text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
       </>
     );
