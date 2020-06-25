@@ -1,6 +1,7 @@
 {
   "short_name": "Maze Notepad",
   "name": "Maze Notepad",
+  "description": "A maze-making program.",
   "icons": [
     {
       "src": "favicon.ico",
