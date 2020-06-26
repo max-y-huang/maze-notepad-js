@@ -24,9 +24,18 @@ class MarkerPicker extends React.Component {
     if (!this.props.show) {
       return null;
     }
+
+    let nullItem = this.props.allowSelectNone ? (
+      <NullItem
+        active={this.props.canvasMarkerColour === -1}
+        onClick={() => this.setCanvasMarkerColour(-1)}
+      />
+    ): null;
+
     return (
       <div className={stylesheet.wrapper}>
         <div className={stylesheet.wrapper__title}>Marker Colour:</div>
+        {nullItem}
         {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
       </div>
     )
@@ -62,6 +71,18 @@ class Item extends React.Component {
       <button
         className={classnames(stylesheet.wrapper__item, this.props.active ? stylesheet.active : stylesheet.inactive)}
         style={{backgroundColor: this.state.colourString, borderColor: this.state.colourString}}
+        onClick={() => this.props.onClick()}
+      />
+    );
+  }
+}
+
+class NullItem extends React.Component {
+
+  render() {
+    return (
+      <button
+        className={classnames(stylesheet.wrapper__nullItem, this.props.active ? stylesheet.active : stylesheet.inactive)}
         onClick={() => this.props.onClick()}
       />
     );

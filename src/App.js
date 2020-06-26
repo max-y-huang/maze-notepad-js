@@ -105,6 +105,7 @@ class App extends React.Component {
       <div className={stylesheet.wrapper__selectionBar}>
         <MarkerPicker
           show={showColourPicker}
+          allowSelectNone={true}
           canvasMarkerColour={canvasMarkerColour}
           setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
         />
