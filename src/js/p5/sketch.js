@@ -106,7 +106,7 @@ const sketch = p => {
     }
     else if (mode === consts.SOLVE) {
       // Validate maze before changing mode to SOLVE.
-      let validCheck = maze.isValidMazeShape();
+      let validCheck = maze.isValidMaze();
       if (!validCheck.success) {
         $.app_showErrorMessageFunc(validCheck.result);  // Display error message.
         $.app_setModeFunc($.mode);  // Revert mode back from SOLVE.

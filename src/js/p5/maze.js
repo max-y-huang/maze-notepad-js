@@ -220,7 +220,9 @@ class Maze {
     }
   }
 
-  isValidMazeShape() {
+  isValidMaze() {
+    let totalMarkerCount = 0;
+    let markerCountByType = Array(consts.COLOURS.length).fill(0);
     // Get the flood-fill graph of an active region.
     let bfsStart = this.graph.activeList.indexOf(true);
     // No shape error.
@@ -237,6 +239,11 @@ class Maze {
       let isActive = this.graph.activeList[i];
       let isParent = (parents[i] !== -1);
       let hasMarker = this.graph.markerList[i] !== null;
+
+      if (hasMarker) {
+        totalMarkerCount++;
+        markerCountByType[this.graph.markerList[i]]++;
+      }
       // Not continuous error.
       if (isActive !== isParent) {
         return { success: false, result: 'The maze must be contiguous.' };
@@ -244,6 +251,17 @@ class Maze {
       // Marker not on maze error.
       if (hasMarker && !isActive) {
         return { success: false, result: 'All markers must be on the maze.' };
+      }
+    }
+    // No markers error.
+    if (totalMarkerCount === 0) {
+      return { success: false, result: 'There must be markers on the maze.' };
+    }
+
+    for (let i = 0; i < consts.COLOURS.length; i++) {
+      // 1 of marker type error.
+      if (markerCountByType[i] === 1) {
+        return { success: false, result: 'For each used marker colour, there must be more than 1 occurance of that marker colour.' };
       }
     }
     // No errors.
