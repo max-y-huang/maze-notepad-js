@@ -7,15 +7,13 @@ import consts from './js/consts';
 
 class MarkerPicker extends React.Component {
 
-  setCanvasMarkerColour = (colour) => this.props.setCanvasMarkerColourFunc(colour);
-
   renderColourButton = (colourCode) => {
     return (
       <Item
         key={colourCode}
         colourCode={colourCode}
-        active={this.props.canvasMarkerColour === colourCode}
-        onClick={() => this.setCanvasMarkerColour(colourCode)}
+        active={this.props.activeValue === colourCode}
+        onClick={() => this.props.onClickFunc(colourCode)}
       />
     );
   }
@@ -27,14 +25,14 @@ class MarkerPicker extends React.Component {
 
     let nullItem = this.props.allowSelectNone ? (
       <NullItem
-        active={this.props.canvasMarkerColour === -1}
-        onClick={() => this.setCanvasMarkerColour(-1)}
+        active={this.props.activeValue === -1}
+        onClick={() => this.props.onClickFunc(-1)}
       />
     ): null;
 
     return (
       <div className={stylesheet.wrapper}>
-        <div className={stylesheet.wrapper__title}>Marker Colour:</div>
+        <div className={stylesheet.wrapper__title}>{this.props.text}</div>
         {nullItem}
         {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
       </div>

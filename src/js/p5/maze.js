@@ -321,11 +321,6 @@ class Maze {
   }
 
   setMarker(x, y, state) {
-    // CHeck run condition.
-    if ($.markerColour === -1) {
-      return;
-    }
-
     let index = this.coordToIndex(x, y);
     this.graph.markerList[index] = state ? $.markerColour : null;
     this.updateMarkersImg();

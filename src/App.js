@@ -23,6 +23,7 @@ class App extends React.Component {
       openMazeFile: null,
       exportMazeData: { mazeImg: null, markersImg: null },
       canvasMarkerColour: 0,
+      canvasSolutionColour: -1,
       errorModalOpen: false,
       errorModalMessage: '',
       instructionsModalOpen: false,
@@ -54,6 +55,7 @@ class App extends React.Component {
   setCanvasMode         = (mode)   => this.setState({ canvasMode: mode });
   setCanvasCreateTool   = (tool)   => this.setState({ canvasCreateTool: tool });
   setCanvasMarkerColour = (colour) => this.setState({ canvasMarkerColour: colour });
+  setCanvasSolutionColour   = (colour) => this.setState({ canvasSolutionColour: colour });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
@@ -83,7 +85,6 @@ class App extends React.Component {
     }
 
     $p5.app__setExportMazeData = this.setExportMazeData;
-    $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
@@ -96,18 +97,27 @@ class App extends React.Component {
   }
 
   renderSelectionBar = () => {
-    let { canvasMode, canvasCreateTool, canvasMarkerColour } = this.state;
-    let showColourPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
-    if (!showColourPicker) {
+    let { canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour } = this.state;
+    let showMarkerMarkerPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
+    let showSolutionMarkerPicker = canvasMode === consts.SOLVE;
+    if (!showMarkerMarkerPicker && !showSolutionMarkerPicker) {
       return null;
     }
     return (
       <div className={stylesheet.wrapper__selectionBar}>
         <MarkerPicker
-          show={showColourPicker}
+          text='Marker Colour:'
+          show={showMarkerMarkerPicker}
+          allowSelectNone={false}
+          activeValue={canvasMarkerColour}
+          onClickFunc={this.setCanvasMarkerColour}
+        />
+        <MarkerPicker
+          text='Displayed Solution:'
+          show={showSolutionMarkerPicker}
           allowSelectNone={true}
-          canvasMarkerColour={canvasMarkerColour}
-          setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
+          activeValue={canvasSolutionColour}
+          onClickFunc={this.setCanvasSolutionColour}
         />
       </div>
     );

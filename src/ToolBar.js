@@ -76,7 +76,6 @@ class ToolBar extends React.Component {
         <Item text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
         <Item text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
         <Divider />
-        <Item text='Solutions'   icon='lightbulb'       active={false} onClick={this.resetCamera} disabled />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
       </>
     );
