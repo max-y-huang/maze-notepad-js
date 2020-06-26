@@ -53,6 +53,7 @@ class Maze {
   }
 
   saveFile(fileName) {
+    this.update(true);
     this.graph.save(fileName);
   }
 
