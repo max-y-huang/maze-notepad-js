@@ -14,6 +14,7 @@ class Global {
   mode = consts.CREATE;
   createTool = consts.SHAPE;
   markerColour = 0;
+  solutionColour = -1;
 
   tileSize = 14;
   rulerIncrement = 5;

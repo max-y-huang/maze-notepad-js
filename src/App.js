@@ -137,7 +137,7 @@ class App extends React.Component {
 
   render() {
     let {
-      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
+      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour,
       openMazeFile, exportMazeData,
       errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
@@ -169,6 +169,7 @@ class App extends React.Component {
               mode={canvasMode}
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
+              solutionColour={canvasSolutionColour}
               openMazeFile={openMazeFile}
               requestOpenMazeFlag={requestOpenMazeFlag}
               requestSaveMazeFlag={requestSaveMazeFlag}

@@ -204,16 +204,18 @@ class Maze {
           continue;
         }
 
+        const containsEdgeFunc = edge => (edge.a === v && edge.b === parents[v]) || (edge.b === v && edge.a === parents[v]);
+        
         let v = i;
         while (v !== firstOccurance) {
-          edgeList.push({ a: v, b: parents[v] });
+          if (edgeList.findIndex(containsEdgeFunc) === -1) {  // Only add edge if not in edgeList.
+            edgeList.push({ a: v, b: parents[v] });
+          }
           v = parents[v];
         }
       }
       this.solutions.push(edgeList);
     }
-
-    console.log(this.solutions);
   }
 
   isValidMazeShape() {
@@ -452,7 +454,12 @@ class Maze {
   }
 
   drawSolutions() {
-    this.p.image(this.solutionsImgs[0], -this.mazeStrokeWeight / 2, -this.mazeStrokeWeight / 2);  // Shift to accomodate stroke weight.
+    // Check run condition.
+    if ($.solutionColour === -1) {
+      return;
+    }
+
+    this.p.image(this.solutionsImgs[$.solutionColour], -this.mazeStrokeWeight / 2, -this.mazeStrokeWeight / 2);  // Shift to accomodate stroke weight.
   }
 
   drawMaze() {

@@ -31,6 +31,7 @@ const sketch = p => {
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
+    changeSolutionColour(props.solutionColour);
   };
 
   const openMazeFile = (flag, file) => {
@@ -131,6 +132,15 @@ const sketch = p => {
     }
 
     $.markerColour = markerColour;
+  }
+
+  const changeSolutionColour = (solutionColour) => {
+    // Check for run condition.
+    if (solutionColour === $.solutionColour) {
+      return;
+    }
+
+    $.solutionColour = solutionColour;
   }
 
   p.setup = () => {
