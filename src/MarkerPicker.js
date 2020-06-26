@@ -1,17 +1,22 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import stylesheet from './css/ColourPicker.module.css';
+import stylesheet from './css/MarkerPicker.module.css';
 
 import consts from './js/consts';
 
-class ColourPicker extends React.Component {
+class MarkerPicker extends React.Component {
 
   setCanvasMarkerColour = (colour) => this.props.setCanvasMarkerColourFunc(colour);
 
   renderColourButton = (colourCode) => {
     return (
-      <ColourPickerItem key={colourCode} colourCode={colourCode} active={this.props.canvasMarkerColour === colourCode} onClick={() => this.setCanvasMarkerColour(colourCode)} />
+      <Item
+        key={colourCode}
+        colourCode={colourCode}
+        active={this.props.canvasMarkerColour === colourCode}
+        onClick={() => this.setCanvasMarkerColour(colourCode)}
+      />
     );
   }
 
@@ -28,7 +33,7 @@ class ColourPicker extends React.Component {
   }
 }
 
-class ColourPickerItem extends React.Component {
+class Item extends React.Component {
 
   constructor(props) {
     super(props);
@@ -63,4 +68,4 @@ class ColourPickerItem extends React.Component {
   }
 }
 
-export default ColourPicker;
+export default MarkerPicker;

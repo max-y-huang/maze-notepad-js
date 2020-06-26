@@ -8,7 +8,7 @@ import stylesheet from './css/App.module.css';
 import consts from './js/consts';
 import $p5 from './js/p5/global';
 import ToolBar from './ToolBar';
-import ColourPicker from './ColourPicker';
+import MarkerPicker from './MarkerPicker';
 import sketch from './js/p5/sketch';
 import exportCanvas from './js/p5/exportCanvas';
 
@@ -103,7 +103,7 @@ class App extends React.Component {
     }
     return (
       <div className={stylesheet.wrapper__selectionBar}>
-        <ColourPicker
+        <MarkerPicker
           show={showColourPicker}
           canvasMarkerColour={canvasMarkerColour}
           setCanvasMarkerColourFunc={this.setCanvasMarkerColour}

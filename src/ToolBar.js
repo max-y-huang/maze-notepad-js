@@ -52,16 +52,16 @@ class ToolBar extends React.Component {
     return (
       <>
       <Divider />
-        <ToolbarItem text='Load' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
-        <ToolbarItem text='Save' icon='save'        active={false} onClick={this.saveMaze} />
+        <Item text='Load' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
+        <Item text='Save' icon='save'        active={false} onClick={this.saveMaze} />
         <Divider />
-        <ToolbarItem text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
-        <ToolbarItem text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
-        <ToolbarItem text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
+        <Item text='Edit Shape'   icon='splotch' active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
+        <Item text='Edit Paths'   icon='map'     active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
+        <Item text='Edit Markers' icon='map-pin' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
         <Divider />
-        <ToolbarItem text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
-        <ToolbarItem text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
-        <ToolbarItem text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
+        <Item text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
+        <Item text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
+        <Item text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
       </>
     );
   }
@@ -73,11 +73,11 @@ class ToolBar extends React.Component {
     return (
       <>
         <Divider />
-        <ToolbarItem text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
-        <ToolbarItem text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
+        <Item text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
+        <Item text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
         <Divider />
-        <ToolbarItem text='Solutions'   icon='lightbulb'       active={false} onClick={this.resetCamera} disabled />
-        <ToolbarItem text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
+        <Item text='Solutions'   icon='lightbulb'       active={false} onClick={this.resetCamera} disabled />
+        <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
       </>
     );
   }
@@ -85,8 +85,8 @@ class ToolBar extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <ToolbarItem text='Edit Mode' icon='wrench' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
-        <ToolbarItem text='View Mode' icon='eye'    active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
+        <Item text='Edit Mode' icon='wrench' active={this.props.canvasMode === consts.CREATE} onClick={() => this.setCanvasMode(consts.CREATE)} />
+        <Item text='View Mode' icon='eye'    active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
         {this.renderCreateButtons()}
         {this.renderSolveButtons()}
         {/* Used to import maze. Should not be displayed. */}
@@ -96,7 +96,7 @@ class ToolBar extends React.Component {
   }
 }
 
-class ToolbarItem extends React.Component {
+class Item extends React.Component {
 
   render() {
     return (
