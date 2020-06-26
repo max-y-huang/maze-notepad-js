@@ -172,7 +172,7 @@ class Maze {
       // Draw solution.
       img.stroke(consts.COLOURS[c]);
       img.strokeWeight(this.suggestedPathsWeight);
-      img.strokeCap(this.p.ROUND);
+      img.strokeCap(this.p.PROJECT);
       this.solutions[c].forEach(e => {
         let a = this.indexToCoord(e.a);
         let b = this.indexToCoord(e.b);
@@ -441,7 +441,7 @@ class Maze {
   drawSuggestedPaths() {
     this.p.stroke(this.suggestedPathsColour);
     this.p.strokeWeight(this.suggestedPathsWeight);
-    this.p.strokeCap(this.p.ROUND);
+    this.p.strokeCap(this.p.PROJECT);
     this.graph.edgeList.filter(e => this.graph.getNotes(e, 'suggestedPath')).forEach(e => {
       let a = this.indexToCoord(e.a);
       let b = this.indexToCoord(e.b);
