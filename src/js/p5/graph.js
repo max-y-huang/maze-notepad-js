@@ -152,7 +152,7 @@ class MazeGraph extends Graph {
       this.activeList[i] = true;
     });
     file.markerList.forEach(marker => {
-      this.markerList[marker.index] = marker.colour;
+      this.markerList[marker[0]] = marker[1];
     });
   }
 

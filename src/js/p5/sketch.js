@@ -31,6 +31,7 @@ const sketch = p => {
     changeMode(props.mode);
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
+    changeSolutionColour(props.solutionColour);
   };
 
   const openMazeFile = (flag, file) => {
@@ -97,13 +98,15 @@ const sketch = p => {
     if (mode === $.mode) {
       return;
     }
+
+    maze.update(true);
     
     if (mode === consts.CREATE) {
       $.mode = mode;
     }
     else if (mode === consts.SOLVE) {
       // Validate maze before changing mode to SOLVE.
-      let validCheck = maze.isValidMazeShape();
+      let validCheck = maze.isValidMaze();
       if (!validCheck.success) {
         $.app_showErrorMessageFunc(validCheck.result);  // Display error message.
         $.app_setModeFunc($.mode);  // Revert mode back from SOLVE.
@@ -131,6 +134,15 @@ const sketch = p => {
     $.markerColour = markerColour;
   }
 
+  const changeSolutionColour = (solutionColour) => {
+    // Check for run condition.
+    if (solutionColour === $.solutionColour) {
+      return;
+    }
+
+    $.solutionColour = solutionColour;
+  }
+
   p.setup = () => {
     p.createCanvas($.width, $.height);
     p.frameRate(60);
@@ -139,6 +151,7 @@ const sketch = p => {
     maze = new Maze(p, camera, 100, 100);
     cursor = new Cursor(p, camera, maze);
     ruler = new Ruler(p, camera, maze);
+    maze.update(true);
     // Add multiple square mazes (with partial overlap) to create a non-square shape.
     /*addStarterMaze(4, 4, 8, 8);
     addStarterMaze(12, 4, 8, 8);

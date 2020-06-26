@@ -1,17 +1,21 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import stylesheet from './css/ColourPicker.module.css';
+import stylesheet from './css/MarkerPicker.module.css';
 
 import consts from './js/consts';
 
-class ColourPicker extends React.Component {
-
-  setCanvasMarkerColour = (colour) => this.props.setCanvasMarkerColourFunc(colour);
+class MarkerPicker extends React.Component {
 
   renderColourButton = (colourCode) => {
     return (
-      <ColourPickerItem key={colourCode} colourCode={colourCode} active={this.props.canvasMarkerColour === colourCode} onClick={() => this.setCanvasMarkerColour(colourCode)} />
+      <Item
+        key={colourCode}
+        colourCode={colourCode}
+        active={this.props.activeValue === colourCode}
+        onClick={() => this.props.onClickFunc(colourCode)}
+        show={this.props.visibleList[colourCode]}
+      />
     );
   }
 
@@ -19,16 +23,22 @@ class ColourPicker extends React.Component {
     if (!this.props.show) {
       return null;
     }
+
+    let nullItem = this.props.allowSelectNone ? (
+      <button className={stylesheet.wrapper__nullItem} onClick={() => this.props.onClickFunc(-1)} />
+    ): null;
+
     return (
       <div className={stylesheet.wrapper}>
-        <div className={stylesheet.wrapper__title}>Marker Colour:</div>
+        <div className={stylesheet.wrapper__title}>{this.props.text}</div>
+        {nullItem}
         {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
       </div>
     )
   }
 }
 
-class ColourPickerItem extends React.Component {
+class Item extends React.Component {
 
   constructor(props) {
     super(props);
@@ -53,6 +63,10 @@ class ColourPickerItem extends React.Component {
   }
 
   render() {
+    if (!this.props.show) {
+      return null;
+    }
+
     return (
       <button
         className={classnames(stylesheet.wrapper__item, this.props.active ? stylesheet.active : stylesheet.inactive)}
@@ -63,4 +77,4 @@ class ColourPickerItem extends React.Component {
   }
 }
 
-export default ColourPicker;
+export default MarkerPicker;

@@ -8,7 +8,7 @@ import stylesheet from './css/App.module.css';
 import consts from './js/consts';
 import $p5 from './js/p5/global';
 import ToolBar from './ToolBar';
-import ColourPicker from './ColourPicker';
+import MarkerPicker from './MarkerPicker';
 import sketch from './js/p5/sketch';
 import exportCanvas from './js/p5/exportCanvas';
 
@@ -23,6 +23,7 @@ class App extends React.Component {
       openMazeFile: null,
       exportMazeData: { mazeImg: null, markersImg: null },
       canvasMarkerColour: 0,
+      canvasSolutionColour: -1,
       errorModalOpen: false,
       errorModalMessage: '',
       instructionsModalOpen: false,
@@ -54,6 +55,7 @@ class App extends React.Component {
   setCanvasMode         = (mode)   => this.setState({ canvasMode: mode });
   setCanvasCreateTool   = (tool)   => this.setState({ canvasCreateTool: tool });
   setCanvasMarkerColour = (colour) => this.setState({ canvasMarkerColour: colour });
+  setCanvasSolutionColour   = (colour) => this.setState({ canvasSolutionColour: colour });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
@@ -83,7 +85,6 @@ class App extends React.Component {
     }
 
     $p5.app__setExportMazeData = this.setExportMazeData;
-    $p5.app_setMarkersImgFunc = this.setMarkersImg;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
@@ -96,17 +97,41 @@ class App extends React.Component {
   }
 
   renderSelectionBar = () => {
-    let { canvasMode, canvasCreateTool, canvasMarkerColour } = this.state;
-    let showColourPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
-    if (!showColourPicker) {
+    let { exportMazeData, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour } = this.state;
+
+    let showMarkerPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
+    let showSolutionPicker = canvasMode === consts.SOLVE;
+
+    if (!showMarkerPicker && !showSolutionPicker) {
       return null;
     }
+
+    let markerPickerVisibleList = [];
+    let solutionPickerVisibleList = [];
+    exportMazeData.solutions.forEach(s => {
+      markerPickerVisibleList.push(true);  // Adding elements in markerPickerVisibleList from solutions because they have the same length.
+      // It is possible for the selected solution not to be visible. The null item doesn't change appearance when selected vs not selected,
+      // so it will look like the null item is selected (which is good).
+      solutionPickerVisibleList.push(s !== null);
+    });
+
     return (
       <div className={stylesheet.wrapper__selectionBar}>
-        <ColourPicker
-          show={showColourPicker}
-          canvasMarkerColour={canvasMarkerColour}
-          setCanvasMarkerColourFunc={this.setCanvasMarkerColour}
+        <MarkerPicker
+          text='Marker Colour:'
+          show={showMarkerPicker}
+          visibleList={markerPickerVisibleList}
+          allowSelectNone={false}
+          activeValue={canvasMarkerColour}
+          onClickFunc={this.setCanvasMarkerColour}
+        />
+        <MarkerPicker
+          text='Displayed Solution:'
+          show={showSolutionPicker}
+          visibleList={solutionPickerVisibleList}
+          allowSelectNone={true}
+          activeValue={canvasSolutionColour}
+          onClickFunc={this.setCanvasSolutionColour}
         />
       </div>
     );
@@ -126,11 +151,12 @@ class App extends React.Component {
 
   render() {
     let {
-      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour,
+      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour,
       openMazeFile, exportMazeData,
       errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
+
     return (
       <>
         <div className={stylesheet.wrapper}>
@@ -158,6 +184,7 @@ class App extends React.Component {
               mode={canvasMode}
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
+              solutionColour={canvasSolutionColour}
               openMazeFile={openMazeFile}
               requestOpenMazeFlag={requestOpenMazeFlag}
               requestSaveMazeFlag={requestSaveMazeFlag}

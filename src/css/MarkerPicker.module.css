@@ -1,0 +1,57 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  padding-right: 0;
+  white-space: nowrap;
+}
+.wrapper__title {
+  color: #e0e0e0;
+  font-size: 16px;
+  padding-bottom: 26px;
+}
+.wrapper__item, .wrapper__nullItem {
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  border-radius: 25%;
+  border-width: 4px;
+  border-style: solid;
+  outline: none;
+}
+.wrapper__item.inactive:not(:hover), .wrapper__nullItem.inactive:not(:hover) {
+  background: none !important;
+}
+.wrapper__item:not(:last-child), .wrapper__nullItem:not(:last-child) {
+  margin-right: 16px;
+}
+.wrapper__nullItem {
+  background: none;
+  border-color: #808080;
+}
+.wrapper__nullItem::before {
+  display: block;
+  position: absolute;
+  top: calc(50% - 2px);
+  left: 0;
+  content: "";
+  width: 40px;
+  height: 4px;
+  background-color: #808080;
+  transform: rotate(-45deg);
+}
+.wrapper__nullItem:hover {
+  border-color: #d12929;
+}
+.wrapper__nullItem:hover::before {
+  background-color: #d12929;
+}
+.wrapper::after {
+  display: inline-block;
+  content: "";
+  width: 16px;
+}
+
+/*# sourceMappingURL=MarkerPicker.module.css.map */

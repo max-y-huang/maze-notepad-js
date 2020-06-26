@@ -11,7 +11,8 @@
     padding-bottom: 26px;
   }
 
-  &__item {
+  &__item, &__nullItem {
+    position: relative;
     cursor: pointer;
     box-sizing: border-box;
     width: 48px;
@@ -27,6 +28,31 @@
 
     &:not(:last-child) {
       margin-right: 16px;
+    }
+  }
+
+  &__nullItem {
+    background: none;
+    border-color: #808080;
+      
+    &::before {
+      display: block;
+      position: absolute;
+      top: calc(50% - 2px);
+      left: 0;
+      content: '';
+      width: 40px;
+      height: 4px;
+      background-color: #808080;
+      transform: rotate(-45deg);
+    }
+
+    &:hover {
+      border-color: rgb(209, 41, 41);
+
+      &::before {
+        background-color: rgb(209, 41, 41);
+      }
     }
   }
 
