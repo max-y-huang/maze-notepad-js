@@ -97,6 +97,8 @@ const sketch = p => {
     if (mode === $.mode) {
       return;
     }
+
+    maze.update(true);
     
     if (mode === consts.CREATE) {
       $.mode = mode;
@@ -139,6 +141,7 @@ const sketch = p => {
     maze = new Maze(p, camera, 100, 100);
     cursor = new Cursor(p, camera, maze);
     ruler = new Ruler(p, camera, maze);
+    maze.update(true);
     // Add multiple square mazes (with partial overlap) to create a non-square shape.
     /*addStarterMaze(4, 4, 8, 8);
     addStarterMaze(12, 4, 8, 8);
