@@ -28,7 +28,7 @@
   margin-right: 16px;
 }
 .wrapper__nullItem {
-  background-color: #e0e0e0;
+  background: none;
   border-color: #808080;
 }
 .wrapper__nullItem::before {
@@ -42,10 +42,10 @@
   background-color: #808080;
   transform: rotate(-45deg);
 }
-.wrapper__nullItem:hover, .wrapper__nullItem.active {
+.wrapper__nullItem:hover {
   border-color: #d12929;
 }
-.wrapper__nullItem:hover::before, .wrapper__nullItem.active::before {
+.wrapper__nullItem:hover::before {
   background-color: #d12929;
 }
 .wrapper::after {

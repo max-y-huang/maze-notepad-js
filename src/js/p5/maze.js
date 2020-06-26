@@ -75,6 +75,17 @@ class Maze {
     this.updateMazeImg();
     this.updateMarkersImg();
     this.updateSolutionsImgs();
+    // Pass image to App for export purposes.
+    $.app__setExportMazeData({
+      mazeImg: this.mazeImg,
+      markersImg: this.markersImg,
+      solutionsImgs: this.solutionsImgs,
+      solutions: this.solutions,
+      cropX1: this.cropX1,
+      cropX2: this.cropX2,
+      cropY1: this.cropY1,
+      cropY2: this.cropY2,
+    });
     // Allow update requests.
     this.needsUpdate = false;
   }
@@ -119,15 +130,6 @@ class Maze {
     });
 
     this.mazeImg.pop();
-    // Pass image to App for export purposes.
-    $.app__setExportMazeData({
-      mazeImg: this.mazeImg,
-      markersImg: this.markersImg,
-      cropX1: this.cropX1,
-      cropX2: this.cropX2,
-      cropY1: this.cropY1,
-      cropY2: this.cropY2,
-    });
   }
 
   updateMarkersImg() {

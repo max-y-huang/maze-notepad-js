@@ -32,7 +32,7 @@
   }
 
   &__nullItem {
-    background-color: #e0e0e0;
+    background: none;
     border-color: #808080;
       
     &::before {
@@ -47,7 +47,7 @@
       transform: rotate(-45deg);
     }
 
-    &:hover, &.active {
+    &:hover {
       border-color: rgb(209, 41, 41);
 
       &::before {

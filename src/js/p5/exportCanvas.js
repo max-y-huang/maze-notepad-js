@@ -10,12 +10,23 @@ const exportCanvas = p => {
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
     if (props.requestExportMazeFlag !== requestExportMazeFlag) {
-      exportImage(props.data);
+      onExport(props.data);
       requestExportMazeFlag = props.requestExportMazeFlag;
     }
   };
 
-  const exportImage = (data) => {
+  const onExport = (data) => {
+    exportImage(data, false);
+    for (let i = 0; i < data.solutions.length; i++) {
+      exportImage(data, true, i);
+    }
+  }
+
+  const exportImage = (data, drawSolution, solutionIndex = 0) => {
+    // Check run condition.
+    if (drawSolution && data.solutions[solutionIndex] === null) {
+      return;
+    }
     // Variables for cropping offset and dimensions.
     let x = data.cropX1 * $.tileSize;  // No offset from maze stroke weight.
     let y = data.cropY1 * $.tileSize;
@@ -25,6 +36,9 @@ const exportCanvas = p => {
     p.resizeCanvas(width, height);
     p.image(data.mazeImg, -x, -y);
     p.image(data.markersImg, -x, -y);
+    if (drawSolution) {
+      p.image(data.solutionsImgs[solutionIndex], -x, -y);
+    }
     p.saveCanvas('maze', 'png');
   }
 }

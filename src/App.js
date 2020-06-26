@@ -97,24 +97,38 @@ class App extends React.Component {
   }
 
   renderSelectionBar = () => {
-    let { canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour } = this.state;
-    let showMarkerMarkerPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
-    let showSolutionMarkerPicker = canvasMode === consts.SOLVE;
-    if (!showMarkerMarkerPicker && !showSolutionMarkerPicker) {
+    let { exportMazeData, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour } = this.state;
+
+    let showMarkerPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
+    let showSolutionPicker = canvasMode === consts.SOLVE;
+
+    if (!showMarkerPicker && !showSolutionPicker) {
       return null;
     }
+
+    let markerPickerVisibleList = [];
+    let solutionPickerVisibleList = [];
+    exportMazeData.solutions.forEach(s => {
+      markerPickerVisibleList.push(true);  // Adding elements in markerPickerVisibleList from solutions because they have the same length.
+      // It is possible for the selected solution not to be visible. The null item doesn't change appearance when selected vs not selected,
+      // so it will look like the null item is selected (which is good).
+      solutionPickerVisibleList.push(s !== null);
+    });
+
     return (
       <div className={stylesheet.wrapper__selectionBar}>
         <MarkerPicker
           text='Marker Colour:'
-          show={showMarkerMarkerPicker}
+          show={showMarkerPicker}
+          visibleList={markerPickerVisibleList}
           allowSelectNone={false}
           activeValue={canvasMarkerColour}
           onClickFunc={this.setCanvasMarkerColour}
         />
         <MarkerPicker
           text='Displayed Solution:'
-          show={showSolutionMarkerPicker}
+          show={showSolutionPicker}
+          visibleList={solutionPickerVisibleList}
           allowSelectNone={true}
           activeValue={canvasSolutionColour}
           onClickFunc={this.setCanvasSolutionColour}
@@ -142,6 +156,7 @@ class App extends React.Component {
       errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
+
     return (
       <>
         <div className={stylesheet.wrapper}>
