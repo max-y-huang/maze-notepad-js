@@ -4,6 +4,7 @@
   padding: 16px;
   padding-right: 0;  // padding-right hack used.
   white-space: nowrap;
+  overflow-x: scroll;
 
   &__title {
     color: #e0e0e0;
