@@ -4,7 +4,7 @@ import { clamp } from '../funcs';
 
 class Cursor {
 
-  colour = consts.COLOURS[2];
+  colour = consts.COLOURS[0];
 
   constructor(p, camera, maze) {
     this.p = p;

@@ -12,7 +12,7 @@ class Maze {
   mazeStrokeColour = [ 32, 32, 32 ];
   mazeStrokeWeight = 2;
   markerSize = 6;
-  suggestedPathsColour = consts.COLOURS[0];
+  suggestedPathsColour = consts.COLOURS[4];
   suggestedPathsWeight = 2;
   toShapeAddColour = [ 192, 255, 192 ];
   toShapeAddStrokeColour = [ 96, 128, 96 ];
@@ -251,18 +251,18 @@ class Maze {
       }
       // Marker not on maze error.
       if (hasMarker && !isActive) {
-        return { success: false, result: 'All markers must be on the maze.' };
+        return { success: false, result: 'The maze must have locations.' };
       }
     }
     // No markers error.
     if (totalMarkerCount === 0) {
-      return { success: false, result: 'There must be markers on the maze.' };
+      return { success: false, result: 'Locations must be on the maze.' };
     }
 
     for (let i = 0; i < consts.COLOURS.length; i++) {
       // 1 of marker type error.
       if (markerCountByType[i] === 1) {
-        return { success: false, result: 'For each used marker colour, there must be more than 1 occurance of that marker colour.' };
+        return { success: false, result: 'There must be multiple instances of each location colour used.' };
       }
     }
     // No errors.

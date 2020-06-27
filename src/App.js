@@ -118,7 +118,7 @@ class App extends React.Component {
     return (
       <div className={stylesheet.wrapper__selectionBar}>
         <MarkerPicker
-          text='Marker Colour:'
+          text='Select location colour:'
           show={showMarkerPicker}
           visibleList={markerPickerVisibleList}
           allowSelectNone={false}
@@ -126,7 +126,7 @@ class App extends React.Component {
           onClickFunc={this.setCanvasMarkerColour}
         />
         <MarkerPicker
-          text='Displayed Solution:'
+          text='Select solution to view:'
           show={showSolutionPicker}
           visibleList={solutionPickerVisibleList}
           allowSelectNone={true}
