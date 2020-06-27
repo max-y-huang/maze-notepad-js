@@ -27,7 +27,7 @@ class App extends React.Component {
       errorModalOpen: false,
       errorModalMessage: '',
       instructionsOpen: false,
-      footerOpen: false,
+      footerOpen: true,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
@@ -63,7 +63,6 @@ class App extends React.Component {
   hideInstructions   = () => this.setState({ instructionsOpen: false });
   toggleInstructions = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
 
-  showFooter = () => this.setState({ footerOpen: true });
   hideFooter = () => this.setState({ footerOpen: false });
 
   onResize = () => {
@@ -77,6 +76,10 @@ class App extends React.Component {
     if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
       this.onResize();
     }
+    // Resize on footer open/close.
+    if (prevState.footerOpen !== this.state.footerOpen) {
+      this.onResize();
+    }
   }
 
   componentDidMount() {
@@ -85,8 +88,6 @@ class App extends React.Component {
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
     this.onResize();
-
-    this.showFooter();  // Comes after resize.
     
     window.addEventListener('resize', this.onResize);
     window.addEventListener('blur', this.requestKeyLoggerClear);
