@@ -33,7 +33,7 @@
 
 .instructions {
   position: absolute;
-  bottom: 1em;
+  top: 1em;
   right: 1em;
 }
 .instructions__messageBox {
@@ -51,15 +51,9 @@
   background: none !important;
   color: #e0e0e0 !important;
 }
-
-.dark em {
+.instructions__messageBox em {
   font-style: normal;
   color: #66d3ff;
-}
-
-.light em {
-  font-style: normal;
-  color: #2994d1;
 }
 
 /*# sourceMappingURL=App.module.css.map */

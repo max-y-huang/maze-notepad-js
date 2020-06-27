@@ -72,10 +72,12 @@ class Maze {
     for (let i = 0; i < this.toShapeList.length; i++) {  // toShapeList needs to be cleared.
       this.toShapeList[i] = 0;
     }
-    this.updateSolutions();
     this.updateMazeImg();
     this.updateMarkersImg();
-    this.updateSolutionsImgs();
+    if (this.isValidMaze().success) {
+      this.updateSolutions();
+      this.updateSolutionsImgs();
+    }
     // Pass image to App for export purposes.
     $.app__setExportMazeData({
       mazeImg: this.mazeImg,
@@ -251,12 +253,12 @@ class Maze {
       }
       // Marker not on maze error.
       if (hasMarker && !isActive) {
-        return { success: false, result: 'The maze must have locations.' };
+        return { success: false, result: 'Locations must be on the maze.' };
       }
     }
     // No markers error.
     if (totalMarkerCount === 0) {
-      return { success: false, result: 'Locations must be on the maze.' };
+      return { success: false, result: 'The maze must have locations.' };
     }
 
     for (let i = 0; i < consts.COLOURS.length; i++) {

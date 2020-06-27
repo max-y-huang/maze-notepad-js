@@ -1,7 +1,6 @@
 import React from 'react';
-import { Modal, Button, Divider } from 'semantic-ui-react';
+import { Modal, Button } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
-import Cookies from 'js-cookie';
 
 import stylesheet from './css/App.module.css';
 
@@ -26,7 +25,6 @@ class App extends React.Component {
       canvasSolutionColour: -1,
       errorModalOpen: false,
       errorModalMessage: '',
-      instructionsModalOpen: false,
       instructionsOpen: false,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
@@ -60,8 +58,6 @@ class App extends React.Component {
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
 
-  showInstructionsModal = () => this.setState({ instructionsModalOpen: true });
-  hideInstructionsModal = () => this.setState({ instructionsModalOpen: false });
   toggleInstructions    = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
 
   onResize = () => {
@@ -78,12 +74,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // Show instructions modal if first time visiting.
-    if (!Cookies.get('maze-notepad-js__visited')) {
-      this.showInstructionsModal();
-      Cookies.set('maze-notepad-js__visited', true);
-    }
-
     $p5.app__setExportMazeData = this.setExportMazeData;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
@@ -108,12 +98,17 @@ class App extends React.Component {
 
     let markerPickerVisibleList = [];
     let solutionPickerVisibleList = [];
-    exportMazeData.solutions.forEach(s => {
-      markerPickerVisibleList.push(true);  // Adding elements in markerPickerVisibleList from solutions because they have the same length.
+    for (let i = 0; i < consts.COLOURS.length; i++) {
+      markerPickerVisibleList.push(true);
       // It is possible for the selected solution not to be visible. The null item doesn't change appearance when selected vs not selected,
       // so it will look like the null item is selected (which is good).
-      solutionPickerVisibleList.push(s !== null);
-    });
+      if (exportMazeData.solutions) {
+        solutionPickerVisibleList.push(exportMazeData.solutions[i] !== null);
+      }
+      else {
+        solutionPickerVisibleList.push(false);
+      }
+    }
 
     return (
       <div className={stylesheet.wrapper__selectionBar}>
@@ -137,23 +132,11 @@ class App extends React.Component {
     );
   }
 
-  renderInstructions = (theme) => {
-    return (
-      <>
-        <p className={stylesheet[theme]}><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
-        <p className={stylesheet[theme]}><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
-        <p className={stylesheet[theme]}><em>Left click</em> to draw</p>
-        <p className={stylesheet[theme]}><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
-        <p className={stylesheet[theme]}>In some cases, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
-      </>
-    );
-  }
-
   render() {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour,
       openMazeFile, exportMazeData,
-      errorModalOpen, errorModalMessage, instructionsModalOpen, instructionsOpen,
+      errorModalOpen, errorModalMessage, instructionsOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
 
@@ -162,6 +145,7 @@ class App extends React.Component {
         <div className={stylesheet.wrapper}>
           <div className={stylesheet.wrapper__toolBar}>
             <ToolBar
+              instructionsOpen={instructionsOpen}
               canvasUseRuler={canvasUseRuler}
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
@@ -174,6 +158,7 @@ class App extends React.Component {
               requestResetMazePatternFunc={this.requestResetMazePattern}
               requestResetCameraFunc={this.requestResetCamera}
               toggleUseRulerFunc={this.toggleUseRuler}
+              toggleInstructionsFunc={this.toggleInstructions}
             />
           </div>
           {this.renderSelectionBar()}
@@ -195,14 +180,6 @@ class App extends React.Component {
           </div>
         </div>
         <div className={stylesheet.instructions}>
-          <Button
-            className={stylesheet.instructions__infoButton}
-            style={{display: instructionsOpen ? 'none' : 'block'}}
-            icon='info'
-            color='black'
-            onClick={this.toggleInstructions}
-          >
-          </Button>
           <div
             className={stylesheet.instructions__messageBox}
             style={{display: instructionsOpen ? 'block' : 'none'}}
@@ -212,7 +189,11 @@ class App extends React.Component {
               icon='close'
               onClick={this.toggleInstructions}
             />
-            {this.renderInstructions('dark')}
+            <p><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
+            <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
+            <p><em>Left click</em> to draw</p>
+            <p><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
+            <p>In some cases, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
           </div>
         </div>
         <Modal
@@ -220,21 +201,6 @@ class App extends React.Component {
           header='Error!'
           content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
           actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
-        />
-        <Modal
-          open={instructionsModalOpen}
-          header='Welcome to Maze Notepad!'
-          content={{
-            content: (
-              <div>
-                {this.renderInstructions('light')}
-                <Divider />
-                <p className={stylesheet.light}>Click the <i className='fas fa-info fa-fw' /> button in the bottom-right corner to view the instructions later</p>
-              </div>
-            ),
-            style: { fontSize: '16px' }
-          }}
-          actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideInstructionsModal }]}
         />
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>

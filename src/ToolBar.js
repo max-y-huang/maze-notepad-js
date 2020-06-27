@@ -45,6 +45,10 @@ class ToolBar extends React.Component {
     this.props.toggleUseRulerFunc();
   }
 
+  toggleInstructions = () => {
+    this.props.toggleInstructionsFunc();
+  }
+
   renderCreateButtons = () => {
     if (this.props.canvasMode !== consts.CREATE) {
       return null;
@@ -62,6 +66,8 @@ class ToolBar extends React.Component {
         <Item text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
         <Item text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
         <Item text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
+        <Divider />
+        <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleInstructions} />
       </>
     );
   }
@@ -77,6 +83,8 @@ class ToolBar extends React.Component {
         <Item text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
         <Divider />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
+        <Divider />
+        <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleInstructions} />
       </>
     );
   }
