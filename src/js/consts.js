@@ -7,6 +7,9 @@ class Consts {
   PATHS = 1;
   MARKERS = 2;
 
+  TEST = 0;
+  SOLUTIONS = 1;
+
   COLOURS = [
     [ 219, 23, 41 ],  // Red
     [ 243, 107, 38 ],  // Orange

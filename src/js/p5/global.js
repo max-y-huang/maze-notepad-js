@@ -13,8 +13,10 @@ class Global {
 
   mode = consts.CREATE;
   createTool = consts.SHAPE;
+  solveTool = consts.TEST;
   markerColour = 0;
   solutionColour = -1;
+  penColour = 0;
 
   tileSize = 14;
   rulerIncrement = 5;

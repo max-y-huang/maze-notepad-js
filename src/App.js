@@ -24,6 +24,7 @@ class App extends React.Component {
       exportMazeData: { mazeImg: null, markersImg: null },
       canvasMarkerColour: 0,
       canvasSolutionColour: -1,
+      canvasPenColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
       instructionsOpen: false,
@@ -52,10 +53,11 @@ class App extends React.Component {
 
   toggleUseRuler = () => this.setState((state) => ({ canvasUseRuler: !state.canvasUseRuler }));
 
-  setCanvasMode         = (mode)   => this.setState({ canvasMode: mode });
-  setCanvasCreateTool   = (tool)   => this.setState({ canvasCreateTool: tool });
-  setCanvasMarkerColour = (colour) => this.setState({ canvasMarkerColour: colour });
+  setCanvasMode             = (mode)   => this.setState({ canvasMode: mode });
+  setCanvasCreateTool       = (tool)   => this.setState({ canvasCreateTool: tool });
+  setCanvasMarkerColour     = (colour) => this.setState({ canvasMarkerColour: colour });
   setCanvasSolutionColour   = (colour) => this.setState({ canvasSolutionColour: colour });
+  setCanvasPenColour        = (colour) => this.setState({ canvasPenColour: colour });
 
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
@@ -96,10 +98,11 @@ class App extends React.Component {
   }
 
   renderSelectionBar = () => {
-    let { exportMazeData, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour } = this.state;
+    let { exportMazeData, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour } = this.state;
 
     let showMarkerPicker = canvasMode === consts.CREATE && canvasCreateTool === consts.MARKERS;
     let showSolutionPicker = canvasMode === consts.SOLVE;
+    let showPenPicker = canvasMode === consts.SOLVE
 
     if (!showMarkerPicker && !showSolutionPicker) {
       return null;
@@ -107,8 +110,10 @@ class App extends React.Component {
 
     let markerPickerVisibleList = [];
     let solutionPickerVisibleList = [];
+    let penPickerVisibleList = [];
     for (let i = 0; i < consts.COLOURS.length; i++) {
       markerPickerVisibleList.push(true);
+      penPickerVisibleList.push(true);
       // It is possible for the selected solution not to be visible. The null item doesn't change appearance when selected vs not selected,
       // so it will look like the null item is selected (which is good).
       if (exportMazeData.solutions) {
@@ -130,6 +135,14 @@ class App extends React.Component {
           onClickFunc={this.setCanvasMarkerColour}
         />
         <MarkerPicker
+          text='Select pen colour:'
+          show={showPenPicker}
+          visibleList={penPickerVisibleList}
+          allowSelectNone={false}
+          activeValue={canvasPenColour}
+          onClickFunc={this.setCanvasPenColour}
+        />
+        <MarkerPicker
           text='Select solution to view:'
           show={showSolutionPicker}
           visibleList={solutionPickerVisibleList}
@@ -143,7 +156,7 @@ class App extends React.Component {
 
   render() {
     let {
-      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour,
+      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
       openMazeFile, exportMazeData,
       errorModalOpen, errorModalMessage, instructionsOpen, footerOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
@@ -179,6 +192,7 @@ class App extends React.Component {
               createTool={canvasCreateTool}
               markerColour={canvasMarkerColour}
               solutionColour={canvasSolutionColour}
+              penColour={canvasPenColour}
               openMazeFile={openMazeFile}
               requestOpenMazeFlag={requestOpenMazeFlag}
               requestSaveMazeFlag={requestSaveMazeFlag}
