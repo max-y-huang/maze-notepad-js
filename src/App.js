@@ -180,20 +180,27 @@ class App extends React.Component {
           </div>
         </div>
         <div className={stylesheet.instructions}>
+          <Button
+            className={stylesheet.instructions__closeButton}
+            icon='close'
+            onClick={this.toggleInstructions}
+            style={{display: instructionsOpen ? 'block' : 'none'}}
+          />
           <div
             className={stylesheet.instructions__messageBox}
             style={{display: instructionsOpen ? 'block' : 'none'}}
           >
-            <Button
-              className={stylesheet.instructions__messageBox__closeButton}
-              icon='close'
-              onClick={this.toggleInstructions}
-            />
+            <p className={stylesheet.instructions__messageBox__header}>
+              In General...
+            </p>
             <p><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
             <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
+            <p className={stylesheet.instructions__messageBox__header}>
+              In Edit Mode...
+            </p>
             <p><em>Left click</em> to draw</p>
             <p><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
-            <p>In some cases, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
+            <p>With certain tools, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
           </div>
         </div>
         <Modal

@@ -230,7 +230,7 @@ class Maze {
     let bfsStart = this.graph.activeList.indexOf(true);
     // No shape error.
     if (bfsStart === -1) {
-      return { success: false, result: 'The maze must have a shape.' };
+      return { success: false, result: 'The maze must have a shape. Try using the Edit Shape tool.' };
     }
     // 1x1 cell error
     if (bfsStart === this.graph.activeList.lastIndexOf(true)) {
@@ -253,18 +253,18 @@ class Maze {
       }
       // Marker not on maze error.
       if (hasMarker && !isActive) {
-        return { success: false, result: 'Locations must be on the maze.' };
+        return { success: false, result: 'All locations must be on the maze.' };
       }
     }
     // No markers error.
     if (totalMarkerCount === 0) {
-      return { success: false, result: 'The maze must have locations.' };
+      return { success: false, result: 'The maze must have locations. Try using the Edit Locations tool.' };
     }
 
     for (let i = 0; i < consts.COLOURS.length; i++) {
       // 1 of marker type error.
       if (markerCountByType[i] === 1) {
-        return { success: false, result: 'There must be multiple instances of each location colour used.' };
+        return { success: false, result: 'There must be multiple locations per location colour used.' };
       }
     }
     // No errors.

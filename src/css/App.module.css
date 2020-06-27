@@ -36,6 +36,13 @@
   top: 1em;
   right: 1em;
 }
+.instructions__closeButton {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  background: none !important;
+  color: #e0e0e0 !important;
+}
 .instructions__messageBox {
   padding: 1em;
   background-color: #202020;
@@ -44,12 +51,12 @@
   border-radius: 6px;
   font-size: 16px;
 }
-.instructions__messageBox__closeButton {
-  position: absolute;
-  top: 4px;
-  right: 0;
-  background: none !important;
-  color: #e0e0e0 !important;
+.instructions__messageBox__header {
+  font-style: italic;
+  font-weight: bold;
+}
+.instructions__messageBox__header:not(:first-child) {
+  margin-top: 2em;
 }
 .instructions__messageBox em {
   font-style: normal;
