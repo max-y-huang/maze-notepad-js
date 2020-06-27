@@ -1,6 +1,7 @@
 import React from 'react';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
+import classnames from 'classnames';
 
 import stylesheet from './css/App.module.css';
 
@@ -26,6 +27,7 @@ class App extends React.Component {
       errorModalOpen: false,
       errorModalMessage: '',
       instructionsOpen: false,
+      footerOpen: false,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
@@ -58,7 +60,11 @@ class App extends React.Component {
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
 
-  toggleInstructions    = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
+  hideInstructions   = () => this.setState({ instructionsOpen: false });
+  toggleInstructions = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
+
+  showFooter = () => this.setState({ footerOpen: true });
+  hideFooter = () => this.setState({ footerOpen: false });
 
   onResize = () => {
     let { offsetWidth, offsetHeight } = this.canvasWrapperRef.current;
@@ -79,6 +85,8 @@ class App extends React.Component {
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
     this.onResize();
+
+    this.showFooter();  // Comes after resize.
     
     window.addEventListener('resize', this.onResize);
     window.addEventListener('blur', this.requestKeyLoggerClear);
@@ -136,7 +144,7 @@ class App extends React.Component {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour,
       openMazeFile, exportMazeData,
-      errorModalOpen, errorModalMessage, instructionsOpen,
+      errorModalOpen, errorModalMessage, instructionsOpen, footerOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
 
@@ -178,18 +186,27 @@ class App extends React.Component {
               requestKeyLoggerClearFlag={requestKeyLoggerClearFlag}
             />
           </div>
+          <div className={stylesheet.wrapper__footer} style={{display: footerOpen ? 'block' : 'none'}}>
+            <button
+              className={classnames(stylesheet.wrapper__footer__closeButton, 'transparent-button')}
+              onClick={this.hideFooter}
+            >
+              <i className='fas fa-times' />
+            </button>
+            <div className={stylesheet.wrapper__footer__message}>
+              <span>Made by Max Huang</span>
+              <span><a href='https://github.com/max-y-huang/maze-notepad-js' rel='noopener noreferrer' target='_blank'>View on GitHub</a></span>
+            </div>
+          </div>
         </div>
-        <div className={stylesheet.instructions}>
-          <Button
-            className={stylesheet.instructions__closeButton}
-            icon='close'
-            onClick={this.toggleInstructions}
-            style={{display: instructionsOpen ? 'block' : 'none'}}
-          />
-          <div
-            className={stylesheet.instructions__messageBox}
-            style={{display: instructionsOpen ? 'block' : 'none'}}
+        <div className={stylesheet.instructions} style={{display: instructionsOpen ? 'block' : 'none'}}>
+          <button
+            className={classnames(stylesheet.instructions__closeButton, 'transparent-button')}
+            onClick={this.hideInstructions}
           >
+            <i className='fas fa-times' />
+          </button>
+          <div className={stylesheet.instructions__messageBox}>
             <p className={stylesheet.instructions__messageBox__header}>
               In General...
             </p>
