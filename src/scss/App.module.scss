@@ -46,14 +46,14 @@
     grid-column: 1 / span 2;
     grid-row: 3 / span 1;
     background-color: #007acc;
-    color: #e0e0e0;
+    color: #ffffff;
     padding: 0.25em 0.25em;
     font-size: 15px;
     text-align: center;
 
     &__closeButton {
       float: right;
-      color: #e0e0e0;
+      color: #ffffff;
     }
 
     &__message {
@@ -71,7 +71,7 @@
       }
 
       a {
-        color: #e0e0e0;
+        color: #ffffff;
         text-decoration: underline;
       }
     }
