@@ -32,6 +32,7 @@ const sketch = p => {
     changeCreateTool(props.createTool);
     changeMarkerColour(props.markerColour);
     changeSolutionColour(props.solutionColour);
+    changePenColour(props.penColour);
   };
 
   const openMazeFile = (flag, file) => {
@@ -143,6 +144,15 @@ const sketch = p => {
     $.solutionColour = solutionColour;
   }
 
+  const changePenColour = (penColour) => {
+    // Check for run condition.
+    if (penColour === $.penColour) {
+      return;
+    }
+
+    $.penColour = penColour;
+  }
+
   p.setup = () => {
     p.createCanvas($.width, $.height);
     p.frameRate(60);
@@ -228,6 +238,7 @@ const sketch = p => {
 
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
     maze.setSuggestedPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
+    maze.setTestingPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(), cursor.getY());
     maze.setMarkerWithMouse(cursor.getX(), cursor.getY());
   }
 
@@ -240,6 +251,7 @@ const sketch = p => {
     camera.translateWithMouse();
     maze.shapeWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
     maze.setSuggestedPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
+    maze.setTestingPathWithMouse(cursor.getX(), cursor.getY(), cursor.getX(p.mouseX - p.movedX), cursor.getY(p.mouseY - p.movedY));
   }
 
   p.mouseReleased = () => {

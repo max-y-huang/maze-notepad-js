@@ -18,6 +18,8 @@ class Maze {
   toShapeAddStrokeColour = [ 96, 128, 96 ];
   toShapeRemoveColour = [ 255, 192, 192 ];
   toShapeRemoveStrokeColour = [ 128, 96, 96 ];
+  testingPathsColour = [ 0, 182, 173 ];
+  testingPathsWeight = 2;
 
   cropX1 = 0;
   cropY1 = 0;
@@ -421,6 +423,70 @@ class Maze {
     this.setMarker(x, y, state);
   }
 
+  setTestingPath(x, y, currX, currY, state) {
+    if (keyLogger.isKeyCodePressed(this.p.SHIFT) && !state) { // Only allow fill if erasing.
+      this.setTestingPathFill(x, y, state);
+    }
+    else {
+      this.setTestingPathPen(x, y, currX, currY, state);
+    }
+  }
+
+  setTestingPathPen(x, y, currX, currY, state, prevX=currX, prevY=currY) {
+    let indexPrev = this.coordToIndex(prevX, prevY);
+    let indexCurr = this.coordToIndex(currX, currY);
+    // Treat like pen if state = true
+    if (state) {
+      this.graph.editEdge(indexPrev, indexCurr, { notes: { testingPath: $.penColour } });
+    }
+    // Treat like eraser if state = false
+    else {
+      this.graph.adjList[indexCurr].forEach(e => {
+        this.graph.editEdge(e.a, e.b, { notes: { testingPath: -1 } });
+      });
+    }
+    // Finish if reached target.
+    if (x === currX && y === currY) {
+      return;
+    }
+    // Call setTestingPathPen() for each cell along mouse path.
+    let offsetX = 0;
+    let offsetY = 0;
+    if (Math.abs(x - currX) > Math.abs(y - currY)) {
+      offsetX = currX < x ? 1 : -1;
+    }
+    else {
+      offsetY = currY < y ? 1 : -1;
+    }
+    this.setTestingPathPen(x, y, currX + offsetX, currY + offsetY, state, currX, currY);
+  }
+
+  setTestingPathFill(x, y, state) {
+    let index = this.coordToIndex(x, y);
+    // BFS to find flood fill region, and shapeFill() for each cell in the region.
+    let parents = this.graph.bfs(index, this.graph.floodFillTestingPathFilterFunc);
+    parents.forEach((parent, i) => {
+      if (parent !== -1) {
+        this.graph.adjList[i].forEach(e => {
+          this.graph.editEdge(e.a, e.b, { notes: { testingPath: -1 } });
+        });
+      }
+    })
+  }
+
+  setTestingPathWithMouse(x, y, prevX, prevY) {
+    // Check run condition.
+    if (!($.mode === consts.SOLVE && $.solveTool === consts.TEST)) {
+      return;
+    }
+    if (!(this.p.mouseIsPressed && (this.p.mouseButton === this.p.LEFT || this.p.mouseButton === this.p.RIGHT))) {
+      return;
+    }
+
+    let state = (this.p.mouseButton === this.p.LEFT) !== keyLogger.isKeyCodePressed(this.p.CONTROL);  // Left-click = true, right-click = false, shift + click = opposite click.
+    this.setTestingPath(x, y, prevX, prevY, state);
+  }
+
   draw() {
     if ($.mode === consts.CREATE) {
       this.drawGrid();
@@ -429,6 +495,7 @@ class Maze {
     this.drawMarkers();
     if ($.mode === consts.SOLVE) {
       this.drawSolutions();
+      this.drawTestingPaths();
     }
     if ($.mode === consts.CREATE) {
       this.drawSuggestedPaths();
@@ -468,6 +535,20 @@ class Maze {
     this.graph.edgeList.filter(e => this.graph.getNotes(e, 'suggestedPath')).forEach(e => {
       let a = this.indexToCoord(e.a);
       let b = this.indexToCoord(e.b);
+      this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
+    });
+  }
+
+  drawTestingPaths() {
+    const edgeFilterFunc = edge => this.graph.getNotes(edge, 'testingPath') !== -1;
+
+    this.p.strokeWeight(this.testingPathsWeight);
+    this.p.strokeCap(this.p.PROJECT);
+    this.graph.edgeList.filter(edgeFilterFunc).forEach(e => {
+      let a = this.indexToCoord(e.a);
+      let b = this.indexToCoord(e.b);
+      let c = consts.COLOURS[this.graph.getNotes(e, 'testingPath')];
+      this.p.stroke(c);
       this.p.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
     });
   }

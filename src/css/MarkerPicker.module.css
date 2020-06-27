@@ -4,6 +4,7 @@
   padding: 16px;
   padding-right: 0;
   white-space: nowrap;
+  overflow-x: scroll;
 }
 .wrapper__title {
   color: #e0e0e0;

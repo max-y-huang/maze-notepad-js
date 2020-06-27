@@ -110,9 +110,6 @@ class MazeGraph extends Graph {
     if (!edge.notes) {
       return false;
     }
-    if (!edge.notes[key]) {
-      return false;
-    }
     return edge.notes[key];
   }
 
@@ -120,12 +117,13 @@ class MazeGraph extends Graph {
     return Math.floor(Math.random() * 1000) + 1000;
   }
 
-  addEdge(a, b, weight, notes = { suggestedPath: false }) {
+  addEdge(a, b, weight, notes = { suggestedPath: false, testingPath: -1 }) {
     super.addEdge(a, b, weight, notes);
   }
 
   floodFillShapeFilterFunc = edge => this.activeList[edge.a] === this.activeList[edge.b];
   floodFillSuggestedPathFilterFunc = edge => this.getNotes(edge, 'suggestedPath');
+  floodFillTestingPathFilterFunc = edge => (this.getNotes(edge, 'testingPath') !== -1);
   generateMazeFilterFunc = edge => this.activeList[edge.a] && this.activeList[edge.b];
   generateMazeSortFunc = (a, b) => {
     let aWeight = a.weight, bWeight = b.weight;
@@ -146,7 +144,7 @@ class MazeGraph extends Graph {
     this.clearMarkerList();
     
     file.edgeList.forEach(edge => {
-      this.addEdge(edge[0], edge[1], edge[2], { suggestedPath: edge[3] });
+      this.addEdge(edge[0], edge[1], edge[2], { suggestedPath: edge[3], testingPath: -1 });
     });
     file.activeList.forEach(i => {
       this.activeList[i] = true;
