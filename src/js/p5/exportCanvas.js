@@ -1,3 +1,4 @@
+import consts from './../consts';
 import $ from './global';
 
 const exportCanvas = p => {
@@ -16,13 +17,13 @@ const exportCanvas = p => {
   };
 
   const onExport = (data) => {
-    exportImage(data, false);
+    exportImage(data, 'maze', false);
     for (let i = 0; i < data.solutions.length; i++) {
-      exportImage(data, true, i);
+      exportImage(data, `maze - solution ${consts.COLOUR_NAMES[i]}`, true, i);
     }
   }
 
-  const exportImage = (data, drawSolution, solutionIndex = 0) => {
+  const exportImage = (data, name, drawSolution, solutionIndex = 0) => {
     // Check run condition.
     if (drawSolution && data.solutions[solutionIndex] === null) {
       return;
@@ -39,7 +40,7 @@ const exportCanvas = p => {
     if (drawSolution) {
       p.image(data.solutionsImgs[solutionIndex], -x, -y);
     }
-    p.saveCanvas('maze', 'png');
+    p.saveCanvas(name, 'png');
   }
 }
 

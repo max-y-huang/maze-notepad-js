@@ -21,7 +21,10 @@ class Consts {
     //[ 223, 55, 148 ],  // Old Pink
     [ 223, 55, 202 ] // New Pink
     //[ 165, 100, 66 ]  // Brown
-  ]
+  ];
+  COLOUR_NAMES = [
+    'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink'
+  ];
 }
 
 let consts = new Consts();
