@@ -6,10 +6,10 @@ import stylesheet from './css/App.module.css';
 
 import consts from './js/consts';
 import $p5 from './js/p5/global';
-import Accordion from './Accordion';
 import Modal from './Modal';
 import ToolBar from './ToolBar';
 import MarkerPicker from './MarkerPicker';
+import HelpBar from './HelpBar';
 import sketch from './js/p5/sketch';
 import exportCanvas from './js/p5/exportCanvas';
 
@@ -28,7 +28,7 @@ class App extends React.Component {
       canvasPenColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
-      instructionsOpen: false,
+      instructionsOpen: true,
       footerOpen: true,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
@@ -79,8 +79,8 @@ class App extends React.Component {
     if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
       this.onResize();
     }
-    // Resize on footer open/close.
-    if (prevState.footerOpen !== this.state.footerOpen) {
+    // Resize on footer open/close or instructions open/close.
+    if (prevState.footerOpen !== this.state.footerOpen || prevState.instructionsOpen !== this.state.instructionsOpen) {
       this.onResize();
     }
   }
@@ -155,6 +155,18 @@ class App extends React.Component {
     );
   }
 
+  renderHelpBar = () => {
+    if (!this.state.instructionsOpen) {
+      return null;
+    }
+
+    return (
+      <div className={stylesheet.wrapper__helpBar}>
+        <HelpBar hideFunc={this.hideInstructions} />
+      </div>
+    );
+  }
+
   render() {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
@@ -202,6 +214,7 @@ class App extends React.Component {
               requestKeyLoggerClearFlag={requestKeyLoggerClearFlag}
             />
           </div>
+          {this.renderHelpBar()}
           <div className={stylesheet.wrapper__footer} style={{display: footerOpen ? 'block' : 'none'}}>
             <button
               className={classnames(stylesheet.wrapper__footer__closeButton, 'transparent-button')}
@@ -213,31 +226,6 @@ class App extends React.Component {
               <span>Made by Max Huang</span>
               <span><a href='https://github.com/max-y-huang/maze-notepad-js' rel='noopener noreferrer' target='_blank'>View on GitHub</a></span>
             </div>
-          </div>
-        </div>
-        <div className={stylesheet.instructions} style={{display: instructionsOpen ? 'block' : 'none'}}>
-          <button
-            className={classnames(stylesheet.instructions__closeButton, 'transparent-button')}
-            onClick={this.hideInstructions}
-          >
-            <i className='fas fa-times' />
-          </button>
-          <div className={stylesheet.instructions__messageBox}>
-            <Accordion
-              summary='In General...'
-              details={<>
-                <p><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
-                <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
-              </>}
-            />
-            <Accordion
-              summary='In Edit Mode...'
-              details={<>
-                <p><em>Left click</em> to draw</p>
-                <p><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
-                <p>With certain tools, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
-              </>}
-            />
           </div>
         </div>
         <Modal

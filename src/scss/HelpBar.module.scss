@@ -1,0 +1,51 @@
+.wrapper {
+  width: 33vw;
+  max-width: 24em;
+  height: 100%;
+  padding: 1.25em 1.25em;
+  padding-bottom: 0;  // padding-bottom hack used.
+  color: #e0e0e0;
+
+  &__closeButton {
+    position: absolute;
+    top: 1.25em;
+    right: 1.25em;
+    color: #e0e0e0;
+  }
+
+  &__header {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-top: 0.25em;
+    margin-bottom: 1.25em;
+  }
+
+  // padding-bottom hack
+  &::after {
+    display: block;
+    content: '';
+    height: 1.25em;
+  }
+
+  em {
+    font-style: normal;
+    color: #66d3ff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td, th {
+      border: 1px solid #505050;
+      text-align: left;
+      vertical-align: top;
+      padding: 0.25em 0.5em;
+    }
+
+    th {
+      background-color: #333333;
+    }
+  }
+}

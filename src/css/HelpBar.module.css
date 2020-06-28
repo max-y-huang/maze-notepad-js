@@ -1,0 +1,45 @@
+.wrapper {
+  width: 33vw;
+  max-width: 24em;
+  height: 100%;
+  padding: 1.25em 1.25em;
+  padding-bottom: 0;
+  color: #e0e0e0;
+}
+.wrapper__closeButton {
+  position: absolute;
+  top: 1.25em;
+  right: 1.25em;
+  color: #e0e0e0;
+}
+.wrapper__header {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #e0e0e0;
+  margin-top: 0.25em;
+  margin-bottom: 1.25em;
+}
+.wrapper::after {
+  display: block;
+  content: "";
+  height: 1.25em;
+}
+.wrapper em {
+  font-style: normal;
+  color: #66d3ff;
+}
+.wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.wrapper table td, .wrapper table th {
+  border: 1px solid #505050;
+  text-align: left;
+  vertical-align: top;
+  padding: 0.25em 0.5em;
+}
+.wrapper table th {
+  background-color: #333333;
+}
+
+/*# sourceMappingURL=HelpBar.module.css.map */

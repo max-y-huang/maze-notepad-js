@@ -18,6 +18,7 @@ body {
   background-color: #404040;
   font-size: 1.6rem;
   font-family: "Lato", sans-serif;
+  line-height: 1.6;
 }
 
 button {
@@ -44,12 +45,13 @@ button {
 
 .wrapper__summary {
   cursor: pointer;
+  font-weight: 700;
   margin-top: 1em;
 }
 .wrapper__summary::before {
   display: inline-block;
   font-size: 0.75em;
-  width: calc(1.25em / 0.75);
+  width: calc(1.6rem * 1.25);
 }
 .wrapper__details {
   padding-left: 1.25em;

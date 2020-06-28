@@ -1,6 +1,6 @@
 .wrapper {
   display: grid;
-  grid-template-columns: auto 1fr; 
+  grid-template-columns: auto 1fr auto; 
   grid-template-rows: 1fr auto auto; 
   width: 100%;
   height: 100%;
@@ -15,7 +15,7 @@
 
   &__selectionBar {
     display: flex;
-    grid-column: 2 / span 1;
+    grid-column: 2 / span 2;
     grid-row: 2 / span 1;
     overflow-x: hidden;  // Will never overflow.
     background-color: #212121;
@@ -42,8 +42,16 @@
     }
   }
 
+  &__helpBar {
+    grid-column: 3 / span 1;
+    grid-row: 1 / span 1;
+    overflow-y: scroll;
+    background-color: #212121;
+    border-left: 1px solid #000000;
+  }
+
   &__footer {
-    grid-column: 1 / span 2;
+    grid-column: 1 / span 3;
     grid-row: 3 / span 1;
     background-color: #007acc;
     color: #ffffff;

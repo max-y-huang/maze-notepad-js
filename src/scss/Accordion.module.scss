@@ -4,11 +4,12 @@
   &__summary {
     @extend %no-select;
     cursor: pointer;
+    font-weight: 700;
 
     &::before {
       display: inline-block;
       font-size: 0.75em;
-      width: calc(1.25em / 0.75);  // Equal to 1.25em with regular font size.
+      width: calc(1.6rem * 1.25);  // Equal to 1.25em with regular font size.
     }
 
     margin-top: 1em;
