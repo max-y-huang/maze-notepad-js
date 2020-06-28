@@ -83,7 +83,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
 
   &__content {
@@ -92,7 +92,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #333333;
+    background-color: #212121;
     border-radius: 6px;
 
     width: calc(100vw - 4em);
@@ -127,7 +127,7 @@
         color: #000000;
 
         &:hover {
-          background-color: #212121;
+          background-color: #333333;
           color: #e0e0e0;
         }
       }
@@ -149,20 +149,11 @@
   }
 
   &__messageBox {
-    padding: 1.25em;
+    padding: 0.25em 1.25em;  // More top and bottom padding from accordion.
     background-color: #212121;
     color: #e0e0e0;
     border: 1px solid #000000;
     border-radius: 6px;
-
-    &__header {
-      font-style: italic;
-      font-weight: bold;
-
-      &:not(:first-child) {
-        margin-top: 2em;
-      }
-    }
 
     em {
       font-style: normal;

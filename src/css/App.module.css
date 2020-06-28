@@ -66,7 +66,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
 }
 .modal__content {
@@ -75,7 +75,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333333;
+  background-color: #212121;
   border-radius: 6px;
   width: calc(100vw - 4em);
   max-width: 50em;
@@ -107,7 +107,7 @@
   color: #000000;
 }
 .modal__content__footer button:hover {
-  background-color: #212121;
+  background-color: #333333;
   color: #e0e0e0;
 }
 
@@ -124,18 +124,11 @@
   padding: 1.25em;
 }
 .instructions__messageBox {
-  padding: 1.25em;
+  padding: 0.25em 1.25em;
   background-color: #212121;
   color: #e0e0e0;
   border: 1px solid #000000;
   border-radius: 6px;
-}
-.instructions__messageBox__header {
-  font-style: italic;
-  font-weight: bold;
-}
-.instructions__messageBox__header:not(:first-child) {
-  margin-top: 2em;
 }
 .instructions__messageBox em {
   font-style: normal;

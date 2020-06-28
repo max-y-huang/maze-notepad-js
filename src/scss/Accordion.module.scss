@@ -1,0 +1,46 @@
+@import 'index.scss';
+
+.wrapper {
+  &__summary {
+    @extend %no-select;
+    cursor: pointer;
+
+    &::before {
+      display: inline-block;
+      font-size: 0.75em;
+      width: calc(1.25em / 0.75);  // Equal to 1.25em with regular font size.
+    }
+
+    margin-top: 1em;
+  }
+
+  &__details {
+    padding-left: 1.25em;
+    margin-bottom: 1em;
+
+    > *:first-child {
+      margin-top: 1em;
+    }
+  }
+}
+
+.show .wrapper {
+  &__summary {
+    &::before {
+      content: '\25BC';
+    }
+  }
+}
+
+.hide .wrapper {
+  &__summary {
+    &::before {
+      content: '\25BA';
+    }
+  }
+
+  &__details {
+    height: 0;
+    overflow: hidden;
+  }
+}

@@ -6,6 +6,7 @@ import stylesheet from './css/App.module.css';
 
 import consts from './js/consts';
 import $p5 from './js/p5/global';
+import Accordion from './Accordion';
 import ToolBar from './ToolBar';
 import MarkerPicker from './MarkerPicker';
 import sketch from './js/p5/sketch';
@@ -221,24 +222,28 @@ class App extends React.Component {
             <i className='fas fa-times' />
           </button>
           <div className={stylesheet.instructions__messageBox}>
-            <p className={stylesheet.instructions__messageBox__header}>
-              In General...
-            </p>
-            <p><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
-            <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
-            <p className={stylesheet.instructions__messageBox__header}>
-              In Edit Mode...
-            </p>
-            <p><em>Left click</em> to draw</p>
-            <p><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
-            <p>With certain tools, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
+            <Accordion
+              summary='In General...'
+              details={<>
+                <p><em>Middle click + drag</em> or use <em>WASD</em> to pan the camera</p>
+                <p><em>Scroll</em> or use <em>E and Q</em> to zoom in / out</p>
+              </>}
+            />
+            <Accordion
+              summary='In Edit Mode...'
+              details={<>
+                <p><em>Left click</em> to draw</p>
+                <p><em>Right click</em> or <em>CTRL + left click</em> to erase</p>
+                <p>With certain tools, <em>SHIFT + left / right click</em> to draw / erase a contiguous area</p>
+              </>}
+            />
           </div>
         </div>
         <Modal
           open={errorModalOpen}
           header='Error!'
           body={<p>{errorModalMessage}</p>}
-          footer={<button onClick={this.hideErrorModal}>Got it!</button>}
+          footer={<button onClick={this.hideErrorModal}>Okay</button>}
         />
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>

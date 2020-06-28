@@ -1,3 +1,5 @@
+@import 'imports.scss';
+
 html {
   font-size: 62.5%;
 }
@@ -11,6 +13,7 @@ body {
 }
 
 button {
+  @extend %no-select;
   cursor: pointer;
   font-size: 1.6rem;
   font-family: 'Lato', sans-serif;
