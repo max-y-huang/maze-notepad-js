@@ -10,25 +10,25 @@
   grid-column: 1/span 1;
   grid-row: 1/span 2;
   overflow-y: scroll;
-  background-color: #202020;
-  border-right: 4px solid #000000;
+  background-color: #212121;
+  border-right: 1px solid #000000;
 }
 .wrapper__selectionBar {
   display: flex;
   grid-column: 2/span 1;
   grid-row: 2/span 1;
   overflow-x: hidden;
-  background-color: #202020;
-  border-top: 4px solid #000000;
+  background-color: #212121;
+  border-top: 1px solid #000000;
 }
 .wrapper__selectionBar > *:not(:last-child) {
-  border-right: 4px solid #000000;
+  border-right: 1px solid #000000;
 }
 .wrapper__canvas {
   grid-column: 2/span 1;
   grid-row: 1/span 1;
   overflow: hidden;
-  background-color: #404040;
+  background-color: #212121;
 }
 .wrapper__canvas > div {
   width: 100%;
@@ -41,7 +41,6 @@
   background-color: #007acc;
   color: #ffffff;
   padding: 0.25em 0.25em;
-  font-size: 15px;
   text-align: center;
 }
 .wrapper__footer__closeButton {
@@ -61,25 +60,75 @@
   text-decoration: underline;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+.modal__content {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333333;
+  border-radius: 6px;
+  width: calc(100vw - 4em);
+  max-width: 50em;
+  max-height: calc(100vh - 4em);
+}
+.modal__content__header {
+  padding: calc(1.6rem * 1.25);
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #e0e0e0;
+}
+.modal__content__body {
+  padding: 1.25em;
+  border-top: 1px solid #505050;
+  border-bottom: 1px solid #505050;
+  color: #e0e0e0;
+}
+.modal__content__footer {
+  padding: 0.8em 1.25em;
+  text-align: right;
+  color: #e0e0e0;
+}
+.modal__content__footer button {
+  padding: 0.6em 1em;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  background-color: #e0e0e0;
+  color: #000000;
+}
+.modal__content__footer button:hover {
+  background-color: #212121;
+  color: #e0e0e0;
+}
+
 .instructions {
   position: absolute;
-  top: 1em;
-  right: 1em;
+  top: 1.25em;
+  right: 1.25em;
 }
 .instructions__closeButton {
   position: absolute;
   top: 0;
   right: 0;
   color: #e0e0e0;
-  padding: 1em;
+  padding: 1.25em;
 }
 .instructions__messageBox {
-  padding: 1em;
-  background-color: #202020;
+  padding: 1.25em;
+  background-color: #212121;
   color: #e0e0e0;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   border-radius: 6px;
-  font-size: 16px;
 }
 .instructions__messageBox__header {
   font-style: italic;

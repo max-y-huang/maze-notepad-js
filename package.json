@@ -15,8 +15,7 @@
     "react-dom": "^16.13.1",
     "react-p5-wrapper": "^2.0.0",
     "react-scripts": "3.4.1",
-    "sass": "^1.26.8",
-    "semantic-ui-react": "^0.88.2"
+    "sass": "^1.26.8"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -5,20 +5,19 @@ import { Graph, MazeGraph } from './graph';
 
 class Maze {
 
-  gridLineColour = [ 128, 128, 128 ];
-  gridLineEmphasisColour = [ 224, 224, 224 ];
+  gridLineColour = '#606060';
+  gridLineEmphasisColour = '#4597b2';
   gridLineWeight = 1;
-  mazeColour = [ 224, 224, 224 ];
-  mazeStrokeColour = [ 32, 32, 32 ];
+  mazeColour = '#e0e0e0';
+  mazeStrokeColour = '#212121';
   mazeStrokeWeight = 2;
   markerSize = 6;
   suggestedPathsColour = consts.COLOURS[4];
   suggestedPathsWeight = 2;
-  toShapeAddColour = [ 192, 255, 192 ];
-  toShapeAddStrokeColour = [ 96, 128, 96 ];
-  toShapeRemoveColour = [ 255, 192, 192 ];
-  toShapeRemoveStrokeColour = [ 128, 96, 96 ];
-  testingPathsColour = [ 0, 182, 173 ];
+  toShapeAddColour = '#c0ffc0';
+  toShapeAddStrokeColour = '#608060';
+  toShapeRemoveColour = '#ffc0c0';
+  toShapeRemoveStrokeColour = '#806060';
   testingPathsWeight = 2;
 
   cropX1 = 0;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
 import P5Wrapper from 'react-p5-wrapper';
 import classnames from 'classnames';
 
@@ -238,8 +237,8 @@ class App extends React.Component {
         <Modal
           open={errorModalOpen}
           header='Error!'
-          content={{ content: errorModalMessage, style: { fontSize: '16px' } }}
-          actions={[{ key: 'confirm', content: 'Got it', color: 'blue', onClick: this.hideErrorModal }]}
+          body={<p>{errorModalMessage}</p>}
+          footer={<button onClick={this.hideErrorModal}>Got it!</button>}
         />
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>
@@ -251,6 +250,26 @@ class App extends React.Component {
           />
         </div>
       </>
+    );
+  }
+}
+
+class Modal extends React.Component {
+
+  render() {
+
+    if (!this.props.open) {
+      return null;
+    }
+
+    return (
+      <div className={stylesheet.modal}>
+        <div className={stylesheet.modal__content}>
+          <div className={stylesheet.modal__content__header}>{this.props.header}</div>
+          <div className={stylesheet.modal__content__body}>{this.props.body}</div>
+          <div className={stylesheet.modal__content__footer}>{this.props.footer}</div>
+        </div>
+      </div>
     );
   }
 }

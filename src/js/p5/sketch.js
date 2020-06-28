@@ -178,7 +178,7 @@ const sketch = p => {
     camera.translateWithKeyboard();
     camera.zoomWithKeyboard();
 
-    p.background(64);
+    p.background('#333333');
     p.push();
     camera.focus();
     maze.draw();

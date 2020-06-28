@@ -1,14 +1,13 @@
 @import 'imports.scss';
 
 .wrapper {
-  width: 200px;
+  width: 14em;
   height: 100%;
-  padding: 16px;
+  padding: 1.25em;
   padding-bottom: 0;  // padding-bottom hack used.
   
   &__item {
     @extend %no-select;
-    cursor: pointer;
     display: flex;
     align-items: center;
     width: 100%;
@@ -17,7 +16,7 @@
     border: none;
     padding: 0;
     border-bottom: 2px solid currentColor;
-    padding-bottom: 8px;
+    padding-bottom: 0.5em;
     color: #66d3ff;
 
     &.inactive:not(:hover) {
@@ -32,17 +31,15 @@
     }
 
     &:not(:last-child) {
-      margin-bottom: 16px;
+      margin-bottom: 1.25em;
     }
 
     &__icon {
-      font-size: 24px;
-      margin-right: 16px;
+      font-size: 1.5em;
+      margin-right: 1em;
     }
 
     &__text {
-      font-size: 16px;
-      font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
       white-space: nowrap;
     }
   }
@@ -51,6 +48,6 @@
   &::after {
     display: block;
     content: '';
-    height: 16px;
+    height: 1.25em;
   }
 }

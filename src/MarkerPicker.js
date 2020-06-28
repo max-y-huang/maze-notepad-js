@@ -42,16 +42,14 @@ class Item extends React.Component {
 
   constructor(props) {
     super(props);
-    let c = consts.COLOURS[props.colourCode];
     this.state = {
-      colourString: `rgb(${c[0]}, ${c[1]}, ${c[2]})`
+      colourString: consts.COLOURS[props.colourCode]
     }
   }
 
   updateColourString = (props = this.props) => {
-    let c = consts.COLOURS[props.colourCode];
     this.setState({
-      colourString: `rgb(${c[0]}, ${c[1]}, ${c[2]})`
+      colourString: consts.COLOURS[props.colourCode]
     });
   }
 
