@@ -66,7 +66,7 @@ class ToolBar extends React.Component {
         <Item text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
         <Item text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
         <div className='divider vertical' />
-        <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleHelpBar} />
+        <Item text='Help' icon='info' active={this.props.helpBarOpen} onClick={this.toggleHelpBar} />
       </>
     );
   }
@@ -83,7 +83,7 @@ class ToolBar extends React.Component {
         <div className='divider vertical' />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
         <div className='divider vertical' />
-        <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleHelpBar} />
+        <Item text='Help' icon='info' active={this.props.helpBarOpen} onClick={this.toggleHelpBar} />
       </>
     );
   }
