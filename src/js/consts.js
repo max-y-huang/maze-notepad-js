@@ -11,18 +11,18 @@ class Consts {
   SOLUTIONS = 1;
 
   COLOURS = [
-    [ 219, 23, 41 ],  // Red
-    [ 243, 107, 38 ],  // Orange
+    '#db1729',  // Red
+    '#f36b26',  // Orange
     //[ 252, 184, 46 ],  // Old Yellow
-    [ 218, 165, 32 ], // New Yellow
+    '#daa520', // New Yellow
     //[ 183, 201, 54 ],  // Olive
-    [ 42, 185, 80 ],  // Green
+    '#2ab950',  // Green
     //[ 0, 182, 173 ],  // Teal
-    [ 19, 138, 205 ],  // Blue
-    [ 96, 66, 197 ],  // Violet
+    '#138acd',  // Blue
+    '#6042c5',  // Violet
     //[ 161, 62, 196 ],  // Purple
     //[ 223, 55, 148 ],  // Old Pink
-    [ 223, 55, 202 ] // New Pink
+    '#df37ca' // New Pink
     //[ 165, 100, 66 ]  // Brown
   ];
   COLOUR_NAMES = [
