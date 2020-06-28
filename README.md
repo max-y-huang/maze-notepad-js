@@ -8,15 +8,15 @@ Hosted at: [https://max-y-huang.github.io/maze-notepad-js/](https://max-y-huang.
 
 * Automatic maze generation
 * Custom maze shapes
-  * Comprised of square cells
-  * Maximum width and height of 100x100
 * User-defined paths
+* Progress saving
+* Export maze as png
+* Maze-testing platform
 
 ## Frameworks and Libraries
 
 * [React.js](https://reactjs.org/)
 * [p5.js](https://p5js.org/)
-* [Semantic UI React](https://react.semantic-ui.com/)
 
 ## Development
 
