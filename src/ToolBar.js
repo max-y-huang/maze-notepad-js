@@ -1,5 +1,4 @@
 import React from 'react';
-import { Divider } from 'semantic-ui-react';
 import classnames from 'classnames';
 
 import stylesheet from './css/ToolBar.module.css';
@@ -55,18 +54,18 @@ class ToolBar extends React.Component {
     }
     return (
       <>
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Load' icon='folder-open' active={false} onClick={() => this.openFileRef.current.click()} />  {/* Run file input from openFileRef. */}
         <Item text='Save' icon='save'        active={false} onClick={this.saveMaze} />
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Edit Shape'     icon='splotch'        active={this.props.canvasCreateTool === consts.SHAPE}   onClick={() => this.setCanvasCreateTool(consts.SHAPE)} />
         <Item text='Edit Paths'     icon='map'            active={this.props.canvasCreateTool === consts.PATHS}   onClick={() => this.setCanvasCreateTool(consts.PATHS)} />
         <Item text='Edit Locations' icon='map-marker-alt' active={this.props.canvasCreateTool === consts.MARKERS} onClick={() => this.setCanvasCreateTool(consts.MARKERS)} />
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Ruler'       icon='ruler'           active={this.props.canvasUseRuler} onClick={this.toggleUseRuler} />
         <Item text='Reset Focus' icon='search-location' active={false}                     onClick={this.resetCamera} />
         <Item text='New Pattern' icon='puzzle-piece'    active={false}                     onClick={this.resetMazePattern} />
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleInstructions} />
       </>
     );
@@ -78,12 +77,12 @@ class ToolBar extends React.Component {
     }
     return (
       <>
-        <Divider />
+      <div className='divider vertical' />
         <Item text='Save'         icon='save'       active={false} onClick={this.saveMaze} />
         <Item text='Export Image' icon='file-image' active={false} onClick={this.exportMaze} />
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
-        <Divider />
+        <div className='divider vertical' />
         <Item text='Help' icon='info' active={this.props.instructionsOpen} onClick={this.toggleInstructions} />
       </>
     );

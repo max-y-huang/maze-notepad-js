@@ -1,22 +1,20 @@
 .wrapper {
   width: 100%;
   height: 100%;
-  padding: 16px;
+  padding: 1.25em;
   padding-right: 0;
   white-space: nowrap;
   overflow-x: scroll;
 }
 .wrapper__title {
   color: #e0e0e0;
-  font-size: 16px;
-  padding-bottom: 26px;
+  padding-bottom: 1.6em;
 }
 .wrapper__item, .wrapper__nullItem {
   position: relative;
-  cursor: pointer;
   box-sizing: border-box;
-  width: 48px;
-  height: 48px;
+  width: 3em;
+  height: 3em;
   border-radius: 25%;
   border-width: 4px;
   border-style: solid;
@@ -26,7 +24,7 @@
   background: none !important;
 }
 .wrapper__item:not(:last-child), .wrapper__nullItem:not(:last-child) {
-  margin-right: 16px;
+  margin-right: 1.25em;
 }
 .wrapper__nullItem {
   background: none;
@@ -38,7 +36,7 @@
   top: calc(50% - 2px);
   left: 0;
   content: "";
-  width: 40px;
+  width: calc(3em - 8px);
   height: 4px;
   background-color: #808080;
   transform: rotate(-45deg);
@@ -52,7 +50,7 @@
 .wrapper::after {
   display: inline-block;
   content: "";
-  width: 16px;
+  width: 1.25em;
 }
 
 /*# sourceMappingURL=MarkerPicker.module.css.map */

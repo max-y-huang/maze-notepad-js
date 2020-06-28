@@ -5,7 +5,7 @@ class Ruler {
 
   width = 32;
   height = 32;
-  colour = [ 64, 64, 64 ];
+  colour = '#333333';
   markerWeight = 2;
   markerColour = [ 224 ];
   markerLength = 14;
