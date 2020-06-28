@@ -28,7 +28,7 @@ class App extends React.Component {
       canvasPenColour: 0,
       errorModalOpen: false,
       errorModalMessage: '',
-      instructionsOpen: true,
+      helpBarOpen: true,
       footerOpen: true,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
@@ -63,8 +63,8 @@ class App extends React.Component {
   showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
   hideErrorModal = ()    => this.setState({ errorModalOpen: false });
 
-  hideInstructions   = () => this.setState({ instructionsOpen: false });
-  toggleInstructions = () => this.setState((state) => ({ instructionsOpen: !state.instructionsOpen }));
+  hideHelpBar   = () => this.setState({ helpBarOpen: false });
+  toggleHelpBar = () => this.setState((state) => ({ helpBarOpen: !state.helpBarOpen }));
 
   hideFooter = () => this.setState({ footerOpen: false });
 
@@ -80,7 +80,7 @@ class App extends React.Component {
       this.onResize();
     }
     // Resize on footer open/close or instructions open/close.
-    if (prevState.footerOpen !== this.state.footerOpen || prevState.instructionsOpen !== this.state.instructionsOpen) {
+    if (prevState.footerOpen !== this.state.footerOpen || prevState.helpBarOpen !== this.state.helpBarOpen) {
       this.onResize();
     }
   }
@@ -156,13 +156,13 @@ class App extends React.Component {
   }
 
   renderHelpBar = () => {
-    if (!this.state.instructionsOpen) {
+    if (!this.state.helpBarOpen) {
       return null;
     }
 
     return (
       <div className={stylesheet.wrapper__helpBar}>
-        <HelpBar hideFunc={this.hideInstructions} />
+        <HelpBar hideFunc={this.hideHelpBar} />
       </div>
     );
   }
@@ -171,7 +171,7 @@ class App extends React.Component {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
       openMazeFile, exportMazeData,
-      errorModalOpen, errorModalMessage, instructionsOpen, footerOpen,
+      errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
     } = this.state;
 
@@ -180,7 +180,7 @@ class App extends React.Component {
         <div className={stylesheet.wrapper}>
           <div className={stylesheet.wrapper__toolBar}>
             <ToolBar
-              instructionsOpen={instructionsOpen}
+              helpBarOpen={helpBarOpen}
               canvasUseRuler={canvasUseRuler}
               canvasMode={canvasMode}
               canvasCreateTool={canvasCreateTool}
@@ -193,7 +193,7 @@ class App extends React.Component {
               requestResetMazePatternFunc={this.requestResetMazePattern}
               requestResetCameraFunc={this.requestResetCamera}
               toggleUseRulerFunc={this.toggleUseRuler}
-              toggleInstructionsFunc={this.toggleInstructions}
+              toggleHelpBarFunc={this.toggleHelpBar}
             />
           </div>
           {this.renderSelectionBar()}
