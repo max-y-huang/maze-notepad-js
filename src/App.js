@@ -7,6 +7,7 @@ import stylesheet from './css/App.module.css';
 import consts from './js/consts';
 import $p5 from './js/p5/global';
 import Accordion from './Accordion';
+import Modal from './Modal';
 import ToolBar from './ToolBar';
 import MarkerPicker from './MarkerPicker';
 import sketch from './js/p5/sketch';
@@ -255,26 +256,6 @@ class App extends React.Component {
           />
         </div>
       </>
-    );
-  }
-}
-
-class Modal extends React.Component {
-
-  render() {
-
-    if (!this.props.open) {
-      return null;
-    }
-
-    return (
-      <div className={stylesheet.modal}>
-        <div className={stylesheet.modal__content}>
-          <div className={stylesheet.modal__content__header}>{this.props.header}</div>
-          <div className={stylesheet.modal__content__body}>{this.props.body}</div>
-          <div className={stylesheet.modal__content__footer}>{this.props.footer}</div>
-        </div>
-      </div>
     );
   }
 }
