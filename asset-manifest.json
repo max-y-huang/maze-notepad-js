@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/maze-notepad-js/static/css/main.f29f194b.chunk.css",
-    "main.js": "/maze-notepad-js/static/js/main.112130cd.chunk.js",
-    "main.js.map": "/maze-notepad-js/static/js/main.112130cd.chunk.js.map",
+    "main.js": "/maze-notepad-js/static/js/main.82c4b0c9.chunk.js",
+    "main.js.map": "/maze-notepad-js/static/js/main.82c4b0c9.chunk.js.map",
     "runtime-main.js": "/maze-notepad-js/static/js/runtime-main.f0280433.js",
     "runtime-main.js.map": "/maze-notepad-js/static/js/runtime-main.f0280433.js.map",
-    "static/js/2.e53c41d5.chunk.js": "/maze-notepad-js/static/js/2.e53c41d5.chunk.js",
-    "static/js/2.e53c41d5.chunk.js.map": "/maze-notepad-js/static/js/2.e53c41d5.chunk.js.map",
+    "static/js/2.4905d662.chunk.js": "/maze-notepad-js/static/js/2.4905d662.chunk.js",
+    "static/js/2.4905d662.chunk.js.map": "/maze-notepad-js/static/js/2.4905d662.chunk.js.map",
     "index.html": "/maze-notepad-js/index.html",
-    "precache-manifest.0aa291cfff8edc89246002a7cea93bba.js": "/maze-notepad-js/precache-manifest.0aa291cfff8edc89246002a7cea93bba.js",
+    "precache-manifest.fdcfbbe5e7b2a8335953556abbe96a58.js": "/maze-notepad-js/precache-manifest.fdcfbbe5e7b2a8335953556abbe96a58.js",
     "service-worker.js": "/maze-notepad-js/service-worker.js",
     "static/css/main.f29f194b.chunk.css.map": "/maze-notepad-js/static/css/main.f29f194b.chunk.css.map",
-    "static/js/2.e53c41d5.chunk.js.LICENSE.txt": "/maze-notepad-js/static/js/2.e53c41d5.chunk.js.LICENSE.txt"
+    "static/js/2.4905d662.chunk.js.LICENSE.txt": "/maze-notepad-js/static/js/2.4905d662.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f0280433.js",
-    "static/js/2.e53c41d5.chunk.js",
+    "static/js/2.4905d662.chunk.js",
     "static/css/main.f29f194b.chunk.css",
-    "static/js/main.112130cd.chunk.js"
+    "static/js/main.82c4b0c9.chunk.js"
   ]
 }
