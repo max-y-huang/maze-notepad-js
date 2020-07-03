@@ -15,6 +15,7 @@ const sketch = p => {
   let requestResetMazePatternFlag = 0;
   let requestResetCameraFlag = 0;
   let requestKeyLoggerClearFlag = 0;
+  let requestOpenMazeHttpFlag = 0;
 
   let camera;
   let cursor;
@@ -27,6 +28,7 @@ const sketch = p => {
     resetMazePattern(props.requestResetMazePatternFlag);
     resetCamera(props.requestResetCameraFlag);
     keyLoggerClear(props.requestKeyLoggerClearFlag);
+    openMazeHttp(props.requestOpenMazeHttpFlag, props.httpMazeData);
     changeUseRuler(props.useRuler);
     changeMode(props.mode);
     changeCreateTool(props.createTool);
@@ -83,6 +85,18 @@ const sketch = p => {
     requestKeyLoggerClearFlag = flag;
 
     keyLogger.clear();
+  }
+
+  const openMazeHttp = (flag, data) => {
+    // Check for run condition.
+    if (flag === requestOpenMazeHttpFlag) {
+      return;
+    }
+    // Wait until the maze is created.
+    if (maze) {
+      requestOpenMazeHttpFlag = flag;
+      maze.loadData(data);
+    }
   }
 
   const changeUseRuler = (useRuler) => {

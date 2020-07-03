@@ -21,18 +21,20 @@ class HelpBar extends React.Component {
           summary='Moving the Canvas'
           details={<>
             <table>
-              <tr>
-                <th>Action</th>
-                <th>Controls</th>
-              </tr>
-              <tr>
-                <td>Pan</td>
-                <td>Middle click or WASD.</td>
-              </tr>
-              <tr>
-                <td>Zoom in/out</td>
-                <td>Scroll or E/Q.</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>Action</th>
+                  <th>Controls</th>
+                </tr>
+                <tr>
+                  <td>Pan</td>
+                  <td>Middle click or WASD.</td>
+                </tr>
+                <tr>
+                  <td>Zoom in/out</td>
+                  <td>Scroll or E/Q.</td>
+                </tr>
+              </tbody>
             </table>
           </>}
         />
@@ -60,22 +62,24 @@ class HelpBar extends React.Component {
           details={<>
             <p>Select which cells on the canvas are a part of the maze. The maze must be contiguous and be larger than 1x1.</p>
             <table>
-              <tr>
-                <th>Action</th>
-                <th>Controls</th>
-              </tr>
-              <tr>
-                <td>Draw shape</td>
-                <td>Left click</td>
-              </tr>
-              <tr>
-                <td>Erase shape</td>
-                <td>Right click or CTRL + left click</td>
-              </tr>
-              <tr>
-                <td>Draw/erase an area</td>
-                <td>SHIFT + draw/erase</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>Action</th>
+                  <th>Controls</th>
+                </tr>
+                <tr>
+                  <td>Draw shape</td>
+                  <td>Left click</td>
+                </tr>
+                <tr>
+                  <td>Erase shape</td>
+                  <td>Right click or CTRL + left click</td>
+                </tr>
+                <tr>
+                  <td>Draw/erase an area</td>
+                  <td>SHIFT + draw/erase</td>
+                </tr>
+              </tbody>
             </table>
           </>}
         />
@@ -84,22 +88,24 @@ class HelpBar extends React.Component {
           details={<>
             <p>Draw custom maze paths. The maze-generation algorithm will prioritize these paths, but it will not form cycles (even if they are drawn).</p>
             <table>
-              <tr>
-                <th>Action</th>
-                <th>Controls</th>
-              </tr>
-              <tr>
-                <td>Draw paths</td>
-                <td>Left click + drag</td>
-              </tr>
-              <tr>
-                <td>Erase paths</td>
-                <td>Right click or CTRL + left click</td>
-              </tr>
-              <tr>
-                <td>Erase an area</td>
-                <td>SHIFT + erase</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>Action</th>
+                  <th>Controls</th>
+                </tr>
+                <tr>
+                  <td>Draw paths</td>
+                  <td>Left click + drag</td>
+                </tr>
+                <tr>
+                  <td>Erase paths</td>
+                  <td>Right click or CTRL + left click</td>
+                </tr>
+                <tr>
+                  <td>Erase an area</td>
+                  <td>SHIFT + erase</td>
+                </tr>
+              </tbody>
             </table>
           </>}
         />
@@ -108,22 +114,24 @@ class HelpBar extends React.Component {
           details={<>
             <p>Locations are mandatory elements that represent sources/destinatons on the maze. Solutions in View Mode are based on location placements.</p>
             <table>
-              <tr>
-                <th>Action</th>
-                <th>Controls</th>
-              </tr>
-              <tr>
-                <td>Select location type</td>
-                <td>Colour picker</td>
-              </tr>
-              <tr>
-                <td>Add location</td>
-                <td>Left click</td>
-              </tr>
-              <tr>
-                <td>Remove location</td>
-                <td>Right click or CTRL + left click</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>Action</th>
+                  <th>Controls</th>
+                </tr>
+                <tr>
+                  <td>Select location type</td>
+                  <td>Colour picker</td>
+                </tr>
+                <tr>
+                  <td>Add location</td>
+                  <td>Left click</td>
+                </tr>
+                <tr>
+                  <td>Remove location</td>
+                  <td>Right click or CTRL + left click</td>
+                </tr>
+              </tbody>
             </table>
           </>}
         />
@@ -157,30 +165,32 @@ class HelpBar extends React.Component {
           details={<>
             <p>Preview, test, and export the maze in this mode.</p>
             <table>
-              <tr>
-                <th>Action</th>
-                <th>Controls</th>
-              </tr>
-              <tr>
-                <td>Change pen colour</td>
-                <td>Colour picker on the left</td>
-              </tr>
-              <tr>
-                <td>Draw paths</td>
-                <td>Left click + drag</td>
-              </tr>
-              <tr>
-                <td>Erase paths</td>
-                <td>Right click or CTRL + left click</td>
-              </tr>
-              <tr>
-                <td>Erase an area</td>
-                <td>SHIFT + erase</td>
-              </tr>
-              <tr>
-                <td>View solution</td>
-                <td>Colour picker on the right</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>Action</th>
+                  <th>Controls</th>
+                </tr>
+                <tr>
+                  <td>Change pen colour</td>
+                  <td>Colour picker on the left</td>
+                </tr>
+                <tr>
+                  <td>Draw paths</td>
+                  <td>Left click + drag</td>
+                </tr>
+                <tr>
+                  <td>Erase paths</td>
+                  <td>Right click or CTRL + left click</td>
+                </tr>
+                <tr>
+                  <td>Erase an area</td>
+                  <td>SHIFT + erase</td>
+                </tr>
+                <tr>
+                  <td>View solution</td>
+                  <td>Colour picker on the right</td>
+                </tr>
+              </tbody>
             </table>
           </>}
         />

@@ -48,6 +48,11 @@ class Maze {
     return { x: index % this.w, y: Math.floor(index / this.w) };
   }
 
+  loadData(data) {
+    this.graph.load(data);
+    this.update(true);
+  }
+
   loadFile(file) {
     this.graph.load(file);
     this.update(true);

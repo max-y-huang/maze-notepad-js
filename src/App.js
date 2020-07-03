@@ -1,6 +1,8 @@
 import React from 'react';
 import P5Wrapper from 'react-p5-wrapper';
 import classnames from 'classnames';
+import queryString from 'query-string';
+import axios from 'axios';
 
 import stylesheet from './css/App.module.css';
 
@@ -23,6 +25,7 @@ class App extends React.Component {
       canvasCreateTool: consts.SHAPE,
       openMazeFile: null,
       exportMazeData: { mazeImg: null, markersImg: null },
+      httpMazeData: null,
       canvasMarkerColour: 0,
       canvasSolutionColour: -1,
       canvasPenColour: 0,
@@ -35,13 +38,15 @@ class App extends React.Component {
       requestExportMazeFlag: 0,
       requestResetMazePatternFlag: 0,
       requestResetCameraFlag: 0,
-      requestKeyLoggerClearFlag: 0
+      requestKeyLoggerClearFlag: 0,
+      requestOpenMazeHttpFlag: 0
     }
     this.canvasWrapperRef = React.createRef();
   }
 
   setExportMazeData = (data) => this.setState({ exportMazeData: data });
   setOpenMazeFile   = (file) => this.setState({ openMazeFile: file });
+  setHttpMazeData   = (data) => this.setState({ httpMazeData: data });
 
   requestOpenMaze         = () => this.setState({ requestOpenMazeFlag: Date.now() });
   requestSaveMaze         = () => this.setState({ requestSaveMazeFlag: Date.now() });
@@ -49,6 +54,7 @@ class App extends React.Component {
   requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
   requestResetCamera      = () => this.setState({ requestResetCameraFlag: Date.now() });
   requestKeyLoggerClear   = () => this.setState({ requestKeyLoggerClearFlag: Date.now() });
+  requestOpenMazeHttp     = () => this.setState({ requestOpenMazeHttpFlag: Date.now() });
 
   setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
 
@@ -74,6 +80,16 @@ class App extends React.Component {
     $p5.height = offsetHeight;
   }
 
+  loadHttpMaze = () => {
+    let getQuery = queryString.parse(window.location.search);
+    if (getQuery['maze']) {
+      axios.get(`https://maze-notepad-api.herokuapp.com/uploads/${getQuery['maze']}`).then(res => {
+        this.setHttpMazeData(res.data);
+        this.requestOpenMazeHttp();
+      });
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     // Resize on mode change or tool change.
     if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
@@ -96,6 +112,8 @@ class App extends React.Component {
     window.addEventListener('blur', this.requestKeyLoggerClear);
     this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setMouseOverCanvas(true));
     this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
+
+    this.loadHttpMaze();
   }
 
   renderSelectionBar = () => {
@@ -170,9 +188,9 @@ class App extends React.Component {
   render() {
     let {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
-      openMazeFile, exportMazeData,
+      openMazeFile, exportMazeData, httpMazeData,
       errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
-      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag
+      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag, requestOpenMazeHttpFlag
     } = this.state;
 
     return (
@@ -199,6 +217,7 @@ class App extends React.Component {
           {this.renderSelectionBar()}
           <div className={stylesheet.wrapper__canvas} ref={this.canvasWrapperRef} onContextMenu={e => e.preventDefault()}> {/* Disable right-click in sketch */}
             <P5Wrapper
+              httpMazeData={httpMazeData}
               sketch={sketch}
               useRuler={canvasUseRuler}
               mode={canvasMode}
@@ -212,6 +231,7 @@ class App extends React.Component {
               requestResetMazePatternFlag={requestResetMazePatternFlag}
               requestResetCameraFlag={requestResetCameraFlag}
               requestKeyLoggerClearFlag={requestKeyLoggerClearFlag}
+              requestOpenMazeHttpFlag={requestOpenMazeHttpFlag}
             />
           </div>
           {this.renderHelpBar()}
