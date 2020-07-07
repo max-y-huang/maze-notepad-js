@@ -81,9 +81,10 @@ class App extends React.Component {
   }
 
   loadHttpMaze = () => {
+    let mazeEndpoint = 'https://maze-notepad.s3.us-east-2.amazonaws.com/mazes';
     let getQuery = queryString.parse(window.location.search);
     if (getQuery['maze']) {
-      axios.get(`https://maze-notepad-api.herokuapp.com/uploads/${getQuery['maze']}`).then(res => {
+      axios.get(`${mazeEndpoint}/${getQuery['maze']}`).then(res => {
         this.setHttpMazeData(res.data);
         this.requestOpenMazeHttp();
       });
