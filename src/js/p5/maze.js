@@ -493,7 +493,7 @@ class Maze {
 
   draw() {
     if ($.mode === consts.CREATE) {
-      this.drawGrid();
+      this.drawGridBase();
     }
     this.drawMaze();
     this.drawMarkers();
@@ -504,9 +504,12 @@ class Maze {
     if ($.mode === consts.CREATE) {
       this.drawSuggestedPaths();
     }
+    if ($.mode === consts.CREATE) {
+      this.drawGridAccents();
+    }
   }
 
-  drawGrid() {
+  drawGridBase() {
     let regularIncrement = (this.camera.pos.z >= 1 || $.useRuler) ? 1 : $.rulerIncrement;
     // Draw regular grid lines.
     this.p.stroke(this.gridLineColour);
@@ -518,10 +521,17 @@ class Maze {
     for (let i = 0; i <= this.w; i += regularIncrement) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
+  }
+
+  drawGridAccents() {
     // Check run condition.
     if (!$.useRuler) {
       return;
     }
+    // Draw regular grid lines.
+    this.p.stroke(this.gridLineColour);
+    this.p.strokeCap(this.p.PROJECT);
+    this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
     // Draw emphasized grid lines.
     this.p.stroke(this.gridLineEmphasisColour);
     for (let i = $.rulerIncrement; i <= this.h - 1; i += $.rulerIncrement) {  // First and last lines should not be emphasized.
