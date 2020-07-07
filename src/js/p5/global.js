@@ -19,7 +19,7 @@ class Global {
   penColour = 0;
 
   tileSize = 14;
-  rulerIncrement = 5;
+  rulerIncrement = 4;
 }
 
 let $ = new Global();

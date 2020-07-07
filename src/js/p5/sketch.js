@@ -171,8 +171,8 @@ const sketch = p => {
     p.createCanvas($.width, $.height);
     p.frameRate(60);
     p.noSmooth();
-    camera = new Camera(p, 96, 96, 2, 2, 0.5, 4);
-    maze = new Maze(p, camera, 100, 100);
+    camera = new Camera(p, 96, 96, 2, 2, 1, 4);
+    maze = new Maze(p, camera, 64, 64);
     cursor = new Cursor(p, camera, maze);
     ruler = new Ruler(p, camera, maze);
     maze.update(true);

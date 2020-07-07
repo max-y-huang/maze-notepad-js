@@ -510,15 +510,14 @@ class Maze {
   }
 
   drawGridBase() {
-    let regularIncrement = (this.camera.pos.z >= 1 || $.useRuler) ? 1 : $.rulerIncrement;
-    // Draw regular grid lines.
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.PROJECT);
     this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
-    for (let i = 0; i <= this.h; i += regularIncrement) {
+
+    for (let i = 0; i <= this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = 0; i <= this.w; i += regularIncrement) {
+    for (let i = 0; i <= this.w; i++) {
       this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
     }
   }
@@ -528,17 +527,20 @@ class Maze {
     if (!$.useRuler) {
       return;
     }
-    // Draw regular grid lines.
+
+    let startX = -this.camera.pos.x / this.camera.pos.z;
+    let startY = -this.camera.pos.y / this.camera.pos.z;
+
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.PROJECT);
     this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
-    // Draw emphasized grid lines.
+
     this.p.stroke(this.gridLineEmphasisColour);
-    for (let i = $.rulerIncrement; i <= this.h - 1; i += $.rulerIncrement) {  // First and last lines should not be emphasized.
-      this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
+    for (let i = 0; i <= this.h; i += $.rulerIncrement) {  // First and last lines should not be emphasized.
+      this.p.line(startX, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
     }
-    for (let i = $.rulerIncrement; i <= this.w - 1; i += $.rulerIncrement) {
-      this.p.line(i * $.tileSize, 0, i * $.tileSize, $.tileSize * this.h);
+    for (let i = 0; i <= this.w; i += $.rulerIncrement) {
+      this.p.line(i * $.tileSize, startY, i * $.tileSize, $.tileSize * this.h);
     }
   }
 
