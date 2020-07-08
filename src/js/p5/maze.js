@@ -18,7 +18,7 @@ class Maze {
   toShapeAddStrokeColour = '#608060';
   toShapeRemoveColour = '#ffc0c0';
   toShapeRemoveStrokeColour = '#806060';
-  testingPathsWeight = 2;
+  testingPathsWeight = 4;
 
   cropX1 = 0;
   cropY1 = 0;
@@ -183,11 +183,15 @@ class Maze {
       // Draw solution.
       img.stroke(consts.COLOURS[c]);
       img.strokeWeight(this.suggestedPathsWeight);
-      img.strokeCap(this.p.PROJECT);
+      img.strokeCap(this.p.SQUARE);
       this.solutions[c].forEach(e => {
         let a = this.indexToCoord(e.a);
         let b = this.indexToCoord(e.b);
-        img.line((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
+        // Dotted line isn't evenly spaced because of: PROJECT scroke cap, connecting dotted lines.
+        $.dottedLine(img, (a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize, (b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize, $.tileSize / 3);
+        // Points fix meeting points between dotted lines.
+        img.point((a.x + 0.5) * $.tileSize, (a.y + 0.5) * $.tileSize);
+        img.point((b.x + 0.5) * $.tileSize, (b.y + 0.5) * $.tileSize);
       });
 
       img.pop();
@@ -496,14 +500,14 @@ class Maze {
       this.drawGridBase();
     }
     this.drawMaze();
-    this.drawMarkers();
     if ($.mode === consts.SOLVE) {
-      this.drawSolutions();
       this.drawTestingPaths();
+      this.drawSolutions();
     }
     if ($.mode === consts.CREATE) {
       this.drawSuggestedPaths();
     }
+    this.drawMarkers();
     if ($.mode === consts.CREATE) {
       this.drawGridAccents();
     }
@@ -512,7 +516,7 @@ class Maze {
   drawGridBase() {
     this.p.stroke(this.gridLineColour);
     this.p.strokeCap(this.p.PROJECT);
-    this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
+    this.p.strokeWeight(this.gridLineWeight);
 
     for (let i = 0; i <= this.h; i++) {
       this.p.line(0, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
@@ -530,17 +534,44 @@ class Maze {
 
     let startX = -this.camera.pos.x / this.camera.pos.z;
     let startY = -this.camera.pos.y / this.camera.pos.z;
+    let useDotted = this.camera.pos.z >= 2;
 
     this.p.stroke(this.gridLineColour);
-    this.p.strokeCap(this.p.PROJECT);
-    this.p.strokeWeight(Math.max(this.gridLineWeight, 1 / this.camera.pos.z));  // Should not go below 1.
+    this.p.strokeCap(this.p.SQUARE);
+    this.p.strokeWeight(this.gridLineWeight);
 
     this.p.stroke(this.gridLineEmphasisColour);
-    for (let i = 0; i <= this.h; i += $.rulerIncrement) {  // First and last lines should not be emphasized.
-      this.p.line(startX, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
+    for (let i = 0; i <= this.h; i += $.rulerIncrement) {
+      if (useDotted) {
+        this.p.line(startX, i * $.tileSize, 0, i * $.tileSize);
+        $.dottedLine(
+          this.p,
+          -this.gridLineWeight,  // Offset to ensure cross for intersections.
+          i * $.tileSize,
+          $.tileSize * this.w,
+          i * $.tileSize,
+          this.gridLineWeight * 2,
+        );
+      }
+      else {
+        this.p.line(startX, i * $.tileSize, $.tileSize * this.w, i * $.tileSize);
+      }
     }
     for (let i = 0; i <= this.w; i += $.rulerIncrement) {
-      this.p.line(i * $.tileSize, startY, i * $.tileSize, $.tileSize * this.h);
+      if (useDotted) {
+        this.p.line(i * $.tileSize, startY, i * $.tileSize, 0);
+        $.dottedLine(
+          this.p, 
+          i * $.tileSize, 
+          -this.gridLineWeight,  // Offset to ensure cross for intersections.
+          i * $.tileSize, 
+          $.tileSize * this.h, 
+          this.gridLineWeight * 2,
+        );
+      }
+      else {
+        this.p.line(i * $.tileSize, startY, i * $.tileSize, $.tileSize * this.h);
+      }
     }
   }
 
