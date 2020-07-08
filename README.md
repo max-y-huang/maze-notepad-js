@@ -15,8 +15,8 @@ Hosted at: [https://max-y-huang.github.io/maze-notepad-js/](https://max-y-huang.
 
 ## Frameworks and Libraries
 
-* [React.js](https://reactjs.org/)
-* [p5.js](https://p5js.org/)
+* [React.js](https://reactjs.org/) - Toolbar, colour picker, help panel, etc...
+* [p5.js](https://p5js.org/) - Maze canvas
 
 ## Development
 
