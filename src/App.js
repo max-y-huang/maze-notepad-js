@@ -13,7 +13,7 @@ import ToolBar from './ToolBar';
 import MarkerPicker from './MarkerPicker';
 import HelpBar from './HelpBar';
 import sketch from './js/p5/sketch';
-import exportCanvas from './js/p5/exportCanvas';
+import helperCanvas from './js/p5/helperCanvas';
 
 class App extends React.Component {
 
@@ -36,6 +36,7 @@ class App extends React.Component {
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,
       requestExportMazeFlag: 0,
+      requestUploadMazeFlag: 0,
       requestResetMazePatternFlag: 0,
       requestResetCameraFlag: 0,
       requestKeyLoggerClearFlag: 0,
@@ -51,6 +52,7 @@ class App extends React.Component {
   requestOpenMaze         = () => this.setState({ requestOpenMazeFlag: Date.now() });
   requestSaveMaze         = () => this.setState({ requestSaveMazeFlag: Date.now() });
   requestExportMaze       = () => this.setState({ requestExportMazeFlag: Date.now() });
+  requestUploadMaze       = () => this.setState({ requestUploadMazeFlag: Date.now() });
   requestResetMazePattern = () => this.setState({ requestResetMazePatternFlag: Date.now() });
   requestResetCamera      = () => this.setState({ requestResetCameraFlag: Date.now() });
   requestKeyLoggerClear   = () => this.setState({ requestKeyLoggerClearFlag: Date.now() });
@@ -191,7 +193,7 @@ class App extends React.Component {
       canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
       openMazeFile, exportMazeData, httpMazeData,
       errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
-      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag, requestOpenMazeHttpFlag
+      requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestUploadMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag, requestOpenMazeHttpFlag
     } = this.state;
 
     return (
@@ -209,6 +211,7 @@ class App extends React.Component {
               requestOpenMazeFunc={this.requestOpenMaze}
               requestSaveMazeFunc={this.requestSaveMaze}
               requestExportMazeFunc={this.requestExportMaze}
+              requestUploadMazeFunc={this.requestUploadMaze}
               requestResetMazePatternFunc={this.requestResetMazePattern}
               requestResetCameraFunc={this.requestResetCamera}
               toggleUseRulerFunc={this.toggleUseRuler}
@@ -258,9 +261,9 @@ class App extends React.Component {
         {/* Used to export maze image. Should not be displayed. */}
         <div style={{display: 'none'}}>
           <P5Wrapper
-            className={stylesheet.exportCanvas}
-            sketch={exportCanvas}
+            sketch={helperCanvas}
             requestExportMazeFlag={requestExportMazeFlag}
+            requestUploadMazeFlag={requestUploadMazeFlag}
             data={exportMazeData}
           />
         </div>

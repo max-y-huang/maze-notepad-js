@@ -84,30 +84,3 @@
     }
   }
 }
-
-.instructions {
-  position: absolute;
-  top: 1.25em;
-  right: 1.25em;
-
-  &__closeButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    color: #e0e0e0;
-    padding: 1.25em;
-  }
-
-  &__messageBox {
-    padding: 0.25em 1.25em;  // More top and bottom padding from accordion.
-    background-color: #212121;
-    color: #e0e0e0;
-    border: 1px solid #000000;
-    border-radius: 6px;
-
-    em {
-      font-style: normal;
-      color: #66d3ff;
-    }
-  }
-}
