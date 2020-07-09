@@ -1,7 +1,9 @@
+import axios from 'axios';
+
+import urls from './../urls';
+
 import consts from '../consts';
 import $ from './global';
-
-import axios from 'axios';
 
 const exportCanvas = p => {
 
@@ -61,11 +63,23 @@ const exportCanvas = p => {
     p.image(data.mazeImg, -x, -y);
     p.image(data.markersImg, -x, -y);
 
-    let img = p.canvas.toDataURL('image/png');
-
-    /*axios.post('https://maze-notpad-api.herokuapp.com/maze/upload', {
-      'maze-file': //
-    });*/
+    p.canvas.toBlob((blob) => {
+      // Create form data.
+      let formData = new FormData();
+      formData.append('maze-file', data.mazeFile);
+      formData.append('image-file', blob);
+      formData.append('name', 'Test');
+      formData.append('tags', 'A,B,C');
+      // Upload maze request.
+      axios({
+        method: 'post',
+        url: `${urls.mazeNotepadApi}/maze/upload`,
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then((req) => {
+        // TODO: Confirm success.
+      });
+    }, 'image/png');
   }
 }
 

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import stylesheet from './css/App.module.css';
 
+import urls from './js/urls';
 import consts from './js/consts';
 import $p5 from './js/p5/global';
 import Modal from './Modal';
@@ -83,10 +84,10 @@ class App extends React.Component {
   }
 
   loadHttpMaze = () => {
-    let mazeEndpoint = 'https://maze-notepad.s3.us-east-2.amazonaws.com/mazes';
     let getQuery = queryString.parse(window.location.search);
-    if (getQuery['maze']) {
-      axios.get(`${mazeEndpoint}/${getQuery['maze']}`).then(res => {
+    let maze = getQuery.maze;
+    if (maze) {
+      axios.get(`${urls.mazeNotepadApi}/mazes/${maze}`).then(res => {
         this.setHttpMazeData(res.data);
         this.requestOpenMazeHttp();
       });

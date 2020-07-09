@@ -86,6 +86,7 @@ class Maze {
     }
     // Pass image to App for export purposes.
     $.app__setExportMazeData({
+      mazeFile: this.graph.getSave(),
       mazeImg: this.mazeImg,
       markersImg: this.markersImg,
       solutionsImgs: this.solutionsImgs,

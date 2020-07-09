@@ -137,6 +137,18 @@ class MazeGraph extends Graph {
     return aWeight - bWeight;
   }
 
+  getSave = () => {
+    let edgeList = this.edgeList.map(edge => [ edge.a, edge.b, edge.weight, this.getNotes(edge, 'suggestedPath') ]);
+    let activeList = this.activeList.map((val, i) => (val === true) ? i : -1).filter(val => val !== -1);  // Log true values as indices.
+    let markerList = this.markerList.map((val, i) => (val !== null) ? [ i, val ] : -1).filter(val => val !== -1);  // Log non-null values as indices.
+    let content = {
+      edgeList: edgeList,
+      activeList: activeList,
+      markerList: markerList
+    };
+    return new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' });
+  }
+
   load(file) {
     this.clearEdgeList();
     this.clearAdjList();
@@ -155,15 +167,7 @@ class MazeGraph extends Graph {
   }
 
   save(fileName) {
-    let edgeList = this.edgeList.map(edge => [ edge.a, edge.b, edge.weight, this.getNotes(edge, 'suggestedPath') ]);
-    let activeList = this.activeList.map((val, i) => (val === true) ? i : -1).filter(val => val !== -1);  // Log true values as indices.
-    let markerList = this.markerList.map((val, i) => (val !== null) ? [ i, val ] : -1).filter(val => val !== -1);  // Log non-null values as indices.
-    let content = {
-      edgeList: edgeList,
-      activeList: activeList,
-      markerList: markerList
-    };
-    saveAs(new Blob([ JSON.stringify(content) ], { type: 'text/plain;charset=utf-8' }), fileName);
+    saveAs(this.getSave(), fileName);
   }
 
   clearActiveList() {
