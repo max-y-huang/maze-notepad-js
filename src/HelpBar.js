@@ -207,6 +207,28 @@ class HelpBar extends React.Component {
           </>}
         />
         <Accordion
+          summary={<>View Mode <i className='fas fa-angle-right fa-fw' /> Upload To Store</>}
+          details={<>
+            <p>Uploads the maze to the <a href='https://max-y-huang.github.io/maze-notepad-store' target='_blank' rel='noopener noreferrer'>Maze Notepad Store</a>.</p>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Input Field</th>
+                  <th>Description</th>
+                </tr>
+                <tr>
+                  <td>Name</td>
+                  <td>The name of the maze.</td>
+                </tr>
+                <tr>
+                  <td>Tags</td>
+                  <td>Keywords for maze searching. Separate tags by commas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </>}
+        />
+        <Accordion
           summary={<>View Mode <i className='fas fa-angle-right fa-fw' /> Reset Focus</>}
           details={<>
             <p>Move the camera to the starting point. This has no effect on the resulting maze.</p>
