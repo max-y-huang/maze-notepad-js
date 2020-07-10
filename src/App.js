@@ -97,7 +97,7 @@ class App extends React.Component {
     let getQuery = queryString.parse(window.location.search);
     let maze = getQuery.maze;
     if (maze) {
-      axios.get(`${urls.mazeNotepadApi}/mazes/${maze}`).then(res => {
+      axios.get(`${urls.s3Bucket}/mazes/${maze}`).then(res => {
         this.setHttpMazeData(res.data);
         this.requestOpenMazeHttp();
       });
