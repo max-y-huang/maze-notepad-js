@@ -1,3 +1,5 @@
+import $ from './global';
+
 class KeyLogger {
 
   keyDown = {};
@@ -9,9 +11,15 @@ class KeyLogger {
   }
 
   isKeyPressed(key) {
+    if (!$.checkKeyInput) {
+      return false;
+    }
     return this.keyDown[key.toLowerCase()] ? true : false;  // Force true or false to be returned (no undefined).
   }
   isKeyCodePressed(keyCode) {
+    if (!$.checkKeyInput) {
+      return false;
+    }
     return this.keyCodeDown[keyCode.toString()] ? true : false;  // Force true or false to be returned (no undefined).
   }
 

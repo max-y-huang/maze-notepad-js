@@ -83,4 +83,15 @@
       }
     }
   }
+
+  &__uploadModal {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 2em;
+    grid-row-gap: 1em;
+    
+    > * {
+      align-self: center;
+    }
+  }
 }

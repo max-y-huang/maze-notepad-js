@@ -66,29 +66,14 @@
   color: #ffffff;
   text-decoration: underline;
 }
-
-.instructions {
-  position: absolute;
-  top: 1.25em;
-  right: 1.25em;
+.wrapper__uploadModal {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 2em;
+  grid-row-gap: 1em;
 }
-.instructions__closeButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: #e0e0e0;
-  padding: 1.25em;
-}
-.instructions__messageBox {
-  padding: 0.25em 1.25em;
-  background-color: #212121;
-  color: #e0e0e0;
-  border: 1px solid #000000;
-  border-radius: 6px;
-}
-.instructions__messageBox em {
-  font-style: normal;
-  color: #66d3ff;
+.wrapper__uploadModal > * {
+  align-self: center;
 }
 
 /*# sourceMappingURL=App.module.css.map */

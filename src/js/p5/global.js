@@ -2,13 +2,14 @@ import consts from './../consts';
 
 class Global {
 
-  app__setExportMazeData = null;
+  app__updateExportMazeData = null;
   app_setModeFunc = null;
   app_showErrorMessageFunc = null;
 
   width = 0;
   height = 0;
-  mouseOverSketch = false;
+  checkMouseInput = true;
+  checkKeyInput = true;
   useRuler = true;
 
   mode = consts.CREATE;

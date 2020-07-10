@@ -1,46 +1,19 @@
 @charset "UTF-8";
-.wrapper__summary, button {
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.wrapper__summary {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-html {
-  font-size: 62.5%;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #404040;
-  font-size: 1.6rem;
-  font-family: "Lato", sans-serif;
-  line-height: 1.6;
-}
-
-button {
-  cursor: pointer;
-  font-size: 1.6rem;
-  font-family: "Lato", sans-serif;
-}
-
-#root {
-  width: 100vw;
-  height: 100vh;
-}
-
-.transparent-button {
-  background: none;
-  outline: none;
-  border: none;
-}
-
-.divider {
-  margin: 1.25em 0;
-  border-top: 1px solid #505050;
 }
 
 .wrapper__summary {

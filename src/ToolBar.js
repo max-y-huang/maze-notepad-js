@@ -32,10 +32,6 @@ class ToolBar extends React.Component {
     this.props.requestExportMazeFunc();
   }
 
-  uploadMaze = () => {
-    this.props.requestUploadMazeFunc();
-  }
-
   resetMazePattern = () => {
     this.props.requestResetMazePatternFunc();
   }
@@ -50,6 +46,10 @@ class ToolBar extends React.Component {
 
   toggleHelpBar = () => {
     this.props.toggleHelpBarFunc();
+  }
+
+  showUploadModal = () => {
+    this.props.showUploadModalFunc();
   }
 
   renderCreateButtons = () => {
@@ -84,7 +84,7 @@ class ToolBar extends React.Component {
       <div className='divider vertical' />
         <Item text='Save'            icon='save'             active={false} onClick={this.saveMaze} />
         <Item text='Export Image'    icon='file-image'       active={false} onClick={this.exportMaze} />
-        <Item text='Upload To Store' icon='cloud-upload-alt' active={false} onClick={this.uploadMaze} />
+        <Item text='Upload To Store' icon='cloud-upload-alt' active={false} onClick={this.showUploadModal} />
         <div className='divider vertical' />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
         <div className='divider vertical' />

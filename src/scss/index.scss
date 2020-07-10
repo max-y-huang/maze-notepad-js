@@ -20,6 +20,15 @@ button {
   font-family: 'Lato', sans-serif;
 }
 
+input {
+  outline: none;
+  font-size: 1.6rem;
+  font-family: 'Lato', sans-serif;
+  padding: 0.4em 1em;
+  border: none;
+  border-radius: 4px;
+}
+
 #root {
   width: 100vw;
   height: 100vh;

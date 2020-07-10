@@ -48,5 +48,10 @@
   background-color: #333333;
   color: #e0e0e0;
 }
+.wrapper__content__footer button:disabled {
+  cursor: not-allowed !important;
+  background-color: #808080 !important;
+  color: #000000 !important;
+}
 
 /*# sourceMappingURL=Modal.module.css.map */

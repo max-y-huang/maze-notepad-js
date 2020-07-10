@@ -9,6 +9,7 @@ import stylesheet from './css/App.module.css';
 import urls from './js/urls';
 import consts from './js/consts';
 import $p5 from './js/p5/global';
+import Loader from './Loader';
 import Modal from './Modal';
 import ToolBar from './ToolBar';
 import MarkerPicker from './MarkerPicker';
@@ -21,15 +22,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       canvasUseRuler: false,
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
       openMazeFile: null,
-      exportMazeData: { mazeImg: null, markersImg: null },
+      exportMazeData: { name: null, tags: null  },
       httpMazeData: null,
       canvasMarkerColour: 0,
       canvasSolutionColour: -1,
       canvasPenColour: 0,
+      uploadModalOpen: false,
       errorModalOpen: false,
       errorModalMessage: '',
       helpBarOpen: true,
@@ -44,11 +47,15 @@ class App extends React.Component {
       requestOpenMazeHttpFlag: 0
     }
     this.canvasWrapperRef = React.createRef();
+    this.uploadNameRef = React.createRef();
+    this.uploadTagsRef = React.createRef();
   }
 
-  setExportMazeData = (data) => this.setState({ exportMazeData: data });
-  setOpenMazeFile   = (file) => this.setState({ openMazeFile: file });
-  setHttpMazeData   = (data) => this.setState({ httpMazeData: data });
+  setLoading = (val) => this.setState({ loading: val });
+
+  updateExportMazeData = (data) => this.setState(state => ({ exportMazeData: { ...state.exportMazeData, ...data } }));
+  setOpenMazeFile      = (file) => this.setState({ openMazeFile: file });
+  setHttpMazeData      = (data) => this.setState({ httpMazeData: data });
 
   requestOpenMaze         = () => this.setState({ requestOpenMazeFlag: Date.now() });
   requestSaveMaze         = () => this.setState({ requestSaveMazeFlag: Date.now() });
@@ -59,8 +66,6 @@ class App extends React.Component {
   requestKeyLoggerClear   = () => this.setState({ requestKeyLoggerClearFlag: Date.now() });
   requestOpenMazeHttp     = () => this.setState({ requestOpenMazeHttpFlag: Date.now() });
 
-  setMouseOverCanvas = (val) => $p5.mouseOverSketch = val;
-
   toggleUseRuler = () => this.setState((state) => ({ canvasUseRuler: !state.canvasUseRuler }));
 
   setCanvasMode             = (mode)   => this.setState({ canvasMode: mode });
@@ -69,8 +74,10 @@ class App extends React.Component {
   setCanvasSolutionColour   = (colour) => this.setState({ canvasSolutionColour: colour });
   setCanvasPenColour        = (colour) => this.setState({ canvasPenColour: colour });
 
-  showErrorModal = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
-  hideErrorModal = ()    => this.setState({ errorModalOpen: false });
+  showUploadModal = ()    => this.setState({ uploadModalOpen: true });
+  hideUploadModal = ()    => this.setState({ uploadModalOpen: false });
+  showErrorModal  = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
+  hideErrorModal  = ()    => this.setState({ errorModalOpen: false });
 
   hideHelpBar   = () => this.setState({ helpBarOpen: false });
   toggleHelpBar = () => this.setState((state) => ({ helpBarOpen: !state.helpBarOpen }));
@@ -94,6 +101,15 @@ class App extends React.Component {
     }
   }
 
+  onUploadMaze = () => {
+    this.setLoading(true);
+    this.updateExportMazeData({
+      name: this.uploadNameRef.current.value,
+      tags: this.uploadTagsRef.current.value
+    });
+    this.requestUploadMaze();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     // Resize on mode change or tool change.
     if (prevState.canvasMode !== this.state.canvasMode || prevState.canvasCreateTool !== this.state.canvasCreateTool) {
@@ -103,10 +119,14 @@ class App extends React.Component {
     if (prevState.footerOpen !== this.state.footerOpen || prevState.helpBarOpen !== this.state.helpBarOpen) {
       this.onResize();
     }
+    // Change checkKeyInput if modal opens/closes.
+    if (prevState.errorModalOpen !== this.state.errorModalOpen || prevState.uploadModalOpen !== this.state.uploadModalOpen) {
+      $p5.checkKeyInput = !(this.state.errorModalOpen || this.state.uploadModalOpen);
+    }
   }
 
   componentDidMount() {
-    $p5.app__setExportMazeData = this.setExportMazeData;
+    $p5.app__updateExportMazeData = this.updateExportMazeData;
     $p5.app_setModeFunc = this.setCanvasMode;
     $p5.app_showErrorMessageFunc = this.showErrorModal;
 
@@ -114,8 +134,8 @@ class App extends React.Component {
     
     window.addEventListener('resize', this.onResize);
     window.addEventListener('blur', this.requestKeyLoggerClear);
-    this.canvasWrapperRef.current.addEventListener('mouseenter', () => this.setMouseOverCanvas(true));
-    this.canvasWrapperRef.current.addEventListener('mouseleave', () => this.setMouseOverCanvas(false));
+    this.canvasWrapperRef.current.addEventListener('mouseenter', () => $p5.checkMouseInput = true);
+    this.canvasWrapperRef.current.addEventListener('mouseleave', () => $p5.checkMouseInput = false);
 
     this.loadHttpMaze();
   }
@@ -191,9 +211,9 @@ class App extends React.Component {
 
   render() {
     let {
-      canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
+      loading, canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
       openMazeFile, exportMazeData, httpMazeData,
-      errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
+      uploadModalOpen, errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestUploadMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag, requestOpenMazeHttpFlag
     } = this.state;
 
@@ -212,11 +232,11 @@ class App extends React.Component {
               requestOpenMazeFunc={this.requestOpenMaze}
               requestSaveMazeFunc={this.requestSaveMaze}
               requestExportMazeFunc={this.requestExportMaze}
-              requestUploadMazeFunc={this.requestUploadMaze}
               requestResetMazePatternFunc={this.requestResetMazePattern}
               requestResetCameraFunc={this.requestResetCamera}
               toggleUseRulerFunc={this.toggleUseRuler}
               toggleHelpBarFunc={this.toggleHelpBar}
+              showUploadModalFunc={this.showUploadModal}
             />
           </div>
           {this.renderSelectionBar()}
@@ -254,6 +274,24 @@ class App extends React.Component {
           </div>
         </div>
         <Modal
+          open={uploadModalOpen}
+          header='Upload Maze to Store'
+          body={
+            <div className={stylesheet.wrapper__uploadModal}>
+              <label>Maze name: </label>
+              <input ref={this.uploadNameRef} placeholder='Name...' />
+              <label>Tags (separate with commas): </label>
+              <input ref={this.uploadTagsRef} placeholder='Tags...' />
+            </div>
+          }
+          footer={
+            <>
+              <button onClick={this.hideUploadModal} style={{marginRight: '0.5em'}}>Cancel</button>
+              <button onClick={this.onUploadMaze}>Upload</button>
+            </>
+          }
+        />
+        <Modal
           open={errorModalOpen}
           header='Error!'
           body={<p>{errorModalMessage}</p>}
@@ -266,8 +304,11 @@ class App extends React.Component {
             requestExportMazeFlag={requestExportMazeFlag}
             requestUploadMazeFlag={requestUploadMazeFlag}
             data={exportMazeData}
+            setLoadingFunc={this.setLoading}
+            hideUploadModalFunc={this.hideUploadModal}
           />
         </div>
+        <Loader active={loading} />
       </>
     );
   }

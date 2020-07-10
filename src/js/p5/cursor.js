@@ -22,7 +22,7 @@ class Cursor {
 
   draw() {
     // Check run conditions.
-    if (!$.mouseOverSketch) {
+    if (!$.checkMouseInput) {
       return;
     }
     // Draw square cursor in CREATE mode.

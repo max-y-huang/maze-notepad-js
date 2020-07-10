@@ -223,17 +223,6 @@ const sketch = p => {
     p.text(Math.round(p.frameRate()) + ' FPS', 16, 32);
   }
 
-  // eslint-disable-next-line
-  const addStarterMaze = (x, y, w, h) => {
-    for (let i = 0; i < h; i++) {
-      for (let j = 0; j < w; j++) {
-        let index = (i + y) * maze.w + (j + x);
-        maze.graph.activeList[index] = true;
-      }
-    }
-    maze.update(true);
-  }
-
   // Used instead of default windowResized() to keep track of new width and height.
   const onResize = () => {
     // Check run conditions.
@@ -246,7 +235,7 @@ const sketch = p => {
 
   p.mousePressed = () => {
     // Check run conditions.
-    if (!$.mouseOverSketch) {
+    if (!$.checkMouseInput) {
       return;
     }
 
@@ -258,7 +247,7 @@ const sketch = p => {
 
   p.mouseDragged = () => {
     // Check run conditions.
-    if (!$.mouseOverSketch) {
+    if (!$.checkMouseInput) {
       return;
     }
 
@@ -274,14 +263,12 @@ const sketch = p => {
 
   p.mouseWheel = (event) => {
     // Check run conditions.
-    if (!$.mouseOverSketch) {
+    if (!$.checkMouseInput) {
       return;
     }
 
     camera.zoomWithMouse(event);
   }
-
-  // Key inputs work even if the mouse is not over the sketch.
 
   p.keyPressed = () => {
     keyLogger.onKeyDown(p.key);

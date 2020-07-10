@@ -51,6 +51,12 @@
           background-color: #333333;
           color: #e0e0e0;
         }
+
+        &:disabled {
+          cursor: not-allowed !important;
+          background-color: #808080 !important;
+          color: #000000 !important;
+        }
       }
     }
   }

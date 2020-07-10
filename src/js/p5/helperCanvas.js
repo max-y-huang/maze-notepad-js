@@ -9,12 +9,20 @@ const exportCanvas = p => {
 
   let requestExportMazeFlag = 0;
   let requestUploadMazeFlag = 0;
+  let hideUploadModalFunc = null;
+  let setLoadingFunc = null;
 
   p.setup = () => {
     p.createCanvas(100, 100);
   }
 
   p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
+    if (props.setLoadingFunc !== setLoadingFunc) {
+      setLoadingFunc = props.setLoadingFunc;
+    }
+    if (props.hideUploadModalFunc !== hideUploadModalFunc) {
+      hideUploadModalFunc = props.hideUploadModalFunc;
+    }
     if (props.requestExportMazeFlag !== requestExportMazeFlag) {
       onExport(props.data);
       requestExportMazeFlag = props.requestExportMazeFlag;
@@ -68,16 +76,21 @@ const exportCanvas = p => {
       let formData = new FormData();
       formData.append('maze-file', data.mazeFile);
       formData.append('image-file', blob);
-      formData.append('name', 'Test');
-      formData.append('tags', 'A,B,C');
+      formData.append('name', data.name);
+      formData.append('tags', data.tags);
       // Upload maze request.
       axios({
         method: 'post',
         url: `${urls.mazeNotepadApi}/maze/upload`,
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' }
-      }).then((req) => {
-        // TODO: Confirm success.
+      }).then(() => {
+        hideUploadModalFunc();
+        setLoadingFunc(false);
+      }).catch(err => {
+        // TODO: add error message.
+        console.log(err.response.data);
+        setLoadingFunc(false);
       });
     }, 'image/png');
   }
