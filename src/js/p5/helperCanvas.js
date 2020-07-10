@@ -11,6 +11,7 @@ const exportCanvas = p => {
   let requestUploadMazeFlag = 0;
   let hideUploadModalFunc = null;
   let setLoadingFunc = null;
+  let setUploadModalBannerMessageFunc = null;
 
   p.setup = () => {
     p.createCanvas(100, 100);
@@ -22,6 +23,9 @@ const exportCanvas = p => {
     }
     if (props.hideUploadModalFunc !== hideUploadModalFunc) {
       hideUploadModalFunc = props.hideUploadModalFunc;
+    }
+    if (props.setUploadModalBannerMessageFunc !== setUploadModalBannerMessageFunc) {
+      setUploadModalBannerMessageFunc = props.setUploadModalBannerMessageFunc;
     }
     if (props.requestExportMazeFlag !== requestExportMazeFlag) {
       onExport(props.data);
@@ -85,11 +89,13 @@ const exportCanvas = p => {
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then(() => {
+        // Successful upload.
         hideUploadModalFunc();
         setLoadingFunc(false);
       }).catch(err => {
-        // TODO: add error message.
-        console.log(err.response.data);
+        // Failed upload.
+        let data = err.response.data;
+        setUploadModalBannerMessageFunc(data.result);
         setLoadingFunc(false);
       });
     }, 'image/png');

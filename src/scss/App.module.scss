@@ -85,13 +85,22 @@
   }
 
   &__uploadModal {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-column-gap: 2em;
-    grid-row-gap: 1em;
-    
-    > * {
-      align-self: center;
+    &__banner {
+      background-color: #ff4040;
+      margin: -1.2em;
+      margin-bottom: 1.2em;
+      padding : 0.8rem 1.2em;
+    }
+
+    &__form {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-column-gap: 2.4em;
+      grid-row-gap: 1.2em;
+      
+      > * {
+        align-self: center;
+      }
     }
   }
 }

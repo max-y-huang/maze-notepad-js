@@ -33,6 +33,7 @@ class App extends React.Component {
       canvasSolutionColour: -1,
       canvasPenColour: 0,
       uploadModalOpen: false,
+      uploadModalBannerMessage: '',
       errorModalOpen: false,
       errorModalMessage: '',
       helpBarOpen: true,
@@ -47,6 +48,7 @@ class App extends React.Component {
       requestOpenMazeHttpFlag: 0
     }
     this.canvasWrapperRef = React.createRef();
+    this.uploadBannerRef = React.createRef();
     this.uploadNameRef = React.createRef();
     this.uploadTagsRef = React.createRef();
   }
@@ -74,10 +76,11 @@ class App extends React.Component {
   setCanvasSolutionColour   = (colour) => this.setState({ canvasSolutionColour: colour });
   setCanvasPenColour        = (colour) => this.setState({ canvasPenColour: colour });
 
-  showUploadModal = ()    => this.setState({ uploadModalOpen: true });
-  hideUploadModal = ()    => this.setState({ uploadModalOpen: false });
-  showErrorModal  = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
-  hideErrorModal  = ()    => this.setState({ errorModalOpen: false });
+  showUploadModal             = ()    => this.setState({ uploadModalOpen: true, uploadModalBannerMessage: '' });  // Empty message upon open.
+  hideUploadModal             = ()    => this.setState({ uploadModalOpen: false });
+  setUploadModalBannerMessage = (msg) => this.setState({ uploadModalBannerMessage: msg });
+  showErrorModal              = (msg) => this.setState({ errorModalOpen: true, errorModalMessage: msg });
+  hideErrorModal              = ()    => this.setState({ errorModalOpen: false });
 
   hideHelpBar   = () => this.setState({ helpBarOpen: false });
   toggleHelpBar = () => this.setState((state) => ({ helpBarOpen: !state.helpBarOpen }));
@@ -213,7 +216,7 @@ class App extends React.Component {
     let {
       loading, canvasUseRuler, canvasMode, canvasCreateTool, canvasMarkerColour, canvasSolutionColour, canvasPenColour,
       openMazeFile, exportMazeData, httpMazeData,
-      uploadModalOpen, errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
+      uploadModalOpen, uploadModalBannerMessage, errorModalOpen, errorModalMessage, helpBarOpen, footerOpen,
       requestOpenMazeFlag, requestSaveMazeFlag, requestExportMazeFlag, requestUploadMazeFlag, requestResetMazePatternFlag, requestResetCameraFlag, requestKeyLoggerClearFlag, requestOpenMazeHttpFlag
     } = this.state;
 
@@ -277,12 +280,21 @@ class App extends React.Component {
           open={uploadModalOpen}
           header='Upload Maze to Store'
           body={
-            <div className={stylesheet.wrapper__uploadModal}>
-              <label>Maze name: </label>
-              <input ref={this.uploadNameRef} placeholder='Name...' />
-              <label>Tags (separate with commas): </label>
-              <input ref={this.uploadTagsRef} placeholder='Tags...' />
-            </div>
+            <>
+              <div
+                ref={this.uploadBannerRef}
+                className={stylesheet.wrapper__uploadModal__banner}
+                style={{display: uploadModalBannerMessage === '' ? 'none' : 'block'}}
+              >
+                {uploadModalBannerMessage}
+              </div>
+              <div className={stylesheet.wrapper__uploadModal__form}>
+                <label>Maze name: </label>
+                <input ref={this.uploadNameRef} placeholder='Name...' />
+                <label>Tags (separate with commas): </label>
+                <input ref={this.uploadTagsRef} placeholder='Tags...' />
+              </div>
+            </>
           }
           footer={
             <>
@@ -306,6 +318,7 @@ class App extends React.Component {
             data={exportMazeData}
             setLoadingFunc={this.setLoading}
             hideUploadModalFunc={this.hideUploadModal}
+            setUploadModalBannerMessageFunc={this.setUploadModalBannerMessage}
           />
         </div>
         <Loader active={loading} />
