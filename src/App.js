@@ -36,7 +36,7 @@ class App extends React.Component {
       uploadModalBannerMessage: '',
       errorModalOpen: false,
       errorModalMessage: '',
-      helpBarOpen: true,
+      helpBarOpen: false,
       footerOpen: true,
       requestOpenMazeFlag: 0,
       requestSaveMazeFlag: 0,

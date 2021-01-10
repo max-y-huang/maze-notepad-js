@@ -100,6 +100,10 @@ class ToolBar extends React.Component {
         <Item text='View Mode' icon='eye'    active={this.props.canvasMode === consts.SOLVE}  onClick={() => this.setCanvasMode(consts.SOLVE)} />
         {this.renderCreateButtons()}
         {this.renderSolveButtons()}
+        <div className='divider vertical' />
+        <div style={{ textAlign: 'center', color: '#606060' }}>
+          Ver. 09-01-2021-1
+        </div>
         {/* Used to import maze. Should not be displayed. */}
         <input style={{display: 'none'}} ref={this.openFileRef} type='file' accept='.mznp' onInput={this.openMaze} />
       </div>

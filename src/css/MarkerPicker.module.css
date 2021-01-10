@@ -54,4 +54,8 @@
   width: 1.25em;
 }
 
+.flexWrapper {
+  display: inline-flex;
+}
+
 /*# sourceMappingURL=MarkerPicker.module.css.map */

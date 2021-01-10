@@ -31,8 +31,10 @@ class MarkerPicker extends React.Component {
     return (
       <div className={stylesheet.wrapper}>
         <div className={stylesheet.wrapper__title}>{this.props.text}</div>
-        {nullItem}
-        {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
+        <div className={stylesheet.flexWrapper}>
+          {nullItem}
+          {consts.COLOURS.map((c, i) => this.renderColourButton(i))}
+        </div>
       </div>
     )
   }
