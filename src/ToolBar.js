@@ -102,7 +102,7 @@ class ToolBar extends React.Component {
         {this.renderSolveButtons()}
         <div className='divider vertical' />
         <div style={{ textAlign: 'center', color: '#606060' }}>
-          Ver. 09-01-2021-1
+          Ver. 08-05-2021-1
         </div>
         {/* Used to import maze. Should not be displayed. */}
         <input style={{display: 'none'}} ref={this.openFileRef} type='file' accept='.mznp' onInput={this.openMaze} />
