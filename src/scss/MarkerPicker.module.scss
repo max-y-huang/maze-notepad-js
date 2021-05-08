@@ -8,7 +8,7 @@
   overflow-x: scroll;
 
   &__title {
-    color: #e0e0e0;
+    color: #f1f1f1;
     padding-bottom: 1.6em;
   }
 
@@ -34,25 +34,9 @@
   &__nullItem {
     background: none;
     border-color: #808080;
-      
-    &::before {
-      display: block;
-      position: absolute;
-      top: calc(50% - 2px);
-      left: 0;
-      content: '';
-      width: calc(3em - 8px);
-      height: 4px;
-      background-color: #808080;
-      transform: rotate(-45deg);
-    }
 
     &:hover {
-      border-color: rgb(209, 41, 41);
-
-      &::before {
-        background-color: rgb(209, 41, 41);
-      }
+      border-color: #f1f1f1;
     }
   }
 

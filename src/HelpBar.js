@@ -209,7 +209,7 @@ class HelpBar extends React.Component {
         <Accordion
           summary={<>View Mode <i className='fas fa-angle-right fa-fw' /> Upload To Store</>}
           details={<>
-            <p>Uploads the maze to the <a href='https://max-y-huang.github.io/maze-notepad-store' target='_blank' rel='noopener noreferrer'>Maze Notepad Store</a>.</p>
+            <p>Uploads the maze to the <a href='https://max-y-huang.github.io/maze-notepad-gallery' target='_blank' rel='noopener noreferrer'>Maze Gallery</a>.</p>
             <table>
               <tbody>
                 <tr>
@@ -223,6 +223,14 @@ class HelpBar extends React.Component {
                 <tr>
                   <td>Tags</td>
                   <td>Keywords for maze searching. Separate tags by commas.</td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>A brief description of the maze.</td>
+                </tr>
+                <tr>
+                  <td>Creator</td>
+                  <td>That would be you.</td>
                 </tr>
               </tbody>
             </table>

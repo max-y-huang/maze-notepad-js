@@ -5,18 +5,18 @@
   height: 100%;
   padding: 1.25em 1.25em;
   padding-bottom: 0;
-  color: #e0e0e0;
+  color: #f1f1f1;
 }
 .wrapper__closeButton {
   position: absolute;
   top: 1.25em;
   right: 1.25em;
-  color: #e0e0e0;
+  color: #f1f1f1;
 }
 .wrapper__header {
   font-size: 1.25em;
   font-weight: 700;
-  color: #e0e0e0;
+  color: #f1f1f1;
   margin-top: 0.25em;
   margin-bottom: 1.25em;
 }

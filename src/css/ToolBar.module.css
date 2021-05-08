@@ -35,7 +35,7 @@
   color: #66d3ff;
 }
 .wrapper__item.inactive:not(:hover) {
-  color: #e0e0e0;
+  color: #f1f1f1;
   border-bottom-color: transparent;
 }
 .wrapper__item:disabled {

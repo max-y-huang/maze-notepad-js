@@ -27,7 +27,7 @@ class App extends React.Component {
       canvasMode: consts.CREATE,
       canvasCreateTool: consts.SHAPE,
       openMazeFile: null,
-      exportMazeData: { name: null, tags: null  },
+      exportMazeData: {},
       httpMazeData: null,
       canvasMarkerColour: 0,
       canvasSolutionColour: -1,
@@ -51,6 +51,8 @@ class App extends React.Component {
     this.uploadBannerRef = React.createRef();
     this.uploadNameRef = React.createRef();
     this.uploadTagsRef = React.createRef();
+    this.uploadDescriptionRef = React.createRef();
+    this.uploadCreatorRef = React.createRef();
   }
 
   setLoading = (val) => this.setState({ loading: val });
@@ -108,7 +110,9 @@ class App extends React.Component {
     this.setLoading(true);
     this.updateExportMazeData({
       name: this.uploadNameRef.current.value,
-      tags: this.uploadTagsRef.current.value
+      tags: this.uploadTagsRef.current.value,
+      description: this.uploadDescriptionRef.current.value,
+      creator: this.uploadCreatorRef.current.value,
     });
     this.requestUploadMaze();
   }
@@ -278,7 +282,7 @@ class App extends React.Component {
         </div>
         <Modal
           open={uploadModalOpen}
-          header='Upload Maze to Store'
+          header='Upload Maze to Gallery'
           body={
             <>
               <div
@@ -293,6 +297,10 @@ class App extends React.Component {
                 <input ref={this.uploadNameRef} placeholder='Name...' />
                 <label>Tags (separate with commas): </label>
                 <input ref={this.uploadTagsRef} placeholder='Tags...' />
+                <label>Description (optional): </label>
+                <textarea ref={this.uploadDescriptionRef} placeholder='Description...' rows='3' />
+                <label>Creator (optional): </label>
+                <input ref={this.uploadCreatorRef} placeholder='Creator...' />
               </div>
             </>
           }

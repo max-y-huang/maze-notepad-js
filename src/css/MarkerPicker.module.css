@@ -8,7 +8,7 @@
   overflow-x: scroll;
 }
 .wrapper__title {
-  color: #e0e0e0;
+  color: #f1f1f1;
   padding-bottom: 1.6em;
 }
 .wrapper__item, .wrapper__nullItem {
@@ -31,22 +31,8 @@
   background: none;
   border-color: #808080;
 }
-.wrapper__nullItem::before {
-  display: block;
-  position: absolute;
-  top: calc(50% - 2px);
-  left: 0;
-  content: "";
-  width: calc(3em - 8px);
-  height: 4px;
-  background-color: #808080;
-  transform: rotate(-45deg);
-}
 .wrapper__nullItem:hover {
-  border-color: #d12929;
-}
-.wrapper__nullItem:hover::before {
-  background-color: #d12929;
+  border-color: #f1f1f1;
 }
 .wrapper::after {
   display: inline-block;

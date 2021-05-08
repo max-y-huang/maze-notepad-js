@@ -13,8 +13,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #212121;
-    border-radius: 6px;
+    background-color: #181818;
+    border: 2px solid #000000;
 
     width: calc(100vw - 4em);
     max-width: 50em;
@@ -24,40 +24,43 @@
       padding: calc(1.6rem * 1.25);  // Equal to 1.25em with normal font size.
       font-size: 1.25em;
       font-weight: 700;
-      color: #e0e0e0;
+      color: #f1f1f1;
     }
 
     &__body {
-      padding: 1.25em;
-      border-top: 1px solid #505050;
-      border-bottom: 1px solid #505050;
-      color: #e0e0e0;
+      padding: 0 1.25em;
+      color: #f1f1f1;
     }
 
     &__footer {
       padding: 0.8em 1.25em;
       text-align: right;
-      color: #e0e0e0;
+      color: #f1f1f1;
+    }
 
-      button {
-        padding: 0.6em 1em;
-        border: none;
-        outline: none;
-        border-radius: 6px;
-        background-color: #e0e0e0;
-        color: #000000;
+    button {
+      padding: 0.6em 1em;
+      border: 2px solid #000000;
+      outline: none;
+      background-color: #f1f1f1;
+      color: #000000;
 
-        &:hover {
-          background-color: #333333;
-          color: #e0e0e0;
-        }
-
-        &:disabled {
-          cursor: not-allowed !important;
-          background-color: #808080 !important;
-          color: #000000 !important;
-        }
+      &:hover {
+        background-color: #007acc;
       }
+
+      &:disabled {
+        cursor: not-allowed !important;
+        background-color: #808080 !important;
+        color: #000000 !important;
+      }
+    }
+
+    input, textarea {
+      border: 2px solid #000000;
+      border-radius: none;
+      outline: none;
+      background-color: #f1f1f1;
     }
   }
 }

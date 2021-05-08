@@ -20,13 +20,10 @@ button {
   font-family: 'Lato', sans-serif;
 }
 
-input {
-  outline: none;
+input, textarea {
   font-size: 1.6rem;
   font-family: 'Lato', sans-serif;
   padding: 0.4em 1em;
-  border: none;
-  border-radius: 4px;
 }
 
 #root {

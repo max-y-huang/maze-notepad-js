@@ -80,8 +80,13 @@ const exportCanvas = p => {
       let formData = new FormData();
       formData.append('maze-file', data.mazeFile);
       formData.append('image-file', blob);
-      formData.append('name', data.name);
-      formData.append('tags', data.tags);
+
+      let fields = [ 'name', 'tags', 'description', 'creator' ];
+      fields.forEach(f => {
+        if (data[f]) {
+          formData.append(f, data[f]);
+        }
+      });
       // Upload maze request.
       axios({
         method: 'post',
