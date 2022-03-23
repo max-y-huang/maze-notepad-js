@@ -82,9 +82,9 @@ class ToolBar extends React.Component {
     return (
       <>
       <div className='divider vertical' />
-        <Item text='Save'            icon='save'             active={false} onClick={this.saveMaze} />
-        <Item text='Export Image'    icon='file-image'       active={false} onClick={this.exportMaze} />
-        <Item text='Upload To Store' icon='cloud-upload-alt' active={false} onClick={this.showUploadModal} />
+        <Item text='Save'              icon='save'             active={false} onClick={this.saveMaze} />
+        <Item text='Export Image'      icon='file-image'       active={false} onClick={this.exportMaze} />
+        <Item text='Upload To Gallery' icon='cloud-upload-alt' active={false} onClick={this.showUploadModal} />
         <div className='divider vertical' />
         <Item text='Reset Focus' icon='search-location' active={false} onClick={this.resetCamera} />
         <div className='divider vertical' />
@@ -102,7 +102,7 @@ class ToolBar extends React.Component {
         {this.renderSolveButtons()}
         <div className='divider vertical' />
         <div style={{ textAlign: 'center', color: '#606060' }}>
-          Ver. 08-05-2021-1
+          Ver. 08-05-2021-2
         </div>
         {/* Used to import maze. Should not be displayed. */}
         <input style={{display: 'none'}} ref={this.openFileRef} type='file' accept='.mznp' onInput={this.openMaze} />

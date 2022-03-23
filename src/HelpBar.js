@@ -207,7 +207,7 @@ class HelpBar extends React.Component {
           </>}
         />
         <Accordion
-          summary={<>View Mode <i className='fas fa-angle-right fa-fw' /> Upload To Store</>}
+          summary={<>View Mode <i className='fas fa-angle-right fa-fw' /> Upload To Gallery</>}
           details={<>
             <p>Uploads the maze to the <a href='https://max-y-huang.github.io/maze-notepad-gallery' target='_blank' rel='noopener noreferrer'>Maze Gallery</a>.</p>
             <table>
