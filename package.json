@@ -1,7 +1,6 @@
 {
   "name": "maze-notepad-js",
   "version": "0.1.0",
-  "homepage": "https://max-y-huang.github.io/maze-notepad-js",
   "private": true,
   "dependencies": {
     "axios": "^0.21.1",
