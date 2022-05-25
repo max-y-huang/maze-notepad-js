@@ -2,7 +2,7 @@
 
 Maze Notepad JS is a maze-making Progressive Web App created by [Max Huang](https://github.com/max-y-huang/).
 
-Hosted at: [https://max-y-huang.github.io/maze-notepad-js/](https://max-y-huang.github.io/maze-notepad-js/).
+Hosted at: [https://maze-notepad.netlify.app/](https://maze-notepad.netlify.app/).
 
 ## Features
 
